@@ -13,6 +13,7 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
 
     //Properties
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var connectBtn: UIBarButtonItem!
     private var scrollIndicatorObj: ScrollViewIndicator!
     private var pageIndicatorObj: PageIndicator!
     private let pageIndicatorHeight: CGFloat = 35
@@ -23,8 +24,6 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     
     private var shouldDisconnect: Bool = false
     
-    
-    @IBOutlet weak var connectBtn: UIBarButtonItem!
     
     //ViewDidLoad.
     override func viewDidLoad() {
