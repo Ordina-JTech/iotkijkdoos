@@ -16,7 +16,7 @@
                 <outlet property="led1Switch" destination="wyV-Ac-DOg" id="Lwj-md-pvj"/>
                 <outlet property="led2ImageView" destination="Lcf-B1-JFL" id="3YS-DS-OKq"/>
                 <outlet property="led2Switch" destination="L2R-zU-Kug" id="IKd-a1-Nwx"/>
-                <outlet property="redSlider" destination="JJv-JB-wK4" id="fwP-OO-DXG"/>
+                <outlet property="rgbSlider" destination="JJv-JB-wK4" id="9ed-vd-iHv"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sui-KR-gCs"/>
             </connections>
         </placeholder>

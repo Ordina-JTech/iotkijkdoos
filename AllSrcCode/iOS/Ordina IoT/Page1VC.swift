@@ -17,7 +17,7 @@ class Page1VC: UIViewController {
     @IBOutlet weak var led2Switch: UISwitch!
     @IBOutlet weak var led1ImageView: UIImageView!
     @IBOutlet weak var led2ImageView: UIImageView!
-    @IBOutlet weak var redSlider: UISlider!
+    @IBOutlet weak var rgbSlider: UISlider!
 
     
     
@@ -28,15 +28,14 @@ class Page1VC: UIViewController {
         //Resize switch buttons
         led1Switch.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
         led2Switch.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
-        redSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
-        print(redSlider.frame.origin.x)
         
-        
+        //Rotate slider
+        rgbSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
     }
     
     
     //TODO: naam veranderen, nu niet duideijk welke het is...s
-    //State changed switch led 1
+    //State changed switch led 1.
     @IBAction func led1Switch(_ sender: Any) {
     
         if blue.isReady {
@@ -47,7 +46,7 @@ class Page1VC: UIViewController {
         }
     }
     
-    //State changed switch led 2
+    //State changed switch led 2.
     @IBAction func led2Switch(_ sender: Any) {
         print("Led 2 is on: \(led2Switch.isOn)")
         
@@ -60,16 +59,17 @@ class Page1VC: UIViewController {
     }
     
 
-    
+    //If slider value changed and blue is ready, call changecolor otherwise set back to 0.
     @IBAction func sliderChangedValue(_ sender: Any) {
         
         if blue.isReady {
-            changeColor(value: redSlider.value)
+            changeColor(value: rgbSlider.value)
         }
         else {
-            redSlider.setValue(0, animated: false)
+            rgbSlider.setValue(0, animated: false)
         }
     }
+    
     
     //Sending the RGB values based on sliders value.
     private func changeColor(value: Float)  {
@@ -96,5 +96,4 @@ class Page1VC: UIViewController {
             blue.sendMessage(string: "c000\n000\n255")
         }
     }
-    
 }

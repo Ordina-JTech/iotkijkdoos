@@ -95,7 +95,7 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     private func resetViews()    {
         page1.led1Switch.setOn(false, animated: true)
         page1.led2Switch.setOn(false, animated: true)
-        page1.redSlider.setValue(0, animated: true)
+        page1.rgbSlider.setValue(0, animated: true)
         page3.angleSlider.value = 0
         page3.rotateImageView.transform = CGAffineTransform(rotationAngle: 0)
     }
