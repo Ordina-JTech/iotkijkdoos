@@ -1,4 +1,4 @@
-package com.donutrapps.bluetoothdemo;
+package nl.ordina.bluetoothdemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

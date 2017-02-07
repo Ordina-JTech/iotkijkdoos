@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.donutrapps.bluetoothdemo;
+package nl.ordina.bluetoothdemo;
 
 import java.util.HashMap;
 

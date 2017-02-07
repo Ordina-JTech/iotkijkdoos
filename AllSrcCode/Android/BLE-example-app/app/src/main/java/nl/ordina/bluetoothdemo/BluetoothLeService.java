@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.donutrapps.bluetoothdemo;
+package nl.ordina.bluetoothdemo;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

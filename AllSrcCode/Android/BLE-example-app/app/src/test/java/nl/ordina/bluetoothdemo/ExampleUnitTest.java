@@ -1,4 +1,4 @@
-package com.donutrapps.bluetoothdemo;
+package nl.ordina.bluetoothdemo;
 
 import org.junit.Test;
 
