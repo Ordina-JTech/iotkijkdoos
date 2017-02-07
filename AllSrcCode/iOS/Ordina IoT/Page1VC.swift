@@ -71,35 +71,26 @@ class Page1VC: UIViewController {
         }
     }
     
-    
-    
-    
-    
-    
-    @IBAction func sliderTouchedUpInside(_ sender: Any) {
-        //changeColor(value: redSlider.value)
-        
-    }
-
-    @IBAction func sliderTouchUpOutside(_ sender: Any) {
-        //changeColor(value: redSlider.value)
-    }
-
+    //Sending the RGB values based on sliders value.
     private func changeColor(value: Float)  {
         
         if value == 0   {
             blue.sendMessage(string: "c000\n000\n000")
         }
-        else if value > 1 && value <= 50  {
+        else if value > 0 && value <= 50  {
             blue.sendMessage(string: "c255\n000\n000")
-            
         }
         else if value > 50 && value <= 100  {
             blue.sendMessage(string: "c255\n255\n000")
-            
         }
-        else if value > 100 && value <= 185 {
+        else if value > 100 && value <= 150 {
             blue.sendMessage(string: "c000\n255\n000")
+        }
+        else if value > 150 && value <= 200 {
+            blue.sendMessage(string: "c000\n255\n255")
+        }
+        else if value > 200 && value <= 250 {
+            blue.sendMessage(string: "c255\n000\n255")
         }
         else    {
             blue.sendMessage(string: "c000\n000\n255")
