@@ -214,8 +214,10 @@ void setRGBColor(int red, int green, int blue)  {
 //Play alarm with blinking LED's.
 void alarm()  {
 
+  //Start timer
   long startTime = millis();
-  
+
+  //Play alarm for 3 seconds (3000 ms)
   while (millis() - startTime < 3000) {
       digitalWrite(LED1, HIGH);
       digitalWrite(LED2, HIGH);
