@@ -21,8 +21,8 @@ const int GREEN = 8;
 const int BLUE = 9;
 
 //Set led on or off (TODO: duidelijker)
-bool powerLed1 = true;
-bool powerLed2 = true;
+bool isOnLed1 = false;
+bool isOnLed2 = false;
 
 
 //Setup runs once if the Arduino is powered on.
@@ -66,16 +66,16 @@ void loop() {
     //Check the input and call the right method
     switch (input)  {
       case 'a':
-      setLed(1);
-      break;
+        setLed(1);
+        break;
 
       case 'b':
-      setLed(2);
-      break;
+        setLed(2);
+        break;
 
       case'c':
-      getRgbValues();
-      break;
+        getRgbValues();
+        break;
 
       case 'd':
         alarm(); 
@@ -182,23 +182,23 @@ void getServoAngle() {
 void setLed(int number) {
   
   if (number == 1)  {
-    if (powerLed1)  {
+    if (!isOnLed1)  {
       Serial.println("powerLed 1 = true");
-      powerLed1 = false;
+      isOnLed1 = true;
       digitalWrite(LED1, HIGH);
     }
     else  {
-      powerLed1 = true;
+      isOnLed1 = false;
       digitalWrite(LED1, LOW);
     }
   }
   else if (number == 2) {
-    if (powerLed2)  {
-      powerLed2 = false;
+    if (!isOnLed2)  {
+      isOnLed2 = true;
       digitalWrite(LED2, HIGH);
     }
     else {
-      powerLed2 = true;
+      isOnLed2 = false;
       digitalWrite(LED2, LOW);
     }
   }
@@ -230,8 +230,7 @@ void alarm()  {
       delay(500);
   }
 
-  //TODO: Feedback geven aan central device: button enabelen of dan pas weer zenden. Als je nog kan klikken terwijl het
-  //alarm bezig is, klopt het niet meer -> serial buffer
+  //TODO: LED aan of uitzetten naar het alarm. anders kloppen de buttons in app niet meer.
    
 }
 
@@ -263,10 +262,15 @@ void vaderJacob() {
 
 //Set the angle of the servo. The input has to be in the range of 0 - 180.
 void setServoAngle(int angle)  {
-  //Attach and detach servo here, otherwise the servo is moving while changing RGB led.
+  
+  //Attach and detach servo here, otherwise the servo is moving while changing RGB led
   servo.attach(SERVO);
   servo.write(angle);
+  
+  //Give servo time to get at the given angle
   delay(50);
+
+  //Detach the servo for unwanted movement
   servo.detach();
 }
 
@@ -274,10 +278,12 @@ void setServoAngle(int angle)  {
 void resetAllComponents() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
-  powerLed1 = true;
-  powerLed2 = true;
+  isOnLed1 = false;
+  isOnLed2 = false;
   setRGBColor(0, 0, 0);
   setServoAngle(180);
+
+  //Send 'y' to central device. If received central can disconnect from peripheral
   bleSerial.println("y");
 }
 
