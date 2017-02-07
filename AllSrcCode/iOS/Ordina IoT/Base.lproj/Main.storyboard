@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="a3v-gK-2Yg">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Ordina IoT-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="MainVC" customModule="Ordina_IoT" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Zr-ww-vSb">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="7Zr-ww-vSb" secondAttribute="bottom" id="2du-hd-Uj5"/>
+                            <constraint firstItem="7Zr-ww-vSb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7Ez-m4-bXi"/>
+                            <constraint firstItem="7Zr-ww-vSb" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JX3-nu-72N"/>
+                            <constraint firstAttribute="trailing" secondItem="7Zr-ww-vSb" secondAttribute="trailing" id="M63-U9-ewD"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Ordina IoT" id="LVh-D6-tTG">
+                        <barButtonItem key="leftBarButtonItem" title="Connect" id="eU1-N9-Wbj">
+                            <connections>
+                                <action selector="connectBtn:" destination="BYZ-38-t0r" id="8iy-Tu-2Wf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="connectBtn" destination="eU1-N9-Wbj" id="c4b-Ef-qvr"/>
+                        <outlet property="scrollView" destination="7Zr-ww-vSb" id="6l7-cU-FHW"/>
+                        <segue destination="QVk-Pt-4ZH" kind="show" identifier="mainToScan" id="EKx-78-zWI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="686" y="60"/>
+        </scene>
+        <!--Devices-->
+        <scene sceneID="ZVu-fb-aKm">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="QVk-Pt-4ZH" customClass="ScanVC" customModule="Ordina_IoT" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rwn-4X-bUP"/>
+                        <viewControllerLayoutGuide type="bottom" id="d9y-EQ-KXQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TUT-Tp-MxS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="65" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Phs-0S-PnL">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="d9y-EQ-KXQ" firstAttribute="top" secondItem="Phs-0S-PnL" secondAttribute="bottom" id="2pO-bw-upy"/>
+                            <constraint firstAttribute="trailing" secondItem="Phs-0S-PnL" secondAttribute="trailing" id="Ikt-nN-CLZ"/>
+                            <constraint firstItem="Phs-0S-PnL" firstAttribute="leading" secondItem="TUT-Tp-MxS" secondAttribute="leading" id="Zal-tj-by6"/>
+                            <constraint firstItem="Phs-0S-PnL" firstAttribute="top" secondItem="Rwn-4X-bUP" secondAttribute="bottom" id="vwI-ef-hFX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Devices" id="k0z-If-1lo">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="xi7-id-OX1">
+                            <connections>
+                                <action selector="cancelBtn:" destination="QVk-Pt-4ZH" id="2H5-M6-Vad"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="vP5-cC-yx8">
+                            <connections>
+                                <action selector="refreshBtn:" destination="QVk-Pt-4ZH" id="PtY-0C-nGQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="refreshBtn" destination="vP5-cC-yx8" id="JR9-KN-hUM"/>
+                        <outlet property="tableView" destination="Phs-0S-PnL" id="EAh-mJ-Qxf"/>
+                        <segue destination="Bzr-La-Gm4" kind="unwind" identifier="scanToMain" unwindAction="unwindToMainViewControllerWithSegue:" id="2DH-oW-fVR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ecu-EA-44C" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Bzr-La-Gm4" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1407" y="60"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="R5p-Yd-H62">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="a3v-gK-2Yg" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fy7-Tu-8Fp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="u06-rt-bA7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JCk-V5-MgD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-86" y="60"/>
+        </scene>
+    </scenes>
+</document>
