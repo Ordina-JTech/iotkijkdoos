@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="nl.ordina.kijkdoos.SoundFragment">
+
+
+    <!-- IMPORTANTE:
+     By Adding the android.support.v4.widget.NestedScrollView you will enable scrolling the content
+     It is really important to follow the documentation of URL:
+         https://developer.android.com/reference/android/support/design/widget/AppBarLayout.html -->
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Your scrolling content: OKT 2016 -->
+        <include layout="@layout/content_fragment_sound" />
+    </android.support.v4.widget.NestedScrollView>
+
+</FrameLayout>

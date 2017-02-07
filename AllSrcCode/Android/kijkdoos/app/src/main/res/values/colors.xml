@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TOP-Bar with android indicators like Battery and Time -->
+    <color name="colorPrimaryDark">#df542a</color>
+
+    <!-- Ordina orange color for the Title Bar with IoT Ordina in it  -->
+    <color name="colorPrimary">#FF7B00</color>
+
+    <!-- Light Orange Pink color for the app Background -->
+    <color name="colorPrimaryBackground">#fceddd</color>
+
+    <!-- (Old settings) Menu for scanning BLE devices -->
+    <color name="colorPrimaryBackgroundMenu">#FF7B00</color>
+
+    <!-- Dark Orange for the TAB (action) bar -->
+    <color name="colorAccent">#fc8d25</color>
+</resources>
