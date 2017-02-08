@@ -127,13 +127,13 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     //Message geven als verbinding is verbroken.
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         BlueProgressMessage.show(state: .disconnected, currentView: self.view)
-        connectBtn.title = ""        //Zonder dit krijg je eerst rare puntje..
+        connectBtn.title = ""        //Zonder dit krijg je eerst rare puntjes te zien
         connectBtn.title = "Connect"
         
         //Reset all the views
         resetViews()
         
-        //set shoudlDisconnect to false
+        //set shoudlDisconnect back to false
         shouldDisconnect = false
         
     }
@@ -174,6 +174,7 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     
     //De seque van ScanVC naar MainVC
     @IBAction func unwindToMainViewController(segue: UIStoryboardSegue) {
+        
         blue.delegate = self
         
         if (blue.connectedPeripheral != nil)    {

@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 
 
-//Global variabelen.
+//Global variable
 var blue: BluetoothConnection!
 
 
@@ -50,7 +50,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
 //Properties 
     
     //Delegate variabele voor bluetoothConnectionDelegate.
-    var delegate: BluetoothConnectionDelegate!
+    var delegate: BluetoothConnectionDelegate?
     
     //Variabele voor CBCentralManager.
     var manager: CBCentralManager!
