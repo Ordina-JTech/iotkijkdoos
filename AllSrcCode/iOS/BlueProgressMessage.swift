@@ -71,15 +71,14 @@ class BlueProgressMessage{
             
         case .poweredOff:
             progressHud.mode = MBProgressHUDMode.text
-            progressHud.label.text = "Your bluetooth has turned off!"
+            progressHud.label.text = "Your bluetooth is turned off!"
             progressHud.detailsLabel.text = "Please turn it back on."
             progressHud.hide(animated: true, afterDelay: 2)
             
         case .notConnected:
             progressHud.mode = MBProgressHUDMode.text
-            progressHud.label.text = "You're not connected to a peripheral!"
-            progressHud.detailsLabel.text = "Please connect before starting a training."
-            progressHud.hide(animated: true, afterDelay: 3)
+            progressHud.label.text = "Not connected!"
+            progressHud.hide(animated: true, afterDelay: 2)
         }
     }
 }

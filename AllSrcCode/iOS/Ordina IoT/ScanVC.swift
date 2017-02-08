@@ -94,8 +94,7 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
         //Opnieuw scannen.
         blue.startScanning()
         BlueProgressMessage.show(state: .scanning, currentView: self.view)
-        //blue.progressMessage(state: .scanning, currentView: self.view)
-        
+                
         //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
     }
@@ -208,7 +207,6 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
         
         //selectedDevice gelijkstellen aan de gekozen device.
         selectedDevice = devices[(indexPath as NSIndexPath).row].peripheral
-        
         
         //Connectie maken met het geselecteerde device.
         blue.manager.connect(selectedDevice!, options: nil)

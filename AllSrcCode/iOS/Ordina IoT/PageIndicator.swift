@@ -49,11 +49,11 @@ class PageIndicator {
             
             //Properties
             pageIndicator = UILabel(frame: rect)
-            pageIndicator.backgroundColor = UIColor.orange
+            pageIndicator.backgroundColor = UIColor(red: 75/255, green: 150/255, blue: 200/255, alpha: 1.0)
             pageIndicator.font = UIFont(name: "Avenir Next", size: 14.0)
             pageIndicator.text = labelText[i]
             pageIndicator.textAlignment = .center
-            pageIndicator.textColor = UIColor.black
+            pageIndicator.textColor = UIColor.white
             
             //Add to main view
             mainView.addSubview(pageIndicator)

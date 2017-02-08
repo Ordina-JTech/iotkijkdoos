@@ -96,12 +96,13 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
         page1.led1Switch.setOn(false, animated: true)
         page1.led2Switch.setOn(false, animated: true)
         page1.rgbSlider.setValue(0, animated: true)
+        page1.rgbLabel.backgroundColor = UIColor.white
         page3.angleSlider.value = 0
         page3.rotateImageView.transform = CGAffineTransform(rotationAngle: 0)
     }
     
     
-    //Resets all the Arduino components to their begin value.
+    //Resets all the Arduino components to their begin value. Peripheral sends 'y' back if succeeded.
     private func resetArduinoComponents()   {
         if blue.isReady {
             blue.sendMessage(string: "r")
@@ -152,9 +153,10 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.x
         scrollIndicatorObj.updateScrollIndicator(xValue: offset)
-        
     }
     
+
+//TODO: weghalen als we geen landscape gaan ondersteunen
     
     //If Orientation view did change.
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -191,7 +193,7 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
     
 //BUTTONS 
     
-    //If connected peripheral is nil -> seque to scan, otherwise cancel connection.
+    //If connected peripheral is nil -> seque to scan, otherwise call resetArduinoComponent method.
     @IBAction func connectBtn(_ sender: Any) {
         
         if (blue.connectedPeripheral == nil)    {
@@ -200,8 +202,6 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
         else    {
             shouldDisconnect = true
             resetArduinoComponents()
-            //blue.manager.cancelPeripheralConnection(blue.connectedPeripheral!)
-
         }
     }
   

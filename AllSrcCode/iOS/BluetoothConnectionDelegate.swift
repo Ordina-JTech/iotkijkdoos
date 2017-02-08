@@ -73,7 +73,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
     
-    //UUID
+    //UUID bluetooth module
     private let serviceUUID: CBUUID = CBUUID(string: "FFE0")
     private let characteristicUUID: CBUUID = CBUUID(string: "FFE1")
     
@@ -101,7 +101,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
     //Zoeken van peripherals.
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print(advertisementData)
         delegate?.blueDidDiscoverPeripheral(peripheral, RSSI: RSSI)
         
     }
@@ -172,14 +171,8 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
             
             delegate?.blueDidReceiveString(message)
         }
-        /*
-        var bytes = [UInt8](repeating: 0, count: data!.count / MemoryLayout<UInt8>.size)
-        (data! as NSData).getBytes(&bytes, length: data!.count)
-        print(bytes) */
     }
   
-    
-    
     
 //METHODS BLUETOOTH CONNECTION
     
