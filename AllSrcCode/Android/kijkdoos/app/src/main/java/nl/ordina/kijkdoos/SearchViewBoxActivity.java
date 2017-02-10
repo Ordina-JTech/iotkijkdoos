@@ -1,7 +1,8 @@
-package nl.ordina.kijkdoos.viewbox.bluetooth;
+package nl.ordina.kijkdoos;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,8 +35,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ProgressDialog progressDialog = new ProgressDialog(this, android.support.v7.appcompat.R.style.Theme_AppCompat_Light_DarkActionBar);
-        progressDialog.setMessage("Verbinden met 'JTech Kijkdoos 1'");
-        progressDialog.show();
+        startActivity(new Intent(this, ViewBoxActivity.class));
     }
 }

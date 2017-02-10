@@ -38,4 +38,8 @@
     <string name="menu_stop">Stop</string>
 
     <string name="no_watchbox_found">Sorry, no watchboxes found! Make sure the watchbox is within range.</string>
+
+    <string name="title_activity_view_box">ViewBoxActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
