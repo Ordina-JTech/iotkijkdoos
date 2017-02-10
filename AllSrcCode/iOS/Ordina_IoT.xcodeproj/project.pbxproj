@@ -7,17 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */; };
+		384154311E4DD82E00F06081 /* BlueProgressMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154301E4DD82E00F06081 /* BlueProgressMessage.swift */; };
+		384154351E4DD84200F06081 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 384154341E4DD84200F06081 /* MBProgressHUD.m */; };
+		3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841543D1E4DF2C500F06081 /* MainVC.swift */; };
+		384154401E4DFC9B00F06081 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841543F1E4DFC9B00F06081 /* NavigationController.swift */; };
 		388699911E4DD008006BC37E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388699901E4DD008006BC37E /* AppDelegate.swift */; };
-		388699931E4DD008006BC37E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388699921E4DD008006BC37E /* ViewController.swift */; };
+		388699931E4DD008006BC37E /* ScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388699921E4DD008006BC37E /* ScanVC.swift */; };
 		388699961E4DD008006BC37E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 388699941E4DD008006BC37E /* Main.storyboard */; };
 		388699981E4DD008006BC37E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 388699971E4DD008006BC37E /* Assets.xcassets */; };
 		3886999B1E4DD008006BC37E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 388699991E4DD008006BC37E /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothConnectionDelegate.swift; sourceTree = "<group>"; };
+		384154301E4DD82E00F06081 /* BlueProgressMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueProgressMessage.swift; sourceTree = "<group>"; };
+		384154321E4DD84100F06081 /* Ordina_IoT-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ordina_IoT-Bridging-Header.h"; sourceTree = "<group>"; };
+		384154331E4DD84200F06081 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		384154341E4DD84200F06081 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		3841543D1E4DF2C500F06081 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
+		3841543F1E4DFC9B00F06081 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		3886998D1E4DD008006BC37E /* Ordina_IoT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ordina_IoT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		388699901E4DD008006BC37E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		388699921E4DD008006BC37E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		388699921E4DD008006BC37E /* ScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanVC.swift; sourceTree = "<group>"; };
 		388699951E4DD008006BC37E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		388699971E4DD008006BC37E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3886999A1E4DD008006BC37E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -35,6 +47,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		384154391E4DF1DA00F06081 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		3841543A1E4DF1E200F06081 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3841543C1E4DF23500F06081 /* Progress View */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		3841543B1E4DF1EB00F06081 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				388699921E4DD008006BC37E /* ScanVC.swift */,
+				3841543D1E4DF2C500F06081 /* MainVC.swift */,
+				3841543F1E4DFC9B00F06081 /* NavigationController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		3841543C1E4DF23500F06081 /* Progress View */ = {
+			isa = PBXGroup;
+			children = (
+				384154331E4DD84200F06081 /* MBProgressHUD.h */,
+				384154341E4DD84200F06081 /* MBProgressHUD.m */,
+				384154301E4DD82E00F06081 /* BlueProgressMessage.swift */,
+			);
+			name = "Progress View";
+			sourceTree = "<group>";
+		};
 		388699841E4DD008006BC37E = {
 			isa = PBXGroup;
 			children = (
@@ -54,12 +102,15 @@
 		3886998F1E4DD008006BC37E /* Ordina_IoT */ = {
 			isa = PBXGroup;
 			children = (
+				384154391E4DF1DA00F06081 /* Model */,
+				3841543A1E4DF1E200F06081 /* View */,
+				3841543B1E4DF1EB00F06081 /* Controller */,
 				388699901E4DD008006BC37E /* AppDelegate.swift */,
-				388699921E4DD008006BC37E /* ViewController.swift */,
 				388699941E4DD008006BC37E /* Main.storyboard */,
-				388699971E4DD008006BC37E /* Assets.xcassets */,
 				388699991E4DD008006BC37E /* LaunchScreen.storyboard */,
+				388699971E4DD008006BC37E /* Assets.xcassets */,
 				3886999C1E4DD008006BC37E /* Info.plist */,
+				384154321E4DD84100F06081 /* Ordina_IoT-Bridging-Header.h */,
 			);
 			path = Ordina_IoT;
 			sourceTree = "<group>";
@@ -97,6 +148,7 @@
 					3886998C1E4DD008006BC37E = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = U8Y4L9ZULC;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -137,7 +189,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				388699931E4DD008006BC37E /* ViewController.swift in Sources */,
+				3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */,
+				3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */,
+				388699931E4DD008006BC37E /* ScanVC.swift in Sources */,
+				384154351E4DD84200F06081 /* MBProgressHUD.m in Sources */,
+				384154311E4DD82E00F06081 /* BlueProgressMessage.swift in Sources */,
+				384154401E4DFC9B00F06081 /* NavigationController.swift in Sources */,
 				388699911E4DD008006BC37E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,11 +318,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = U8Y4L9ZULC;
 				INFOPLIST_FILE = Ordina_IoT/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "RW.Ordina-IoT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -274,11 +335,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = U8Y4L9ZULC;
 				INFOPLIST_FILE = Ordina_IoT/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "RW.Ordina-IoT";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -302,6 +366,7 @@
 				388699A11E4DD008006BC37E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
