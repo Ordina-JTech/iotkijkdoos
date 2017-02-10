@@ -26,48 +26,54 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="6Ec-H4-CbA">
-                    <rect key="frame" x="0.0" y="65" width="375" height="125"/>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="6Ec-H4-CbA">
+                    <rect key="frame" x="0.0" y="65" width="375" height="107"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lampIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Lcf-B1-JFL">
-                            <rect key="frame" x="0.0" y="0.0" width="187.5" height="125"/>
+                            <rect key="frame" x="0.0" y="0.0" width="177.5" height="107"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lampIcon" translatesAutoresizingMaskIntoConstraints="NO" id="PGx-gG-EeV">
-                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="125"/>
+                            <rect key="frame" x="197.5" y="0.0" width="177.5" height="107"/>
                         </imageView>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="width" secondItem="6Ec-H4-CbA" secondAttribute="height" multiplier="6:2" id="vri-2X-w42"/>
+                        <constraint firstAttribute="width" secondItem="6Ec-H4-CbA" secondAttribute="height" multiplier="7:2" id="vri-2X-w42"/>
                     </constraints>
                 </stackView>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="L2R-zU-Kug">
-                    <rect key="frame" x="257.5" y="210" width="51" height="31"/>
+                    <rect key="frame" x="262.5" y="192" width="51" height="31"/>
                     <color key="onTintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <action selector="led2Switch:" destination="-1" eventType="valueChanged" id="7mF-fi-9tb"/>
                     </connections>
                 </switch>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wyV-Ac-DOg">
-                    <rect key="frame" x="69.5" y="210" width="51" height="31"/>
+                    <rect key="frame" x="65" y="192" width="51" height="31"/>
                     <color key="onTintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <action selector="led1Switch:" destination="-1" eventType="valueChanged" id="kXO-rb-eSq"/>
                     </connections>
                 </switch>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="300" translatesAutoresizingMaskIntoConstraints="NO" id="JJv-JB-wK4">
-                    <rect key="frame" x="73" y="441" width="229" height="31"/>
+                    <rect key="frame" x="85.5" y="402" width="204" height="31"/>
                     <color key="minimumTrackTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="transform" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="angle">
+                            <real key="value" value="-90"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <action selector="rgbSliderWasTouched:" destination="-1" eventType="touchDown" id="eT9-rf-yb1"/>
                         <action selector="sliderChangedValue:" destination="-1" eventType="valueChanged" id="4DY-1N-ei2"/>
                     </connections>
                 </slider>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PhM-eF-e2o">
-                    <rect key="frame" x="152.5" y="251" width="70" height="70"/>
+                    <rect key="frame" x="152.5" y="232" width="70" height="70"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="70" id="ZU8-HA-vjg"/>
-                        <constraint firstAttribute="height" constant="70" id="ZfV-sD-TOU"/>
+                        <constraint firstAttribute="height" constant="70" id="QxU-fU-LEr"/>
+                        <constraint firstAttribute="width" constant="70" id="S7l-ID-Ts6"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
@@ -78,19 +84,19 @@
             <constraints>
                 <constraint firstItem="JJv-JB-wK4" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="2iW-Ke-Ubq"/>
                 <constraint firstItem="6Ec-H4-CbA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="3ep-VJ-T4X"/>
-                <constraint firstItem="JJv-JB-wK4" firstAttribute="top" secondItem="PhM-eF-e2o" secondAttribute="bottom" constant="120" id="DpA-dk-4b4"/>
-                <constraint firstItem="PhM-eF-e2o" firstAttribute="top" secondItem="wyV-Ac-DOg" secondAttribute="bottom" constant="10" id="Oq7-Df-PnF"/>
                 <constraint firstItem="L2R-zU-Kug" firstAttribute="centerX" secondItem="PGx-gG-EeV" secondAttribute="centerX" id="OzL-N6-TjR"/>
-                <constraint firstItem="JJv-JB-wK4" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="225:667" id="TsI-Ie-epc"/>
+                <constraint firstItem="JJv-JB-wK4" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.3" id="TsI-Ie-epc"/>
                 <constraint firstItem="6Ec-H4-CbA" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="Vq6-en-WSF"/>
                 <constraint firstItem="L2R-zU-Kug" firstAttribute="top" secondItem="PGx-gG-EeV" secondAttribute="bottom" constant="20" id="bAJ-fF-h0t"/>
                 <constraint firstItem="wyV-Ac-DOg" firstAttribute="top" secondItem="6Ec-H4-CbA" secondAttribute="bottom" constant="20" id="eYP-bH-4lj"/>
+                <constraint firstItem="JJv-JB-wK4" firstAttribute="top" secondItem="PhM-eF-e2o" secondAttribute="bottom" constant="100" id="luH-31-jJc"/>
                 <constraint firstAttribute="trailing" secondItem="6Ec-H4-CbA" secondAttribute="trailing" id="qnb-u5-Iar"/>
                 <constraint firstItem="PhM-eF-e2o" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="s9I-9s-6sJ"/>
+                <constraint firstItem="PhM-eF-e2o" firstAttribute="top" secondItem="6Ec-H4-CbA" secondAttribute="bottom" constant="60" id="uD0-xg-pI0"/>
                 <constraint firstItem="wyV-Ac-DOg" firstAttribute="centerX" secondItem="Lcf-B1-JFL" secondAttribute="centerX" id="y7M-29-Sgg"/>
             </constraints>
             <nil key="simulatedBottomBarMetrics"/>
-            <point key="canvasLocation" x="75" y="98"/>
+            <point key="canvasLocation" x="74.5" y="97.5"/>
         </view>
     </objects>
     <resources>

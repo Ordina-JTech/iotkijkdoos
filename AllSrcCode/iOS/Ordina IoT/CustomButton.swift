@@ -22,6 +22,20 @@ class CustomButton: UIButton    {
 }
 
 
+@IBDesignable
+class CustomSlider: UISlider {
+    
+        @IBInspectable var angle: CGFloat = 0   {
+            
+            didSet{
+                let hans = (angle/180) * CGFloat(M_PI)
+                self.transform = CGAffineTransform(rotationAngle: hans)
+            }
+        }
+}
+
+
+
     
     
 

@@ -34,7 +34,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Ordina IoT" id="LVh-D6-tTG">
-                        <barButtonItem key="leftBarButtonItem" title="Connect" id="eU1-N9-Wbj">
+                        <barButtonItem key="rightBarButtonItem" title="Connect" id="eU1-N9-Wbj">
                             <connections>
                                 <action selector="connectBtn:" destination="BYZ-38-t0r" id="8iy-Tu-2Wf"/>
                             </connections>

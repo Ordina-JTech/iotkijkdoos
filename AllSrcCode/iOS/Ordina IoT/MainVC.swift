@@ -50,11 +50,10 @@ class MainVC: UIViewController, BluetoothConnectionDelegate, UIScrollViewDelegat
         yOrigin = yOrigin + pageIndicatorHeight - 2
         scrollIndicatorObj = ScrollViewIndicator(mainView: self.view, scrollView: scrollView, yOrigin: yOrigin)
         scrollIndicatorObj.addScrollIndicator()
+        
     }
     
-
-    //TODO: Waarom width van de pages groter zijn, maar wel goed showen
-    //TODO: change with/height if its in landscape. scrollIndicator performs well.
+    
     //Add the three viewcontrollers.
     private func addViewControllers()   {
         

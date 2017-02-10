@@ -45,13 +45,5 @@ class Page3VC: UIViewController {
         else {
             angleSlider.setValue(previousValue, animated: false)
         }
- 
     }
-
-   
-
-
-    
-
-
 }

@@ -34,23 +34,27 @@ class Page1VC: UIViewController {
     
     var currentRgbColor: RgbColor!
     
+
+    
+
     //View did load
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Resize switch buttons
-        led1Switch.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
-        led2Switch.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
-        
+
         //Rotate slider
-        rgbSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
-        //rgbSlider.thumbTintColor = UIColor(red: 62/255, green: 104/255, blue: 132/255, alpha: 1/0)
+        //rgbSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        
+        
+        
         
         //Rgb label
         rgbLabel.backgroundColor = UIColor.white
         currentRgbColor = .white
-        rgbLabel.layer.masksToBounds = true
-        rgbLabel.layer.cornerRadius = 25
+        rgbLabel.layer.masksToBounds = true //has to be true to change corner radius label
+        rgbLabel.layer.cornerRadius = 20
+        
+        
         
     }
     
