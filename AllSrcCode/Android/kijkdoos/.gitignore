@@ -36,8 +36,8 @@ proguard/
 captures/
 
 # Intellij
-# *.iml                 Okt2016 for my one preferences
-# .idea/workspace.xml   Okt2016 for my one preferences
+*.iml                 Okt2016 for my one preferences
+.idea/workspace.xml   Okt2016 for my one preferences
 .idea/libraries
 
 # Keystore files
