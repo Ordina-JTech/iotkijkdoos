@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".bluetoothlegatt.DeviceControlActivity"
             android:label="@string/title_activity_bluetooth"
@@ -46,11 +46,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ViewBoxActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_view_box"
-            android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name=".ViewBoxActivity" />
+        <activity android:name=".EditComponentActivity" ></activity>
     </application>
 
 </manifest>

@@ -8,11 +8,11 @@
 
     <ImageView
         android:id="@+id/IVTelevision"
-        android:layout_width="0dp"
-        android:layout_height="109dp"
+        android:layout_width="223dp"
+        android:layout_height="172dp"
         android:transitionName="bla"
         app:srcCompat="@drawable/tv_meubel_illus4_bewerkt_licht_minder_nerf"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="81dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp" />
 </android.support.constraint.ConstraintLayout>
