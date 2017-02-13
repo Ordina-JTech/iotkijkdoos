@@ -10,59 +10,39 @@ import UIKit
 import CoreBluetooth
 
 
-class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, BluetoothConnectionDelegate {
+class ScanVC: UIViewController, BluetoothConnectionDelegate {
     
     
-    //Properties
+//Properties
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var refreshBtn: UIBarButtonItem!
+    
+    private var tableViewObj: TableView!
+    private var refreshControl: UIRefreshControl!
+    
 
-
-    //Swipe to refresh
-    lazy var refreshControl: UIRefreshControl = {
-        
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
-        
-        return refreshControl
-    }()
-    
-    //Array met gescande devices
-    var devices: [(peripheral: CBPeripheral, RSSI: Float)] = []
-    
-    //Het geselecteerde device
-    var selectedDevice: CBPeripheral?
-    
-    
+//View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         //Refreshbutton Disable
         refreshBtn.isEnabled = false
         
         //Delegate en DataSource gelijk zetten aan deze VC.
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableViewObj = TableView()
+        tableView.delegate = tableViewObj
+        tableView.dataSource = tableViewObj
+        
+        //Add refreshControl
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
         //bluetooth Connection
         blue = BluetoothConnection(delegate: self)
         
-        //Checken of bluetooth aan staat
-        if (blue.manager.state == .poweredOn)   {
-            blue.startScanning()
-            
-            //Enable refresh button while scanning
-            refreshBtn.isEnabled = false
-            
         
-            //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
-            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
-            
-        }
     }
-    
     
 //METHODS ScanVC
     
@@ -76,7 +56,7 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
     }
     
     
-    //Als er 5 seconden is gescand.
+    //After 5 seconds of scanning.
     func scanTimeOut()  {
         
         blue.stopScanning()
@@ -84,29 +64,39 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
         refreshBtn.isEnabled = true
         
         //ProgressMessage laten zien.
-        if devices.count == 0   {
+        if tableViewObj.devices.count == 0   {
             BlueProgressMessage.show(state: .noDeviceDetected, currentView: self.view)
         }
     }
     
-    
+    //Start scanning again.
     func refreshDevices()  {
         
         //Array met devices leegmaken, tableview reloaden en refreshButton disabelen.
-        devices = []
+        tableViewObj.devices = []
         tableView.reloadData()
         refreshBtn.isEnabled = false
         
         //Opnieuw scannen.
         blue.startScanning()
-        BlueProgressMessage.show(state: .scanning, currentView: self.view)
         
         //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
-        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ScanVC.scanTimeOut), userInfo: nil, repeats: false)
+    }
+    
+    //Start refreshen programmatically: Starting app and pressing refresh button.
+    private func startRefreshControl()  {
+        tableView.setContentOffset(CGPoint(x: 0, y: -25), animated: true)
+        refreshControl.beginRefreshing()
+    }
+    
+    func setPortraitOrientation()   {
+        let value = UIInterfaceOrientation.portrait.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
     }
     
     
-    //CB CENTRALMANAGER METHODE
+//CB CENTRALMANAGER METHODE
     
     
     //Als bluetoothState is veranderd (powerdOn/poweredOff).
@@ -114,6 +104,10 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
         if poweredOn    {
             //Scannen starten
             blue.startScanning()
+            
+            //Start refresh programmatically
+            startRefreshControl()
+            
             refreshBtn.isEnabled = false
             
             //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
@@ -131,15 +125,17 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
         
         //checken of de gevonden al in perpheral staan, zo ja return.
-        for exisiting in devices {
-            if exisiting.peripheral.identifier == peripheral.identifier { return }
+        for exisiting in tableViewObj.devices {
+            if exisiting.peripheral.identifier == peripheral.identifier {
+                return
+            }
         }
         
         //Op basis van signaalsterkte (RSSI) sorteren.
         //TODO: checken waarom dubbele vraagteken en 0.0.
         let theRSSI = RSSI?.floatValue ?? 0.0
-        devices.append(peripheral: peripheral, RSSI: theRSSI)
-        devices.sort {$0.RSSI < $1.RSSI }
+        tableViewObj.devices.append(peripheral: peripheral, RSSI: theRSSI)
+        tableViewObj.devices.sort {$0.RSSI < $1.RSSI }
         
         //Tableview reloaden, zodat nieuwe data erin wordt gezet.
         tableView.reloadData()
@@ -149,8 +145,8 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
     //Als de connectie is gemaakt.
     func blueDidConnect(_ peripheral: CBPeripheral) {
         
-        //Unwind segue uitvoeren.
-        performSegue(withIdentifier: "scanToMain", sender: nil)
+        //segue naar main uitvoeren.
+        performSegue(withIdentifier: "scanToMain", sender: self)
     }
     
     
@@ -170,58 +166,15 @@ class ScanVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Blue
         refreshBtn.isEnabled = true
         BlueProgressMessage.show(state: .disconnected, currentView: self.view)
         
+        NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
-    
-    //TABLEVIEW DELEGATE/DATASOURCE METHODS.
-    
-    
-    //Aantal rijen in array devices.
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return devices.count
-    }
-    
-    
-    //Wat er in de cellen moet komen.
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = UITableViewCell()
-        cell.textLabel?.text = devices[indexPath.row].peripheral.name
-        cell.backgroundColor = UIColor.white
-        cell.textLabel?.font = UIFont(name: "Avenir Next", size: 21)
-        cell.textLabel?.textColor = UIColor.black
-        cell.accessoryType = .disclosureIndicator
-        
-        
-        return cell
-    }
-    
-    
-    //Als er op een specifeke cel wordt geklikt.
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        //Stoppen met scannen.
-        blue.manager.stopScan()
-        
-        //Geselecteerde row deselecten.
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        //selectedDevice gelijkstellen aan de gekozen device.
-        selectedDevice = devices[(indexPath as NSIndexPath).row].peripheral
-        
-        //Connectie maken met het geselecteerde device.
-        blue.manager.connect(selectedDevice!, options: nil)
-    }
-    
-    
-    //BUTTONS
+//BUTTONS
     
     //Refresh Button
     @IBAction func refreshWasTouched(_ sender: Any) {
+        startRefreshControl()
         refreshDevices()
     }
-
-
-
 }
 

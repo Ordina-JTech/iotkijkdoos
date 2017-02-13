@@ -11,7 +11,10 @@
 		384154311E4DD82E00F06081 /* BlueProgressMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154301E4DD82E00F06081 /* BlueProgressMessage.swift */; };
 		384154351E4DD84200F06081 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 384154341E4DD84200F06081 /* MBProgressHUD.m */; };
 		3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841543D1E4DF2C500F06081 /* MainVC.swift */; };
-		384154401E4DFC9B00F06081 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841543F1E4DFC9B00F06081 /* NavigationController.swift */; };
+		3841544D1E51B8C600F06081 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841544C1E51B8C600F06081 /* TableView.swift */; };
+		384154521E51C10D00F06081 /* DisconnectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154511E51C10D00F06081 /* DisconnectButton.swift */; };
+		384154551E51DB4900F06081 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154541E51DB4900F06081 /* SettingView.swift */; };
+		384154571E51F7F200F06081 /* RgbVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154561E51F7F200F06081 /* RgbVC.swift */; };
 		388699911E4DD008006BC37E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388699901E4DD008006BC37E /* AppDelegate.swift */; };
 		388699931E4DD008006BC37E /* ScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388699921E4DD008006BC37E /* ScanVC.swift */; };
 		388699961E4DD008006BC37E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 388699941E4DD008006BC37E /* Main.storyboard */; };
@@ -26,7 +29,10 @@
 		384154331E4DD84200F06081 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		384154341E4DD84200F06081 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		3841543D1E4DF2C500F06081 /* MainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
-		3841543F1E4DFC9B00F06081 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		3841544C1E51B8C600F06081 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		384154511E51C10D00F06081 /* DisconnectButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectButton.swift; sourceTree = "<group>"; };
+		384154541E51DB4900F06081 /* SettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		384154561E51F7F200F06081 /* RgbVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RgbVC.swift; sourceTree = "<group>"; };
 		3886998D1E4DD008006BC37E /* Ordina_IoT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ordina_IoT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		388699901E4DD008006BC37E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		388699921E4DD008006BC37E /* ScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanVC.swift; sourceTree = "<group>"; };
@@ -59,6 +65,9 @@
 			isa = PBXGroup;
 			children = (
 				3841543C1E4DF23500F06081 /* Progress View */,
+				3841544C1E51B8C600F06081 /* TableView.swift */,
+				384154511E51C10D00F06081 /* DisconnectButton.swift */,
+				384154541E51DB4900F06081 /* SettingView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -68,7 +77,7 @@
 			children = (
 				388699921E4DD008006BC37E /* ScanVC.swift */,
 				3841543D1E4DF2C500F06081 /* MainVC.swift */,
-				3841543F1E4DFC9B00F06081 /* NavigationController.swift */,
+				384154561E51F7F200F06081 /* RgbVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -191,11 +200,14 @@
 			files = (
 				3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */,
 				3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */,
+				384154571E51F7F200F06081 /* RgbVC.swift in Sources */,
 				388699931E4DD008006BC37E /* ScanVC.swift in Sources */,
+				3841544D1E51B8C600F06081 /* TableView.swift in Sources */,
 				384154351E4DD84200F06081 /* MBProgressHUD.m in Sources */,
 				384154311E4DD82E00F06081 /* BlueProgressMessage.swift in Sources */,
-				384154401E4DFC9B00F06081 /* NavigationController.swift in Sources */,
 				388699911E4DD008006BC37E /* AppDelegate.swift in Sources */,
+				384154521E51C10D00F06081 /* DisconnectButton.swift in Sources */,
+				384154551E51DB4900F06081 /* SettingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

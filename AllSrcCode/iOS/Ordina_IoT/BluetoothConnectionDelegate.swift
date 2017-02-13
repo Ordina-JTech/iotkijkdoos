@@ -184,9 +184,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         
         let uuid = serviceUUID
         manager.scanForPeripherals(withServices: [uuid], options: nil)
-        
-        //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
-        //Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
     }
     
     //Stop scanning for peripherals.
