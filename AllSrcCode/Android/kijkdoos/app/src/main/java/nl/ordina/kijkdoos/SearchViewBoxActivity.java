@@ -8,10 +8,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nl.ordina.kijkdoos.bluetooth.BluetoothService;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    @Inject
+    BluetoothService bluetoothService;
 
     @BindView(R.id.viewBoxList)
     ListView viewBoxList;
