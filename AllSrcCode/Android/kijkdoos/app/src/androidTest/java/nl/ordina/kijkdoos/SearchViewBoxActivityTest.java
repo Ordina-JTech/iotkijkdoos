@@ -1,11 +1,11 @@
 package nl.ordina.kijkdoos;
 
 import android.app.Instrumentation;
-import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.bluetooth.BluetoothService;
-import nl.ordina.kijkdoos.dagger.ApplicationComponent;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -51,9 +50,7 @@ public class SearchViewBoxActivityTest {
 
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
-        SearchViewBoxActivity searchViewBoxActivity = mActivityRule.getActivity();
-        verify(bluetoothService).search();
-
+        verify(bluetoothService).searchDevices();
     }
 
     @Test
@@ -65,5 +62,11 @@ public class SearchViewBoxActivityTest {
     public void navigateToViewBoxActivity() throws Exception {
         onData(equalTo("JTech Kijkdoos 1")).perform(click());
         intended(hasComponent(ViewBoxActivity.class.getName()));
+    }
+
+    @After
+    public void resetMocks() throws Exception {
+        Mockito.reset(bluetoothService);
+
     }
 }

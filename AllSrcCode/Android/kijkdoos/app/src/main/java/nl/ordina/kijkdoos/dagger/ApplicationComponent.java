@@ -10,7 +10,8 @@ import nl.ordina.kijkdoos.SearchViewBoxActivity;
  */
 
 @Singleton
-@Component(modules = {BluetoothServiceModule.class})
+@Component(modules = {AndroidApplicationModule.class,
+        BluetoothServiceModule.class})
 public interface ApplicationComponent {
     void inject(SearchViewBoxActivity activity);
 }

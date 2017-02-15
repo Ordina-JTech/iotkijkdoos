@@ -1,5 +1,7 @@
 package nl.ordina.kijkdoos.dagger;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -10,12 +12,12 @@ import nl.ordina.kijkdoos.bluetooth.BluetoothService;
  * Created by coenhoutman on 15-2-2017.
  */
 
-@Module
+@Module(includes = AndroidApplicationModule.class)
 public class BluetoothServiceModule {
 
     @Singleton
     @Provides
-    public BluetoothService provideBluetoothService() {
-        return new BluetoothService();
+    public BluetoothService provideBluetoothService(Context context) {
+        return new BluetoothService(context);
     }
 }

@@ -13,8 +13,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.bluetooth.BluetoothService;
+import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
-public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
+
+public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
 
     @Inject
     BluetoothService bluetoothService;
@@ -28,6 +31,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_view_box);
         ButterKnife.bind(this);
+        getViewBoxApplication(this).getApplicationComponent().inject(this);
 
         viewBoxListAdapter = new ArrayAdapter<>(this, R.layout.listitem_device, R.id.device_name);
         viewBoxListAdapter.add("JTech Kijkdoos 1");
@@ -36,7 +40,18 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
+    protected void onResume() {
+        bluetoothService.searchDevices(this);
+        super.onResume();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         startActivity(new Intent(this, ViewBoxActivity.class));
+    }
+
+    @Override
+    public void onDeviceFound() {
+
     }
 }
