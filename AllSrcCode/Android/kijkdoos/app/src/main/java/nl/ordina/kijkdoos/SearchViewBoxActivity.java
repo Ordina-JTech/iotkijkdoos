@@ -1,5 +1,6 @@
 package nl.ordina.kijkdoos;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.ordina.kijkdoos.bluetooth.BluetoothService;
+import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
@@ -20,7 +21,7 @@ import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
 
     @Inject
-    BluetoothService bluetoothService;
+    AbstractBluetoothService bluetoothService;
 
     @BindView(R.id.viewBoxList)
     ListView viewBoxList;
@@ -51,7 +52,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
-    public void onDeviceFound() {
+    public void onDeviceFound(BluetoothDevice bluetoothDevice) {
 
     }
 }

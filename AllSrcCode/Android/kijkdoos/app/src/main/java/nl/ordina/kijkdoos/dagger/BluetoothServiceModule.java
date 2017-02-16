@@ -1,11 +1,13 @@
 package nl.ordina.kijkdoos.dagger;
 
 import android.content.Context;
+import android.os.Build;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.BluetoothService;
 
 /**
@@ -17,7 +19,10 @@ public class BluetoothServiceModule {
 
     @Singleton
     @Provides
-    public BluetoothService provideBluetoothService(Context context) {
-        return new BluetoothService(context);
+    public AbstractBluetoothService provideBluetoothService(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return new BluetoothService(context);
+        }
+        return null;
     }
 }

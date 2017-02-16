@@ -14,7 +14,8 @@ import org.mockito.Mockito;
 
 import javax.inject.Inject;
 
-import nl.ordina.kijkdoos.bluetooth.BluetoothService;
+import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
+import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -24,6 +25,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -36,7 +38,7 @@ public class SearchViewBoxActivityTest {
     public IntentsTestRule<SearchViewBoxActivity> mActivityRule = new IntentsTestRule(SearchViewBoxActivity.class);
 
     @Inject
-    BluetoothService bluetoothService;
+    AbstractBluetoothService bluetoothService;
 
     @Before
     public void inject() throws Exception {
@@ -50,7 +52,7 @@ public class SearchViewBoxActivityTest {
 
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
-        verify(bluetoothService).searchDevices();
+        verify(bluetoothService).searchDevices(any(DeviceFoundListener.class));
     }
 
     @Test

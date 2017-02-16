@@ -1,29 +1,37 @@
 package nl.ordina.kijkdoos.bluetooth;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
+import android.annotation.TargetApi;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.support.annotation.NonNull;
-
-import junit.framework.Assert;
 
 import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by coenhoutman on 15-2-2017.
  */
-public class BluetoothService {
+@TargetApi(21)
+public class BluetoothService extends AbstractBluetoothService {
 
-    private final BluetoothManager bluetoothManager;
-    private final BluetoothAdapter adapter;
+    private final BluetoothLeScanner bluetoothScanner;
 
     public BluetoothService(Context context) {
-        bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-        adapter = bluetoothManager.getAdapter();
+        super(context);
+        bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
     }
 
+    @Override
     public void searchDevices(@NonNull DeviceFoundListener callback) {
         assertNotNull(callback);
-        callback.onDeviceFound();
+
+        bluetoothScanner.startScan(new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                callback.onDeviceFound(result.getDevice());
+            }
+        });
     }
+
 }
