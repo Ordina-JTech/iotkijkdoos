@@ -1,6 +1,7 @@
 package nl.ordina.kijkdoos;
 
 import android.app.Instrumentation;
+import android.bluetooth.BluetoothDevice;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
+import nl.ordina.kijkdoos.bluetooth.BluetoothDeviceWrapper;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
@@ -24,9 +26,13 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by coenhoutman on 9-2-2017.
@@ -35,40 +41,37 @@ import static org.mockito.Mockito.verify;
 @RunWith(AndroidJUnit4.class)
 public class SearchViewBoxActivityTest {
     @Rule
-    public IntentsTestRule<SearchViewBoxActivity> mActivityRule = new IntentsTestRule(SearchViewBoxActivity.class);
+    public IntentsTestRule<SearchViewBoxActivity> mActivityRule = new IntentsTestRule(SearchViewBoxActivity.class){
+        @Override
+        protected void beforeActivityLaunched() {
+            Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+            ViewBoxApplication context = (ViewBoxApplication) instrumentation.getTargetContext()
+                    .getApplicationContext();
+
+            MockedApplicationComponent component = (MockedApplicationComponent) context.getApplicationComponent();
+            component.inject(SearchViewBoxActivityTest.this);
+
+            BluetoothDeviceWrapper mockedBluetoothDevice = mock(BluetoothDeviceWrapper.class);
+            when(mockedBluetoothDevice.getName()).thenReturn("Mocked JTech Kijkdoos 1");
+
+            doAnswer(invocationOnMock -> {
+                invocationOnMock.getArgumentAt(0, DeviceFoundListener.class).onDeviceFound(mockedBluetoothDevice);
+                return null;
+            }).when(bluetoothService).searchDevices(any());
+        }
+    };
 
     @Inject
     AbstractBluetoothService bluetoothService;
 
-    @Before
-    public void inject() throws Exception {
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        ViewBoxApplication context = (ViewBoxApplication) instrumentation.getTargetContext()
-                .getApplicationContext();
-
-        MockedApplicationComponent component = (MockedApplicationComponent) context.getApplicationComponent();
-        component.inject(this);
+    @Test
+    public void navigateToViewBoxActivity() throws Exception {
+        onData(equalTo("Mocked JTech Kijkdoos 1")).perform(click());
+        intended(allOf(hasComponent(ViewBoxActivity.class.getName())));
     }
 
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
         verify(bluetoothService).searchDevices(any(DeviceFoundListener.class));
-    }
-
-    @Test
-    public void showListOfFoundViewBoxes() throws Exception {
-        onData(equalTo("JTech Kijkdoos 1")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void navigateToViewBoxActivity() throws Exception {
-        onData(equalTo("JTech Kijkdoos 1")).perform(click());
-        intended(hasComponent(ViewBoxActivity.class.getName()));
-    }
-
-    @After
-    public void resetMocks() throws Exception {
-        Mockito.reset(bluetoothService);
-
     }
 }

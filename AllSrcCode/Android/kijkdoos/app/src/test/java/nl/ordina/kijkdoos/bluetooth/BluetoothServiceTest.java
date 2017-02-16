@@ -6,16 +6,14 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.ArgumentCaptor;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -61,7 +59,11 @@ public class BluetoothServiceTest {
         DeviceFoundListener mockedCallback = mock(DeviceFoundListener.class);
         bluetoothService.searchDevices(mockedCallback);
 
-        verify(mockedCallback).onDeviceFound(mockedBluetoothDevice);
+        ArgumentCaptor<BluetoothDeviceWrapper> argumentCaptor = ArgumentCaptor.forClass(BluetoothDeviceWrapper.class);
+
+        verify(mockedCallback).onDeviceFound(argumentCaptor.capture());
+
+        assertEquals(mockedBluetoothDevice, argumentCaptor.getValue().getDevice());
     }
 
     @Test(expected = AssertionError.class)

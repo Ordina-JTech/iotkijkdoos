@@ -29,7 +29,7 @@ public class BluetoothService extends AbstractBluetoothService {
         bluetoothScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
-                callback.onDeviceFound(result.getDevice());
+                callback.onDeviceFound(new BluetoothDeviceWrapper(result.getDevice()));
             }
         });
     }
