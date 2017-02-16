@@ -95,7 +95,7 @@ void loop() {
         break;
 
       case 'r':
-        resetAllComponents();
+        resetComponents();
         break;
 
       default:
@@ -232,8 +232,13 @@ void alarm()  {
       delay(500);
   }
 
-  //TODO: LED aan of uitzetten naar het alarm. anders kloppen de buttons in app niet meer.
-   
+  //Leds are off after alarm. Check weither they were on before alarm started
+  if (isOnLed1) {
+    digitalWrite(LED1, HIGH);
+  }
+  if(isOnLed2)  {
+    digitalWrite(LED2, HIGH);
+  }    
 }
 
 //Play vader Jacob.
@@ -277,7 +282,7 @@ void setServoAngle(int angle)  {
 }
 
 //Reset all the components to their start value
-void resetAllComponents() {
+void resetComponents() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
   isOnLed1 = false;

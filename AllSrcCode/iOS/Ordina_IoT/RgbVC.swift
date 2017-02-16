@@ -9,6 +9,9 @@
 import Foundation
 
 
+//TODO:     - Value did change refactoren
+
+
 //Enum to check the current color of rgb led
 enum RgbColor   {
     case white
@@ -23,28 +26,73 @@ enum RgbColor   {
 
 class RgbVC: NSObject    {
     
-//Properties
-    var rgbSettingView: SettingView!
+//Properties.
+    var settingView: SettingView!
     private var rgbLabel: UILabel!
     private var currentRgbColor: RgbColor = RgbColor.white
     private var rgbSlider: UISlider!
     
-//Constructor
+    
+//Constructor.
     init(frame: CGRect) {
         super.init()
-        rgbSettingView = SettingView(frame: frame)
-        rgbSettingView.addRgbView()
-        
-        rgbLabel = rgbSettingView.rgbLabel
-        rgbSlider = rgbSettingView.rgbSlider
-        rgbSlider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
+        settingView = SettingView(frame: frame, title: "Control Rgb light")
+        addRgbView()
     }
     
-    //Changing de Rgb color
-    func sliderValueChanged(sender: UISlider) {
+    
+    //Add the view for rgb light.
+    private func addRgbView()    {
         
-        //Sending the RGB values based on sliders value.
-            
+    //Label
+        
+        //Creation
+        rgbLabel = UILabel()
+        settingView.addSubview(rgbLabel)
+        
+        //Constraints
+        let heightConstant = settingView.frame.width/4
+        rgbLabel.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        rgbLabel.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        rgbLabel.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        
+        let yConstant = settingView.frame.height/12.5   //Ratio (30.0 iPhone 7)
+        rgbLabel.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+        
+        //Properties
+        rgbLabel.translatesAutoresizingMaskIntoConstraints = false
+        rgbLabel.layer.masksToBounds = true
+        rgbLabel.layer.cornerRadius = heightConstant/2
+        rgbLabel.layer.borderWidth = 2
+        rgbLabel.layer.borderColor = UIColor.lightGray.cgColor
+        rgbLabel.backgroundColor = UIColor.white
+        
+    //Slider
+        
+        //Creation
+        rgbSlider = UISlider()
+        settingView.addSubview(rgbSlider)
+        
+        //Constraints
+        let topConstant = settingView.frame.height/12.5 //Ratio (30.0 iPhone 7)
+        rgbSlider.topAnchor.constraint(equalTo: rgbLabel.bottomAnchor, constant: topConstant).isActive = true
+        
+        let leftRightConstant = settingView.frame.height/15.0 //Ratio (25.0 iPhone 7)
+        rgbSlider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
+        rgbSlider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
+        
+        //Properties
+        rgbSlider.translatesAutoresizingMaskIntoConstraints = false
+        rgbSlider.value = 0
+        rgbSlider.minimumValue = 0
+        rgbSlider.maximumValue = 300
+        rgbSlider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
+    }
+
+    
+    //Sending the RGB values based on sliders value.
+    func sliderValueChanged(sender: UISlider) {
+
         switch sender.value    {
             
         //White

@@ -10,78 +10,71 @@ import UIKit
 
 class SettingView: UIView {
 
-    private var mainView: CGRect!
-    var rgbSlider: UISlider!
-    var rgbLabel: UILabel!
-    var okBtn: UIButton!
+//Properties
     
+//Constructor
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    override init(frame: CGRect)  {
+    init(frame: CGRect, title: String)  {
         super.init(frame: frame)
-        
-        mainView = frame
-        
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.85)
-        self.layer.cornerRadius = 10
-        //self.isHidden = true
+        self.backgroundColor = UIColor.white
+        addTitleBar(text: title)
     }
     
     
+    //Add the title bar to setting view
+    private func addTitleBar(text: String)  {
     
-    func addRgbView()    {
+    //View
         
-        //Label
-        var x = (mainView.width/2) - (mainView.width/8)
-        var y  = ((mainView.height/2) - (mainView.height/4))/2
-        var point = CGPoint(x: x, y: y)
-        var size = CGSize(width: mainView.width/4, height: mainView.height/4)
-        var rect = CGRect(origin: point, size: size)
+        //Creation
+        let viewPoint = CGPoint(x: 0, y: 0)
+        let viewSize = CGSize(width: self.frame.width, height: self.frame.height/3)
+        let viewRect = CGRect(origin: viewPoint, size: viewSize)
+        let titleView = UIView(frame: viewRect)
+        self.addSubview(titleView)
         
-        rgbLabel = UILabel(frame: rect)
-        rgbLabel.layer.masksToBounds = true
-        rgbLabel.layer.cornerRadius = 15
-        rgbLabel.backgroundColor = UIColor.white
+        //Properties
+        titleView.backgroundColor = UIColor.orange
         
-        self.addSubview(rgbLabel)
+    //Label
         
-        //Slider
-        point = CGPoint(x: 25, y: mainView.height/2)
-        size = CGSize(width: mainView.width - 50, height: 20)
-        rect = CGRect(origin: point, size: size)
+        //Creation
+        let titleLabel = UILabel()
+        titleView.addSubview(titleLabel)
         
-        rgbSlider = UISlider(frame: rect)
-        rgbSlider.value = 0
-        rgbSlider.minimumValue = 0
-        rgbSlider.maximumValue = 300
+        //Constraints
+        titleLabel.heightAnchor.constraint(equalToConstant: titleView.frame.height/3).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor).isActive = true
         
-        self.addSubview(rgbSlider)
+        //Properties
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.text = text
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont(name: "Avenir Next", size: 25.0)
+        titleLabel.sizeToFit()
         
-        //Button
-        /*x = (mainView.width/2) - (mainView.width/8)
-        y  = ((mainView.height/2) + (mainView.height/4))
+    //ImageView
         
-        
-        point = CGPoint(x: x, y: y)
-        size = CGSize(width: rgbLabel.frame.width*2, height: 40)
-        rect = CGRect(origin: point, size: size)
-        
-        okBtn = UIButton(frame: rect)
-        okBtn.setTitle("Done", for: .normal)
-        okBtn.setTitleColor(UIColor.white, for: .normal)
-        okBtn.layer.cornerRadius = 10
-        okBtn.backgroundColor = UIColor.orange
-        
-        self.addSubview(okBtn)*/
-        
-        
-        
-        
-        
-        
-        
-    }
+        //Creation
+        let imageName = "jtech_logo"
+        let image = UIImage(named: imageName)
+        let imageView = UIImageView(image: image)
+        titleView.addSubview(imageView)
 
+        //Constraints
+        imageView.rightAnchor.constraint(equalTo: titleView.rightAnchor, constant: 0.0).isActive = true
+        imageView.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: titleLabel.frame.height).isActive = true
+
+        let widthAnchor = titleView.frame.width/2.4
+        imageView.widthAnchor.constraint(equalToConstant: widthAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: titleLabel.frame.height*2).isActive = true
+
+        //Properties
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+    }
 }
