@@ -102,7 +102,7 @@ class MainVC: UIViewController{
         
         let index = tapGestureRecognizer.view!.tag
 
-        if !viewIsActive[index]    {
+        if !viewIsActive[index] && !viewIsActive.contains(true)    {
             animateSettingView(view: settingViewArray[index], x: 0)
             viewIsActive[index] = true
         }
