@@ -56,6 +56,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        //Try to reset arduinoComponents if user closes the app.
+        if blue.isReady {
+            blue.sendMessage(string: "r")
+        }
     }
 
 
