@@ -39,7 +39,6 @@ public class BluetoothServiceTest {
 
         when(mockedContext.getSystemService(Context.BLUETOOTH_SERVICE)).thenReturn(mockedBluetoothManager);
         when(mockedBluetoothManager.getAdapter()).thenReturn(mockedBluetoothAdapter);
-
     }
 
     @Test
@@ -70,5 +69,12 @@ public class BluetoothServiceTest {
     public void testNullCallback() throws Exception {
         BluetoothService bluetoothService = new BluetoothService(mockedContext);
         bluetoothService.searchDevices(null);
+    }
+
+    @Test
+    public void testIsBluetoothSupportedReturnsFalse() throws Exception {
+        when(mockedContext.has)
+        BluetoothService bluetoothService = new BluetoothService(mockedContext);
+
     }
 }

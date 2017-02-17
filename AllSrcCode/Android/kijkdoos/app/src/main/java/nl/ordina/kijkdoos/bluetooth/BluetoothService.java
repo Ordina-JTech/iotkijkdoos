@@ -5,6 +5,7 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import static junit.framework.Assert.assertNotNull;
@@ -12,7 +13,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Created by coenhoutman on 15-2-2017.
  */
-@TargetApi(21)
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class BluetoothService extends AbstractBluetoothService {
 
     private final BluetoothLeScanner bluetoothScanner;

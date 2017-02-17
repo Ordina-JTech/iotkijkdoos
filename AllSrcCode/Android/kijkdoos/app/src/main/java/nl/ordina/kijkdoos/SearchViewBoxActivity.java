@@ -53,6 +53,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onDeviceFound(BluetoothDeviceWrapper bluetoothDevice) {
-        viewBoxListAdapter.add(bluetoothDevice.getName());
+        String address = bluetoothDevice.getDevice().getAddress();
+        viewBoxListAdapter.add(address);
     }
 }

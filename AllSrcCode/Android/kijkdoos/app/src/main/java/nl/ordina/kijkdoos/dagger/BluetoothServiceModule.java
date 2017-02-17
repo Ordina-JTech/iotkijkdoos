@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.BluetoothService;
+import nl.ordina.kijkdoos.bluetooth.PreLollipopBluetoothService;
 
 /**
  * Created by coenhoutman on 15-2-2017.
@@ -20,9 +21,9 @@ public class BluetoothServiceModule {
     @Singleton
     @Provides
     public AbstractBluetoothService provideBluetoothService(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return new BluetoothService(context);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return new PreLollipopBluetoothService(context);
         }
-        return null;
+        return new BluetoothService(context);
     }
 }
