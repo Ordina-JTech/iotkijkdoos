@@ -49,7 +49,7 @@ void setup() {
   pinMode(SPEAKER, OUTPUT);
 
   //Start servo at 180 degrees (for counter clockwise)
-  setServoAngle(179);
+  setServoAngle(180, 400);
   
 }
 
@@ -74,7 +74,7 @@ void loop() {
         break;
 
       case'c':
-        getRgbValues();
+        getRGBValues();
         break;
 
       case 'd':
@@ -104,52 +104,59 @@ void loop() {
   }
 }
 
-//Get the rgb values from the central device.
-void getRgbValues() {
+//Read the char and set the RGB value.
+void getRGBValues() {
   
-  //Array for the RGB values, the charCount and the index for accessing the array
-  int rgbValues[3];
-  int charCount = 0;
-  int index = 0;
-  
-  //Combine the 9 chars together in one String
-  String rgbString = "";
+  int count = 0;
 
-  //Loop untill the 9 chars are received
-  while (charCount < 9)  {
-
-    //If data is available
-    if (bleSerial.available() > 0)  {
-
-      //Read the char
+  while (count == 0) {
+    if (bleSerial.available() > 0) {
+      
       char input = bleSerial.read();
-
-      //If the input is not equal to a newline char, add input to rgbString
-      if (input != '\n') {
+    
+      switch (input)  {
         
-        //Add input to the rgbString
-        rgbString += input;
-        charCount++;
-
-        //If rgbString length is equal to 3, the first value is received
-        if (rgbString.length() == 3)  {
-
-           //Add to int value to the array, add 1 to index and 
-           rgbValues[index] = rgbString.toInt();
-           Serial.println(rgbValues[index]);
-           index++;
-           rgbString = "";    
-        }
+        //White
+        case '0':
+          setRGBColor(0,0,0);
+          break;
+        
+        //Red
+        case '1':
+        setRGBColor(255,0,0);
+        break;
+       
+        //Yellow
+        case '2':
+        setRGBColor(255,255,0);
+        break;
+        
+        //Green
+        case '3':
+        setRGBColor(0,255,0);
+        break;
+        
+        //Aqua
+        case '4':
+        setRGBColor(0,255,255);
+        break;
+        
+        //Blue
+        case '5':
+        setRGBColor(0,0,255);
+        break;
+        
+        //Purple
+        case '6':
+        setRGBColor(255,0,255);
+        break;
       }
+      count++;
     }
   }
-
-  //Set the RGB color with the received values.
-  setRGBColor(rgbValues[0], rgbValues[1], rgbValues[2]);
-  
 }
 
-//Read the serial input, translate it to the angle and call setServoAngle method.
+//Read the serial input, convert it to the angle and call setServoAngle method.
 void getServoAngle() {
 
   //Create empty string and char
@@ -174,7 +181,7 @@ void getServoAngle() {
   int angle = 180 - angleStr.toInt();
 
   //Set the servo angle with received angle
-  setServoAngle(angle);
+  setServoAngle(angle, 50);
   
 }
 
@@ -183,7 +190,6 @@ void setLed(int number) {
   
   if (number == 1)  {
     if (!isOnLed1)  {
-      Serial.println("powerLed 1 = true");
       isOnLed1 = true;
       digitalWrite(LED1, HIGH);
     }
@@ -268,14 +274,15 @@ void vaderJacob() {
 }
 
 //Set the angle of the servo. The input has to be in the range of 0 - 180.
-void setServoAngle(int angle)  {
+void setServoAngle(int angle, int milliSec)  {
   
   //Attach and detach servo here, otherwise the servo is moving while changing RGB led
   servo.attach(SERVO);
+  Serial.println(angle);
   servo.write(angle);
   
   //Give servo time to get at the given angle
-  delay(50);
+  delay(milliSec);
 
   //Detach the servo for unwanted movement
   servo.detach();
@@ -288,7 +295,7 @@ void resetComponents() {
   isOnLed1 = false;
   isOnLed2 = false;
   setRGBColor(0, 0, 0);
-  setServoAngle(180);
+  setServoAngle(180, 400);
 
   //Send 'y' to central device. If received central can disconnect from peripheral
   bleSerial.println("y");
