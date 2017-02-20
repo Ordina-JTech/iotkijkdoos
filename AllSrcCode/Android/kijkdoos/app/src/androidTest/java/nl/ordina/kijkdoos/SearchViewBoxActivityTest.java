@@ -3,6 +3,7 @@ package nl.ordina.kijkdoos;
 import android.app.Instrumentation;
 import android.bluetooth.BluetoothDevice;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,11 +22,13 @@ import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
 import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
@@ -53,6 +56,7 @@ public class SearchViewBoxActivityTest {
 
             BluetoothDeviceWrapper mockedBluetoothDevice = mock(BluetoothDeviceWrapper.class);
             when(mockedBluetoothDevice.getName()).thenReturn("Mocked JTech Kijkdoos 1");
+            when(mockedBluetoothDevice.getAddress()).thenReturn("00:11:22:33:44:55");
 
             doAnswer(invocationOnMock -> {
                 invocationOnMock.getArgumentAt(0, DeviceFoundListener.class).onDeviceFound(mockedBluetoothDevice);
@@ -66,12 +70,23 @@ public class SearchViewBoxActivityTest {
 
     @Test
     public void navigateToViewBoxActivity() throws Exception {
-        onData(equalTo("Mocked JTech Kijkdoos 1")).perform(click());
+        onView(withText("Mocked JTech Kijkdoos 1")).perform(click());
         intended(allOf(hasComponent(ViewBoxActivity.class.getName())));
     }
 
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
         verify(bluetoothService).searchDevices(any(DeviceFoundListener.class));
+    }
+
+    @Test
+    public void whenADeviceWasAlreadyFoundIgnoreTheNewDevice() throws Exception {
+        triggerAnotherSearch();
+
+        onView(withText("Mocked JTech Kijkdoos 1")).check(matches(isDisplayed()));
+    }
+
+    private void triggerAnotherSearch() {
+        mActivityRule.getActivity().searchForViewBoxes();
     }
 }

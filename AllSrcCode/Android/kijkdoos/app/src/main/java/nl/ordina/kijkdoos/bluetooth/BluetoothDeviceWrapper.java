@@ -2,9 +2,11 @@ package nl.ordina.kijkdoos.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import lombok.Getter;
 
+import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -12,7 +14,6 @@ import static junit.framework.Assert.assertNotNull;
  */
 
 public class BluetoothDeviceWrapper {
-    private String name;
 
     @Getter
     private BluetoothDevice device;
@@ -23,7 +24,13 @@ public class BluetoothDeviceWrapper {
     }
 
     public String getName() {
-        return device.getName();
+        String deviceName = device.getName();
+
+        return isEmpty(deviceName) ? getAddress() : device.getName();
+    }
+
+    public String getAddress() {
+        return device.getAddress();
     }
 
     @Override

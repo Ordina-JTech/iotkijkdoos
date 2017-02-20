@@ -73,8 +73,8 @@ public class BluetoothServiceTest {
 
     @Test
     public void testIsBluetoothSupportedReturnsFalse() throws Exception {
-        when(mockedContext.has)
-        BluetoothService bluetoothService = new BluetoothService(mockedContext);
+//        when(mockedContext.has)
+//        BluetoothService bluetoothService = new BluetoothService(mockedContext);
 
     }
 }

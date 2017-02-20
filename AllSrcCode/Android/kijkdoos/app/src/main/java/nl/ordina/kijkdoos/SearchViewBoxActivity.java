@@ -1,8 +1,8 @@
 package nl.ordina.kijkdoos;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,7 +26,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @BindView(R.id.viewBoxList)
     ListView viewBoxList;
-    private ArrayAdapter<String> viewBoxListAdapter;
+
+    private ViewBoxListAdapter viewBoxListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +36,20 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         ButterKnife.bind(this);
         getViewBoxApplication(this).getApplicationComponent().inject(this);
 
-        viewBoxListAdapter = new ArrayAdapter<>(this, R.layout.listitem_device, R.id.device_name);
+        viewBoxListAdapter = new ViewBoxListAdapter(this);
         viewBoxList.setAdapter(viewBoxListAdapter);
         viewBoxList.setOnItemClickListener(this);
     }
 
     @Override
     protected void onResume() {
-        bluetoothService.searchDevices(this);
+        searchForViewBoxes();
         super.onResume();
+    }
+
+    @VisibleForTesting
+    void searchForViewBoxes() {
+        bluetoothService.searchDevices(this);
     }
 
     @Override
@@ -53,7 +59,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onDeviceFound(BluetoothDeviceWrapper bluetoothDevice) {
-        String address = bluetoothDevice.getDevice().getAddress();
-        viewBoxListAdapter.add(address);
+        viewBoxListAdapter.addDevice(bluetoothDevice);
     }
 }
