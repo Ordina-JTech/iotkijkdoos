@@ -44,27 +44,26 @@ enum Message {
 }
 
 
-//TODO: kijken welke variabelen private/final kunnen zijn
 final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate   {
     
 //Properties 
     
-    //Delegate variabele voor bluetoothConnectionDelegate.
+    //Delegate variabele voor bluetoothConnectionDelegate
     var delegate: BluetoothConnectionDelegate?
     
-    //Variabele voor CBCentralManager.
+    //Variabele voor CBCentralManager
     var manager: CBCentralManager!
     
-    //Variabele voor de connected device(optional).
-    var connectedPeripheral: CBPeripheral?
+    //Variabele voor de connected device(optional)
+    private(set) var connectedPeripheral: CBPeripheral?
     
-    //Variabele voor
+    //Write characteristic als CBcharacteristic gevonden is
     weak var writeCharacteristic: CBCharacteristic?
     
     //Variabele voor de manier van schrijven: without response
     private var writeType: CBCharacteristicWriteType = .withoutResponse
     
-    //Als isReady true is kan er iets verzonden worden naar het device.
+    //Als isReady true is kan er iets verzonden worden naar het device
     var isReady: Bool {
         get {
             return manager.state == .poweredOn &&
@@ -114,12 +113,13 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         //connectedPeripheral gelijkstellen aan de peripheral.
         connectedPeripheral = peripheral
         
-        //Kijken of er services zijn "FFE0".
+        //Kijken of er services zijn: "FFE0".
         peripheral.discoverServices([serviceUUID])
     }
     
     //Als het niet gelukt is om te connecten.
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        connectedPeripheral = nil
         delegate?.blueDidFailToConnect(peripheral, error: error as NSError?)
     }
     
@@ -132,9 +132,11 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
 //PERIPHERAL DELEGATE METHODS
     
+    //Als er services zijn ontdekt.
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         peripheral.discoverCharacteristics([characteristicUUID], for: peripheral.services![0])
     }
+    
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
@@ -153,22 +155,17 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
     
-    
+    //Als er data wordt ontvangen.
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         //Data ophalen.
         let data = characteristic.value
         
-        //Checken of data niet niets is
+        //Checken of data niet nil is
         guard data != nil else {return}
 
-        
-        //Data converten van chars naar string
+        //Data converten naar unicode en delegate updaten
         if let message = String(data: data!, encoding: String.Encoding.utf8) {
-            
-            //Uit de ontvangen string /r/n halen.
-            //let message = str.replacingOccurrences(of: "\r\n", with: "", options: .regularExpression, range: nil)
-            
             delegate?.blueDidReceiveString(message)
         }
     }
@@ -179,7 +176,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
     //Start scanning for peripherals.
     func startScanning()    {
-        //Zeker zijn dat bluetooth aanstaat.
+
         guard manager.state == .poweredOn else {return}
         
         let uuid = serviceUUID
@@ -191,14 +188,14 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         manager.stopScan()
     }
     
-    //TODO: Change name method. To vague right now.
-    //Message sturen naar PunchPad.
+    
+    //Message sturen naar peripheral
     func sendMessage(string: String)  {
         
         //Check is string is not empty and conenction is ready to send messages.
         if string != "" && blue.isReady {
             let data = string.data(using: String.Encoding.utf8)
-            blue.connectedPeripheral!.writeValue(data!, for: blue.writeCharacteristic!, type: blue.writeType)
+            connectedPeripheral!.writeValue(data!, for: blue.writeCharacteristic!, type: blue.writeType)
         }
     }
 }
