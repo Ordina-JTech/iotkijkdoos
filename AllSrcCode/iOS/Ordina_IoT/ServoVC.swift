@@ -15,7 +15,7 @@ class ServoVC: NSObject {
 //Properties
     var settingView: SettingView!
     private var slider: UISlider!
-    private var previousValue: Float = 0
+    private var previousValue: Int = 0
     private var angleLabel: UILabel!
     private var imageView: UIImageView!
     
@@ -23,7 +23,6 @@ class ServoVC: NSObject {
 //Constructor.
     init(frame: CGRect, title: String) {
         super.init()
-        
         settingView = SettingView(frame: frame, title: title)
         addServoView()
     }
@@ -94,21 +93,24 @@ class ServoVC: NSObject {
     }
     
     
-    //If user did change slider value.
+    //Change servo angle every 5 degree if the previous slider value is not equal to the current value. It Reduces the amount of data send to peripheral.
     func sliderValueChanged()   {
         
-        //Change servo angle every 5 degree if the previous slider value is not equal to the current value.
-        if blue.isReady{
-            if (Int(slider.value) % 5 == 0) && (Int(slider.value) != Int(previousValue))  {
-                
-                //Convert slider value to radians and make transformation
-                let sliderValue = slider.value
-                let radianAngle = sliderValue * .pi / 180
-                imageView.transform = CGAffineTransform(rotationAngle: CGFloat(radianAngle))
-                blue.sendMessage(string: "g\(Int(sliderValue))\n")
-                angleLabel.text = "\(String((Int(sliderValue))))°"
-                previousValue = slider.value
-            }
+        guard blue.isReady else {return}
+        
+        let sliderValue = Int(slider.value)
+        
+        if (sliderValue % 5 == 0) && (sliderValue != previousValue)  {
+            rotateImage(value: slider.value)
+            angleLabel.text = "\(String((sliderValue)))°"
+            blue.sendMessage(string: "g\(sliderValue)\n")
+            previousValue = sliderValue
         }
+    }
+    
+    //Convert slider value to radians, make transformation and change text angle label.
+    private func rotateImage(value: Float)  {
+        let radianAngle = value * .pi / 180
+        imageView.transform = CGAffineTransform(rotationAngle: CGFloat(radianAngle))
     }
 }

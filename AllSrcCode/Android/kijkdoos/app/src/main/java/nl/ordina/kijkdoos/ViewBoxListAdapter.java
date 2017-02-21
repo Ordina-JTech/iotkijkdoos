@@ -10,42 +10,42 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.ordina.kijkdoos.bluetooth.ViewBox;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
 
 public class ViewBoxListAdapter extends BaseAdapter {
-    private ArrayList<ViewBox> viewBoxes;
+    private ArrayList<ViewBoxRemoteController> viewBoxRemoteControllers;
     private LayoutInflater inflater;
 
     public ViewBoxListAdapter(SearchViewBoxActivity activity) {
         super();
-        viewBoxes = new ArrayList<>();
+        viewBoxRemoteControllers = new ArrayList<>();
         inflater = activity.getLayoutInflater();
     }
 
-    public void addViewBox(ViewBox device) {
-        if (!viewBoxes.contains(device)) {
-            viewBoxes.add(device);
+    public void addViewBoxRemoteController(ViewBoxRemoteController device) {
+        if (!viewBoxRemoteControllers.contains(device)) {
+            viewBoxRemoteControllers.add(device);
             notifyDataSetChanged();
         }
     }
 
-    public ViewBox getViewBox(int position) {
-        return viewBoxes.get(position);
+    public ViewBoxRemoteController getViewBoxRemoteController(int position) {
+        return viewBoxRemoteControllers.get(position);
     }
 
     public void clear() {
-        viewBoxes.clear();
+        viewBoxRemoteControllers.clear();
     }
 
     @Override
     public int getCount() {
-        return viewBoxes.size();
+        return viewBoxRemoteControllers.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return viewBoxes.get(i);
+        return viewBoxRemoteControllers.get(i);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ViewBoxListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         }
 
-        viewHolder.title.setText(viewBoxes.get(position).getName());
+        viewHolder.title.setText(viewBoxRemoteControllers.get(position).getName());
 
         return convertView;
     }

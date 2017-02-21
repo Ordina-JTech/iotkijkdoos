@@ -6,11 +6,7 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import lombok.Getter;
 
@@ -21,12 +17,12 @@ import static junit.framework.Assert.assertNotNull;
  * Created by coenhoutman on 16-2-2017.
  */
 
-public class ViewBox {
+public class ViewBoxRemoteController {
 
     @Getter
     private BluetoothDevice device;
 
-    public ViewBox(@NonNull BluetoothDevice device) {
+    public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
         this.device = device;
     }
@@ -46,13 +42,13 @@ public class ViewBox {
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 if (status != BluetoothGatt.GATT_SUCCESS) {
-                    Log.w(ViewBox.class.getSimpleName(), this + ": failed to connect (" + status + ")");
+                    Log.w(ViewBoxRemoteController.class.getSimpleName(), this + ": failed to connect (" + status + ")");
                     return;
                 }
 
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     if (listener != null) {
-                        listener.onConnected(ViewBox.this);
+                        listener.onConnected(ViewBoxRemoteController.this);
                     }
                 }
             }
@@ -72,7 +68,7 @@ public class ViewBox {
     }
 
     public interface OnConnectedListener {
-        void onConnected(ViewBox viewBox);
+        void onConnected(ViewBoxRemoteController viewBoxRemoteController);
     }
 
 }

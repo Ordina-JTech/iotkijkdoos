@@ -40,7 +40,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         
         //Bluetooth Connection
         blue = BluetoothConnection(delegate: self)
-        
     }
     
     
@@ -90,6 +89,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         refreshControl.beginRefreshing()
     }
     
+    //ScanVC altijd in portrait laten zien.
     func setPortraitOrientation()   {
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
@@ -108,13 +108,13 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             //Start refresh programmatically
             startRefreshControl()
             
+            //Disable refreshButton
             refreshBtn.isEnabled = false
             
             //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
             Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
         else{
-            blue.connectedPeripheral = nil
             BlueProgressMessage.show(state: .poweredOff, currentView: self.view)
             refreshBtn.isEnabled = false
         }
@@ -158,19 +158,20 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     //Als de connectie mislukt.
     func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
-        blueDidNotConnect()
+        refreshBtn.isEnabled = true
         BlueProgressMessage.show(state: .failedToConnect, currentView: self.view)
     }
     
     
     //Als de connectie wordt verbroken.
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        blueDidNotConnect()
+        refreshBtn.isEnabled = true
         BlueProgressMessage.show(state: .disconnected, currentView: self.view)
         
-        //Notificate other VC's
+        //Notificate other VC's if connection lost
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
+    
     
     //Central Recieves 'r' from peripheral is resetting was succesfull.
     func blueDidReceiveString(_ message: String) {
@@ -186,13 +187,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         else if messageArray[0] == "y"   {
             blue.manager.cancelPeripheralConnection(blue.connectedPeripheral!)
         }
-    }
-    
-    
-    //When blue did failed to or disconnected set connectedPeripheral to nil and enable refreshButton
-    private func blueDidNotConnect()    {
-        blue.connectedPeripheral = nil
-        refreshBtn.isEnabled = true
     }
     
     

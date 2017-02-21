@@ -58,7 +58,7 @@ public class BluetoothDiscoveryServiceTest {
         DeviceFoundListener mockedCallback = mock(DeviceFoundListener.class);
         bluetoothDiscoveryService.searchDevices(mockedCallback);
 
-        ArgumentCaptor<ViewBox> argumentCaptor = ArgumentCaptor.forClass(ViewBox.class);
+        ArgumentCaptor<ViewBoxRemoteController> argumentCaptor = ArgumentCaptor.forClass(ViewBoxRemoteController.class);
 
         verify(mockedCallback).onDeviceFound(argumentCaptor.capture());
 

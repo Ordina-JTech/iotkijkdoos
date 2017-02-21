@@ -19,7 +19,7 @@ import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.ViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxListAdapter;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
-import nl.ordina.kijkdoos.bluetooth.ViewBox;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
@@ -83,14 +83,14 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ViewBox viewBox = viewBoxListAdapter.getViewBox(position);
-        viewBox.connect(this, connectedViewBox -> {
+        ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
+        viewBoxRemoteController.connect(this, connectedViewBox -> {
             runOnUiThread(() -> startActivity(new Intent(this, ViewBoxActivity.class)));
         });
     }
 
     @Override
-    public void onDeviceFound(ViewBox bluetoothDevice) {
-        runOnUiThread(() -> viewBoxListAdapter.addViewBox(bluetoothDevice));
+    public void onDeviceFound(ViewBoxRemoteController bluetoothDevice) {
+        runOnUiThread(() -> viewBoxListAdapter.addViewBoxRemoteController(bluetoothDevice));
     }
 }
