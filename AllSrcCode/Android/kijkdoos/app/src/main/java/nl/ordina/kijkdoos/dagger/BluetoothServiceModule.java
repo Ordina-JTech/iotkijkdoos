@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
-import nl.ordina.kijkdoos.bluetooth.BluetoothService;
+import nl.ordina.kijkdoos.bluetooth.BluetoothDiscoveryService;
 import nl.ordina.kijkdoos.bluetooth.PreLollipopBluetoothService;
 
 /**
@@ -24,6 +24,6 @@ public class BluetoothServiceModule {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return new PreLollipopBluetoothService(context);
         }
-        return new BluetoothService(context);
+        return new BluetoothDiscoveryService(context);
     }
 }

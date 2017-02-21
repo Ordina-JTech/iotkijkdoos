@@ -1,10 +1,6 @@
 package nl.ordina.kijkdoos.bluetooth;
 
-import android.annotation.TargetApi;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 /**
@@ -18,7 +14,7 @@ public class PreLollipopBluetoothService extends AbstractBluetoothService {
     @Override
     public void searchDevices(@NonNull DeviceFoundListener callback) {
         getBluetoothAdapter().startLeScan((device, rssi, scanRecord) -> {
-            callback.onDeviceFound(new BluetoothDeviceWrapper(device));
+            callback.onDeviceFound(new ViewBox(device));
         });
     }
 }

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
  */
 
 @TargetApi(21)
-public class BluetoothServiceTest {
+public class BluetoothDiscoveryServiceTest {
 
     private BluetoothManager mockedBluetoothManager;
     private BluetoothAdapter mockedBluetoothAdapter;
@@ -54,11 +54,11 @@ public class BluetoothServiceTest {
             return null;
         }).when(mockedBluetoothScanner).startScan(any(ScanCallback.class));
 
-        BluetoothService bluetoothService = new BluetoothService(mockedContext);
+        BluetoothDiscoveryService bluetoothDiscoveryService = new BluetoothDiscoveryService(mockedContext);
         DeviceFoundListener mockedCallback = mock(DeviceFoundListener.class);
-        bluetoothService.searchDevices(mockedCallback);
+        bluetoothDiscoveryService.searchDevices(mockedCallback);
 
-        ArgumentCaptor<BluetoothDeviceWrapper> argumentCaptor = ArgumentCaptor.forClass(BluetoothDeviceWrapper.class);
+        ArgumentCaptor<ViewBox> argumentCaptor = ArgumentCaptor.forClass(ViewBox.class);
 
         verify(mockedCallback).onDeviceFound(argumentCaptor.capture());
 
@@ -67,8 +67,8 @@ public class BluetoothServiceTest {
 
     @Test(expected = AssertionError.class)
     public void testNullCallback() throws Exception {
-        BluetoothService bluetoothService = new BluetoothService(mockedContext);
-        bluetoothService.searchDevices(null);
+        BluetoothDiscoveryService bluetoothDiscoveryService = new BluetoothDiscoveryService(mockedContext);
+        bluetoothDiscoveryService.searchDevices(null);
     }
 
     @Test

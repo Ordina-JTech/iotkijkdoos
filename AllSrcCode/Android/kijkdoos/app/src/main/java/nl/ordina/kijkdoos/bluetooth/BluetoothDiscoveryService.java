@@ -14,11 +14,11 @@ import static junit.framework.Assert.assertNotNull;
  * Created by coenhoutman on 15-2-2017.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class BluetoothService extends AbstractBluetoothService {
+public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
     private final BluetoothLeScanner bluetoothScanner;
 
-    public BluetoothService(Context context) {
+    public BluetoothDiscoveryService(Context context) {
         super(context);
         bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
     }
@@ -30,7 +30,7 @@ public class BluetoothService extends AbstractBluetoothService {
         bluetoothScanner.startScan(new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
-                callback.onDeviceFound(new BluetoothDeviceWrapper(result.getDevice()));
+                callback.onDeviceFound(new ViewBox(result.getDevice()));
             }
         });
     }

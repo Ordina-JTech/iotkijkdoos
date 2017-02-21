@@ -10,41 +10,42 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nl.ordina.kijkdoos.bluetooth.BluetoothDeviceWrapper;
+import nl.ordina.kijkdoos.bluetooth.ViewBox;
 import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
 
 public class ViewBoxListAdapter extends BaseAdapter {
-    private ArrayList<BluetoothDeviceWrapper> devices;
+    private ArrayList<ViewBox> viewBoxes;
     private LayoutInflater inflater;
 
     public ViewBoxListAdapter(SearchViewBoxActivity activity) {
         super();
-        devices = new ArrayList<>();
+        viewBoxes = new ArrayList<>();
         inflater = activity.getLayoutInflater();
     }
 
-    public void addDevice(BluetoothDeviceWrapper device) {
-        if (!devices.contains(device)) {
-            devices.add(device);
+    public void addViewBox(ViewBox device) {
+        if (!viewBoxes.contains(device)) {
+            viewBoxes.add(device);
+            notifyDataSetChanged();
         }
     }
 
-    public BluetoothDeviceWrapper getDevice(int position) {
-        return devices.get(position);
+    public ViewBox getViewBox(int position) {
+        return viewBoxes.get(position);
     }
 
     public void clear() {
-        devices.clear();
+        viewBoxes.clear();
     }
 
     @Override
     public int getCount() {
-        return devices.size();
+        return viewBoxes.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return devices.get(i);
+        return viewBoxes.get(i);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ViewBoxListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         }
 
-        viewHolder.title.setText(devices.get(position).getName());
+        viewHolder.title.setText(viewBoxes.get(position).getName());
 
         return convertView;
     }

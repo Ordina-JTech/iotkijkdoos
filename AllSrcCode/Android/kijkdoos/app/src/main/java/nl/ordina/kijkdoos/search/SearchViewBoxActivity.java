@@ -19,7 +19,7 @@ import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.ViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxListAdapter;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
-import nl.ordina.kijkdoos.bluetooth.BluetoothDeviceWrapper;
+import nl.ordina.kijkdoos.bluetooth.ViewBox;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
@@ -64,7 +64,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
             waitingForBluetoothBeingEnabled = false;
             if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, "This app needs bluetooth enabled to work", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.BluetoothNeededMessage, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -83,11 +83,14 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(this, ViewBoxActivity.class));
+        ViewBox viewBox = viewBoxListAdapter.getViewBox(position);
+        viewBox.connect(this, connectedViewBox -> {
+            runOnUiThread(() -> startActivity(new Intent(this, ViewBoxActivity.class)));
+        });
     }
 
     @Override
-    public void onDeviceFound(BluetoothDeviceWrapper bluetoothDevice) {
-        viewBoxListAdapter.addDevice(bluetoothDevice);
+    public void onDeviceFound(ViewBox bluetoothDevice) {
+        runOnUiThread(() -> viewBoxListAdapter.addViewBox(bluetoothDevice));
     }
 }
