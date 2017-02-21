@@ -9,27 +9,11 @@
 import Foundation
 
 
-//TODO:     - Value did change refactoren
-
-
-//Enum to check the current color of rgb led
-enum RgbColor   {
-    case white
-    case red
-    case yellow
-    case green
-    case aqua
-    case blue
-    case purple
-}
-
-
 class RgbVC: NSObject    {
     
 //Properties.
     var settingView: SettingView!
     private var rgbLabel: UILabel!
-    private var currentRgbColor: RgbColor = RgbColor.white
     private var rgbSlider: UISlider!
     
     private let white = UIColor.white
@@ -40,11 +24,20 @@ class RgbVC: NSObject    {
     private let blueColor = UIColor.blue.withAlphaComponent(0.75)
     private let purple = UIColor.purple.withAlphaComponent(0.75)
     
+    private var colorArray: [UIColor] = []
+    private let messageArray = ["c0", "c1", "c2", "c3", "c4", "c5", "c6"]
+    private var valueArray: [Int] = [0, 50, 100, 150, 200, 250, 300]
+    private var currentColor: UIColor = UIColor.white
+
+
 //Constructor.
     init(frame: CGRect) {
         super.init()
         settingView = SettingView(frame: frame, title: "Control Rgb light")
         addRgbView()
+        
+        //Add all the colors to the colorArray
+        colorArray = [white, red, yellow, green, aqua, blueColor, purple]
     }
     
     
@@ -100,60 +93,19 @@ class RgbVC: NSObject    {
     //Sending the RGB values based on sliders value.
     func sliderValueChanged(sender: UISlider) {
 
-        switch sender.value    {
-            
-        //White
-        case 0:
-            if currentRgbColor != .white    {
-                currentRgbColor = .white
-                blue.sendMessage(string: "c0")
-                setRgbColor(color: white)
+        let sliderValue = Int(sender.value)
+        
+        for index in 0..<valueArray.count   {
+            if sliderValue <= valueArray[index]  {
+                
+                if currentColor != colorArray[index] {
+                    currentColor = colorArray[index]
+                    blue.sendMessage(string: messageArray[index])
+                    setRgbColor(color: colorArray[index])
+                }
+                
+                break
             }
-        //Red
-        case 1..<51:
-            if currentRgbColor != .red  {
-                currentRgbColor = .red
-                blue.sendMessage(string: "c1")
-                setRgbColor(color: red)
-            }
-        //Yellow
-        case 51..<101:
-            if currentRgbColor != .yellow   {
-                currentRgbColor = .yellow
-                blue.sendMessage(string: "c2")
-                setRgbColor(color: yellow)
-            }
-        //Green
-        case 101..<151:
-            if currentRgbColor != .green    {
-                currentRgbColor = .green
-                blue.sendMessage(string: "c3")
-                setRgbColor(color: green)
-            }
-        //Aqua
-        case 151..<201:
-            if currentRgbColor != .aqua {
-                currentRgbColor = .aqua
-                blue.sendMessage(string: "c4")
-                setRgbColor(color: aqua)
-            }
-        //Blue
-        case 201..<251:
-            if currentRgbColor != .blue {
-                currentRgbColor = .blue
-                blue.sendMessage(string: "c5")
-                setRgbColor(color: blueColor)
-            }
-        //Purple
-        case 251..<301:
-            if currentRgbColor != .purple   {
-                currentRgbColor = .purple
-                blue.sendMessage(string: "c6")
-                setRgbColor(color: purple)
-     
-            }
-        default:
-            break
         }
     }
     
@@ -161,6 +113,5 @@ class RgbVC: NSObject    {
     private func setRgbColor(color: UIColor) {
         rgbLabel.backgroundColor = color
         rgbSlider.minimumTrackTintColor = color
-        
     }
 }

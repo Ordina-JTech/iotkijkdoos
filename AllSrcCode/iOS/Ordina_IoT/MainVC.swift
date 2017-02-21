@@ -19,7 +19,6 @@ class MainVC: UIViewController{
     @IBOutlet weak var rgbImage: UIImageView!
     @IBOutlet weak var speakerImage: UIImageView!
     
-    
     private var rgbVC: RgbVC!
     private var leftLedVC: LedVC!
     private var rightLedVC: LedVC!
@@ -29,12 +28,20 @@ class MainVC: UIViewController{
     private var viewIsActive: [Bool] = []
     private var settingViewArray: [UIView]!
     
-    //Prevent changing to portrait
-    override var shouldAutorotate: Bool {
-            return false
+    
+    //Has to be true, otherwie supportedInterfaceOrientations will not be called
+    override open var shouldAutorotate: Bool {
+            return true
     }
     
-    private var settingViewFrame: CGRect    {
+    //Allow only landscape orientation
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask    {
+        return .landscape
+    }
+    
+    
+    private final var settingViewFrame: CGRect    {
+
         let point = CGPoint(x: -self.view.frame.width, y: 0)
         let size = CGSize(width: self.view.frame.width/2, height: self.view.frame.height)
         let rect = CGRect(origin: point, size: size)
@@ -109,7 +116,7 @@ class MainVC: UIViewController{
     }
     
     
-    //Hide setting view with animation.
+    //Hide SettingView if user swipes to left.
     func userSwipedSettingView(tapGestureRecognizer: UITapGestureRecognizer)  {
         
         let index = tapGestureRecognizer.view!.tag
@@ -145,7 +152,7 @@ class MainVC: UIViewController{
 
 //Prepare Seque
     
-    //Set scanVC in portrait pefore seque.
+    //Set scanVC in portrait pefore seque executes.
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "mainToScan"    {
             if let scanVC = segue.destination as? ScanVC    {

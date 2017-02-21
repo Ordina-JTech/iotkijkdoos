@@ -20,7 +20,7 @@ const int RED = 7;
 const int GREEN = 8;
 const int BLUE = 9;
 
-//Set led on or off (TODO: duidelijker)
+//Bool for led 1/2 ot know if their powered on 
 bool isOnLed1 = false;
 bool isOnLed2 = false;
 
@@ -34,7 +34,7 @@ void setup() {
   //Start communication with the bluetooth module
   bleSerial.begin(9600);
 
-//Declare the digtial pins as output  
+//Declare the digital pins as output  
 
   //Yellow led1 & led2
   pinMode(LED1, OUTPUT);
@@ -48,8 +48,8 @@ void setup() {
   //Piëzo Speaker
   pinMode(SPEAKER, OUTPUT);
 
-  //Start servo at 180 degrees (for counter clockwise)
-  setServoAngle(180, 400);
+  //Start servo at 180 degrees for counter clockwise and pause 400 milliseconds to get to the angle.
+  setServoAngle(179, 400);
   
 }
 
@@ -65,6 +65,7 @@ void loop() {
     
     //Check the input and call the right method
     switch (input)  {
+    
       case 'a':
         setLed(1);
         break;
@@ -85,9 +86,9 @@ void loop() {
         vaderJacob();
         break;
 
-      //Create your own challenge
+      //Create your own sound
       case 'f':
-        //Add call to method
+        yourCustomSound();
         break;
 
       case 'g':
@@ -103,6 +104,37 @@ void loop() {
     }
   }
 }
+
+
+//LED 1 & 2
+
+//Set led ON/OFF.
+void setLed(int number) {
+  
+  if (number == 1)  {
+    if (!isOnLed1)  {
+      isOnLed1 = true;
+      digitalWrite(LED1, HIGH);
+    }
+    else  {
+      isOnLed1 = false;
+      digitalWrite(LED1, LOW);
+    }
+  }
+  else if (number == 2) {
+    if (!isOnLed2)  {
+      isOnLed2 = true;
+      digitalWrite(LED2, HIGH);
+    }
+    else {
+      isOnLed2 = false;
+      digitalWrite(LED2, LOW);
+    }
+  }
+}
+
+
+//RGB Light
 
 //Read the char and set the RGB value.
 void getRGBValues() {
@@ -156,66 +188,15 @@ void getRGBValues() {
   }
 }
 
-//Read the serial input, convert it to the angle and call setServoAngle method.
-void getServoAngle() {
-
-  //Create empty string and char
-  String angleStr = "";
-  char input = '\0';
-
-  while (input != '\n') {
-
-    if (bleSerial.available() > 0)  {
-
-      //Read input
-      input = bleSerial.read();
-
-      //If input is not equal to '\n', add the char to the string
-      if (input != '\n')  {
-        angleStr += input;     
-      }
-    }   
-  }
-
-  //Convert var angleStr an int. To get the servo moving counter clockwise -> 180-
-  int angle = 180 - angleStr.toInt();
-
-  //Set the servo angle with received angle
-  setServoAngle(angle, 50);
-  
-}
-
-//Set led ON/OFF.
-void setLed(int number) {
-  
-  if (number == 1)  {
-    if (!isOnLed1)  {
-      isOnLed1 = true;
-      digitalWrite(LED1, HIGH);
-    }
-    else  {
-      isOnLed1 = false;
-      digitalWrite(LED1, LOW);
-    }
-  }
-  else if (number == 2) {
-    if (!isOnLed2)  {
-      isOnLed2 = true;
-      digitalWrite(LED2, HIGH);
-    }
-    else {
-      isOnLed2 = false;
-      digitalWrite(LED2, LOW);
-    }
-  }
-}
-
 //The method for setting the color of the RGB.
 void setRGBColor(int red, int green, int blue)  {
   analogWrite(RED, red);
   analogWrite(GREEN, green);
   analogWrite(BLUE, blue);
 }
+
+
+//BUZZER
 
 //Play alarm with blinking LED's.
 void alarm()  {
@@ -273,12 +254,50 @@ void vaderJacob() {
   //int frequencies[] = {262, 294, 330, 349, 370, 392, 440, 494, 523, 587, 659, 699, 784, 880, 989};
 }
 
+//Create Your Custom Sound!
+void yourCustomSound()  {
+  
+}
+
+
+//SERVO 
+
+//Read the serial input, convert it to the angle and call setServoAngle method.
+void getServoAngle() {
+
+  //Create empty string and char
+  String angleStr = "";
+  char input = '\0';
+
+  while (input != '\n') {
+
+    if (bleSerial.available() > 0)  {
+
+      //Read input
+      input = bleSerial.read();
+
+      //If input is not equal to '\n', add the char to the string
+      if (input != '\n')  {
+        angleStr += input;     
+      }
+    }   
+  }
+
+  //Convert var angleStr to an int. To get the servo moving counter clockwise reduce 180 with received angle
+  int angle = 180 - angleStr.toInt();
+
+  //Set the servo angle with received angle in 50 milliseconds
+  setServoAngle(angle, 50);
+  
+}
+
 //Set the angle of the servo. The input has to be in the range of 0 - 180.
 void setServoAngle(int angle, int milliSec)  {
   
-  //Attach and detach servo here, otherwise the servo is moving while changing RGB led
+  //Attach and detach servo here, otherwise the servo is moving while changing RGB light
   servo.attach(SERVO);
-  Serial.println(angle);
+
+  //Write the angle to the servo
   servo.write(angle);
   
   //Give servo time to get at the given angle
@@ -288,16 +307,20 @@ void setServoAngle(int angle, int milliSec)  {
   servo.detach();
 }
 
-//Reset all the components to their start value
+
+//RESET
+
+//Reset all the components to their begin value
 void resetComponents() {
   digitalWrite(LED1, LOW);
   digitalWrite(LED2, LOW);
   isOnLed1 = false;
   isOnLed2 = false;
   setRGBColor(0, 0, 0);
-  setServoAngle(180, 400);
+  setServoAngle(179, 400);
 
-  //Send 'y' to central device. If received central can disconnect from peripheral
+  /*Send 'y' to central device. If received, central can disconnect from peripheral. 
+  This is to make sure all the components are off after disconnecting with central device.*/
   bleSerial.println("y");
 }
 

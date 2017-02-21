@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-//Delegate protocol
+//Delegate table view protocol
 protocol TableViewDelegate  {
     func userDidSelectRow(indexPath: IndexPath)
 }
@@ -29,6 +29,7 @@ class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
         self.tableViewData = data
     }
     
+    //Als er nieuwe data.
     func reloadTableViewData(data: [String])  {
         tableViewData = data
     }

@@ -13,10 +13,10 @@ class SpeakerVC: NSObject, TableViewDelegate   {
     
 //Properties
     var settingView: SettingView!
-    var tableView: UITableView!
-    var tableViewObj: TableView!
-    let sounds: [String] = ["Alarm", "Vader Jacob", "Create Your Own"]
-    let speakerMessage: [String] = ["d", "e", "f"]
+    private var tableView: UITableView!
+    private var tableViewObj: TableView!
+    private let sounds: [String] = ["Alarm", "Vader Jacob", "Create Your Own"]
+    private let speakerMessage: [String] = ["d", "e", "f"]
     
     init(frame: CGRect, title: String)  {
         super.init()
@@ -47,7 +47,7 @@ class SpeakerVC: NSObject, TableViewDelegate   {
         tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    
+    //If user did select a row in table view.
     func userDidSelectRow(indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
