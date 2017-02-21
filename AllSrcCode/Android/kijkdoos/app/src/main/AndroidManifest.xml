@@ -17,28 +17,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".bluetoothlegatt.DeviceControlActivity"
-            android:label="@string/title_activity_bluetooth"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".bluetoothlegatt.DeviceScanActivity"
-            android:label="@string/title_devices"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
 
-        <service
-            android:name=".bluetoothlegatt.BluetoothLeService"
-            android:enabled="true" />
-
-        <activity android:name=".SearchViewBoxActivity">
+        <activity android:name=".search.SearchViewBoxActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

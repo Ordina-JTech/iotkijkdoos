@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos;
+package nl.ordina.kijkdoos.runner;
 
 import android.app.Application;
 import android.app.Instrumentation;
@@ -8,6 +8,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.runner.AndroidJUnitRunner;
 
 import org.junit.runners.model.InitializationError;
+
+import nl.ordina.kijkdoos.MockedViewBoxApplication;
 
 /**
  * Created by coenhoutman on 15-2-2017.

@@ -1,6 +1,5 @@
 package nl.ordina.kijkdoos;
 
-import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.bluetooth.BluetoothDeviceWrapper;
+import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
 
 public class ViewBoxListAdapter extends BaseAdapter {
     private ArrayList<BluetoothDeviceWrapper> devices;

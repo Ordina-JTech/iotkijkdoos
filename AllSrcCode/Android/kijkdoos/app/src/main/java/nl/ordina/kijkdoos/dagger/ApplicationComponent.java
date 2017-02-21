@@ -3,7 +3,7 @@ package nl.ordina.kijkdoos.dagger;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import nl.ordina.kijkdoos.SearchViewBoxActivity;
+import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
 
 /**
  * Created by coenhoutman on 15-2-2017.
