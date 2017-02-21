@@ -14,4 +14,6 @@
 
     <!-- Dark Orange for the TAB (action) bar -->
     <color name="colorAccent">#fc8d25</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>
