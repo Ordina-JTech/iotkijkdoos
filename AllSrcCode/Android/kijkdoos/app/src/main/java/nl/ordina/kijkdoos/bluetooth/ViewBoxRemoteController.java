@@ -5,8 +5,13 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
+import org.parceler.Parcels;
 
 import lombok.Getter;
 
@@ -16,12 +21,13 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Created by coenhoutman on 16-2-2017.
  */
-
+@Parcel
 public class ViewBoxRemoteController {
 
     @Getter
     private BluetoothDevice device;
 
+    @ParcelConstructor
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
         this.device = device;
@@ -55,6 +61,10 @@ public class ViewBoxRemoteController {
         })).run();
     }
 
+    public Parcelable wrapInParcelable() {
+        return Parcels.wrap(this);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return device.equals(obj);
@@ -66,6 +76,7 @@ public class ViewBoxRemoteController {
                 "name=" + getName() +
                 '}';
     }
+
 
     public interface OnConnectedListener {
         void onConnected(ViewBoxRemoteController viewBoxRemoteController);

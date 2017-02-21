@@ -12,6 +12,8 @@ import butterknife.OnClick;
 
 public class ViewBoxActivity extends AppCompatActivity {
 
+    public static final String EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER = "BUNDLED_VIEW_BOX_REMOTE_CONTROLLER";
+    public static final String EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER = "VIEW_BOX_REMOTE_CONTROLLER";
     @BindView(R.id.IVTelevision)
     public ImageView television;
 

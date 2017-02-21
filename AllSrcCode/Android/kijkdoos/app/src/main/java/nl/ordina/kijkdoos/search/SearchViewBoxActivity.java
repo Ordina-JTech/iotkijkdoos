@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.parceler.Parcel;
+import org.parceler.Parcels;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -22,6 +25,8 @@ import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
+import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
@@ -84,9 +89,15 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
-        viewBoxRemoteController.connect(this, connectedViewBox -> {
-            runOnUiThread(() -> startActivity(new Intent(this, ViewBoxActivity.class)));
-        });
+        Bundle bundledToAvoidSamsungBug = new Bundle();
+        bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
+
+        viewBoxRemoteController.connect(this, connectedViewBox -> runOnUiThread(() -> {
+            Intent intent = new Intent(this, ViewBoxActivity.class);
+            intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
+
+            startActivity(intent);
+        }));
     }
 
     @Override

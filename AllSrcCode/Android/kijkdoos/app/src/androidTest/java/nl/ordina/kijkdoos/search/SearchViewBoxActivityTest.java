@@ -2,6 +2,7 @@ package nl.ordina.kijkdoos.search;
 
 import android.app.Instrumentation;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,8 +16,8 @@ import javax.inject.Inject;
 import nl.ordina.kijkdoos.ViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxApplication;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
-import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.OnConnectedListener;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
@@ -24,12 +25,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -43,6 +45,12 @@ import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class SearchViewBoxActivityTest {
+    @Inject
+    AbstractBluetoothService bluetoothService;
+
+    private ViewBoxRemoteController mockedViewBoxRemoteController;
+    private Bundle bundleAsMockForParcelableViewBoxRemoteController = new Bundle();
+
     @Rule
     public IntentsTestRule<SearchViewBoxActivity> activityRule = new IntentsTestRule<SearchViewBoxActivity>(SearchViewBoxActivity.class) {
         @Override
@@ -57,6 +65,7 @@ public class SearchViewBoxActivityTest {
             mockedViewBoxRemoteController = mock(ViewBoxRemoteController.class);
             when(mockedViewBoxRemoteController.getName()).thenReturn("Mocked JTech Kijkdoos 1");
             when(mockedViewBoxRemoteController.getAddress()).thenReturn("00:11:22:33:44:55");
+            when(mockedViewBoxRemoteController.wrapInParcelable()).thenReturn(bundleAsMockForParcelableViewBoxRemoteController);
 
             doAnswer(invocationOnMock -> {
                 invocationOnMock.getArgumentAt(1, OnConnectedListener.class).onConnected(mockedViewBoxRemoteController);
@@ -72,14 +81,14 @@ public class SearchViewBoxActivityTest {
         }
     };
 
-    @Inject
-    AbstractBluetoothService bluetoothService;
-    private ViewBoxRemoteController mockedViewBoxRemoteController;
-
     @Test
     public void navigateToViewBoxActivity() throws Exception {
+        Bundle expectedIntentBundle = new Bundle();
+        expectedIntentBundle.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, new Bundle());
+
         onView(withText("Mocked JTech Kijkdoos 1")).perform(click());
-        intended(allOf(hasComponent(ViewBoxActivity.class.getName())));
+        intended(allOf(hasComponent(ViewBoxActivity.class.getName()),
+                hasExtra(org.hamcrest.Matchers.equalTo(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER), org.hamcrest.Matchers.any(Bundle.class))));
     }
 
     @Test
@@ -103,4 +112,5 @@ public class SearchViewBoxActivityTest {
     private void triggerAnotherSearch() {
         activityRule.getActivity().searchForViewBoxes();
     }
+
 }

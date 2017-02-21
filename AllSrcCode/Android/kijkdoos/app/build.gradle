@@ -46,6 +46,9 @@ dependencies {
     provided 'javax.annotation:javax.annotation-api:1.2'
     annotationProcessor 'org.projectlombok:lombok:1.16.14'
 
+    compile 'org.parceler:parceler-api:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
