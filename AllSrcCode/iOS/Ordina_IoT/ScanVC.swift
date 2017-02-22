@@ -21,6 +21,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private var devices: [(peripheral: CBPeripheral, RSSI: Float)] = [] //Array met gescande devices
     private var isFirstChar: Bool = true
 
+    
 //View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
