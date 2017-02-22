@@ -29,8 +29,10 @@ public abstract class AbstractBluetoothService {
     }
 
     public abstract void searchDevices(@NonNull DeviceFoundListener callback);
+    public abstract void stopSearch();
 
     public boolean isBluetoothEnabled() {
         return bluetoothAdapter.isEnabled();
     }
+
 }

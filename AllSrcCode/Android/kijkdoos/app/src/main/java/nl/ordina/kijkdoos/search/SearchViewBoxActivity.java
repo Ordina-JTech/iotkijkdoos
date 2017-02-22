@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -88,11 +89,12 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        bluetoothService.stopSearch();
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
         Bundle bundledToAvoidSamsungBug = new Bundle();
         bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
 
-        viewBoxRemoteController.connect(this, connectedViewBox -> runOnUiThread(() -> {
+        viewBoxRemoteController.connect(this, () -> runOnUiThread(() -> {
             Intent intent = new Intent(this, ViewBoxActivity.class);
             intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
 
