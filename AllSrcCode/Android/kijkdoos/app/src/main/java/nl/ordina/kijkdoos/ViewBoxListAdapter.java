@@ -36,6 +36,7 @@ public class ViewBoxListAdapter extends BaseAdapter {
 
     public void clear() {
         viewBoxRemoteControllers.clear();
+        notifyDataSetChanged();
     }
 
     @Override

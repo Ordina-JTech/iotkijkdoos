@@ -32,15 +32,12 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
         super(context);
         bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
 
-        scanFilter = new ScanFilter.Builder().setServiceUuid(SERVICE.getUuid()).build();
+        scanFilter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(SERVICE.getUuid())).build();
     }
 
     @Override
     public void searchDevices(@NonNull DeviceFoundListener callback) {
         assertNotNull(callback);
-        if (scanCallback != null) {
-            return;
-        }
 
         scanCallback = new ScanCallback() {
             @Override
@@ -53,6 +50,10 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
     @Override
     public void stopSearch() {
+        if (scanCallback == null) {
+            return;
+        }
+
         bluetoothScanner.stopScan(scanCallback);
     }
 }

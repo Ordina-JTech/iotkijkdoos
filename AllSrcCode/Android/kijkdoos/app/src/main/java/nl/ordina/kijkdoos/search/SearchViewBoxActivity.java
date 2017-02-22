@@ -15,6 +15,11 @@ import android.widget.Toast;
 import org.parceler.Parcel;
 import org.parceler.Parcels;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -75,6 +80,14 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        bluetoothService.stopSearch();
+        viewBoxListAdapter.clear();
+    }
+
     private void askUserToEnableBluetooth() {
         waitingForBluetoothBeingEnabled = true;
 
@@ -94,12 +107,29 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         Bundle bundledToAvoidSamsungBug = new Bundle();
         bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
 
-        viewBoxRemoteController.connect(this, () -> runOnUiThread(() -> {
-            Intent intent = new Intent(this, ViewBoxActivity.class);
-            intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
+        final Future<Void> connect = viewBoxRemoteController.connect(this);
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    connect.get(5, TimeUnit.SECONDS);
+                    viewBoxRemoteController.disconnect();
+                    runOnUiThread(() -> {
 
-            startActivity(intent);
-        }));
+                        Intent intent = new Intent(SearchViewBoxActivity.this, ViewBoxActivity.class);
+                        intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
+
+                        startActivity(intent);
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override

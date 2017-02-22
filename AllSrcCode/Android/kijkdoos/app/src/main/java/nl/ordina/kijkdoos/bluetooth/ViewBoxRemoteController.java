@@ -3,9 +3,11 @@ package nl.ordina.kijkdoos.bluetooth;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.os.ParcelUuid;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,12 +19,9 @@ import org.parceler.ParcelConstructor;
 import org.parceler.Parcels;
 import org.parceler.Transient;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -40,7 +39,7 @@ import static junit.framework.Assert.assertNotNull;
 public class ViewBoxRemoteController {
 
     public enum UUID {
-        SERVICE("0000ffe0-0000-1000-8000-00805f9b34fb"), CHARACTERISTIC("00002a37-0000-1000-8000-00805f9b34fb");
+        SERVICE("0000ffe0-0000-1000-8000-00805f9b34fb"), CHARACTERISTIC("0000ffe1-0000-1000-8000-00805f9b34fb");
 
         private final String uuid;
 
@@ -48,8 +47,8 @@ public class ViewBoxRemoteController {
             this.uuid = uuid;
         }
 
-        public ParcelUuid getUuid() {
-            return new ParcelUuid(java.util.UUID.fromString(uuid));
+        public java.util.UUID getUuid() {
+            return java.util.UUID.fromString(uuid);
         }
     }
 
@@ -65,6 +64,12 @@ public class ViewBoxRemoteController {
 
     @Transient
     private BluetoothCallbackRegister bluetoothCallbackRegister;
+
+    @Transient
+    private BluetoothGattService bluetoothGattService;
+
+    @Transient
+    private BluetoothGattCharacteristic bluetoothGattCharacteristic;
 
     @ParcelConstructor
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
@@ -85,17 +90,20 @@ public class ViewBoxRemoteController {
         return device.getAddress();
     }
 
-    public void connect(final Context context, final OnConnectedListener listener) {
-        bluetoothCallbackRegister.registerOnConnectedListener(listener);
-        backgroundService.getExecutorService().submit(() -> device.connectGatt(context, false, bluetoothCallbackRegister));
+    public Future<Void> connect(final Context context) {
+        return backgroundService.getExecutorService()
+                .submit(() -> {
+                    device.connectGatt(context, false, bluetoothCallbackRegister);
+                    while ((bluetoothGattService == null || bluetoothGattCharacteristic == null) && !Thread.interrupted()) {
+                    }
+
+                    return null;
+                });
     }
 
     public void disconnect() {
         if (bluetoothGatt != null) {
-            bluetoothCallbackRegister.registerOnDisconnectedListener(() -> {
-                bluetoothGatt.close();
-                bluetoothGatt = null;
-            });
+            bluetoothGatt.disconnect();
         }
     }
 
@@ -148,12 +156,19 @@ public class ViewBoxRemoteController {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 bluetoothGatt = gatt;
 
-                Stream.of(onConnectedListeners).forEach(OnConnectedListener::onConnected);
-                onConnectedListeners.clear();
+                bluetoothGatt.discoverServices();
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Stream.of(onDisconnectedListeners).forEach(OnDisconnectedListener::onDisconnected);
+                Stream.of(onDisconnectedListeners).filter(value -> value != null).forEach(OnDisconnectedListener::onDisconnected);
                 onDisconnectedListeners.clear();
             }
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            bluetoothGattService = bluetoothGatt.getService(UUID.SERVICE.getUuid());
+            bluetoothGattCharacteristic = bluetoothGattService.getCharacteristic(UUID.CHARACTERISTIC.getUuid());
+
+            bluetoothGatt.setCharacteristicNotification(bluetoothGattCharacteristic, true);
         }
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import org.parceler.Parcels;
@@ -41,7 +42,7 @@ public class ViewBoxActivity extends AppCompatActivity {
 
         final Parcelable parceledViewBoxRemoteController = actualExtras.getParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER);
         viewBoxRemoteController = Parcels.unwrap(parceledViewBoxRemoteController);
-        viewBoxRemoteController.connect(this, null);
+        viewBoxRemoteController.connect(this);
     }
 
     @Override
@@ -52,8 +53,6 @@ public class ViewBoxActivity extends AppCompatActivity {
 
     @OnClick(R.id.IVTelevision)
     public void onTelevisionClicked() {
-        Bundle animationOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(this, television, "ViewBoxComponent")
-                .toBundle();
-        startActivity(new Intent(this, EditComponentActivity.class), animationOptions);
+        Log.d("bla", "bla");
     }
 }
