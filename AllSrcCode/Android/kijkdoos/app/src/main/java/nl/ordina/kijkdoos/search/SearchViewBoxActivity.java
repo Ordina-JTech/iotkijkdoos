@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -26,7 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.ViewBoxActivity;
-import nl.ordina.kijkdoos.ViewBoxListAdapter;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
@@ -63,7 +57,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     @Override
     protected void onResume() {
         if (bluetoothService.isBluetoothEnabled()) {
-            searchForViewBoxes();
+            bluetoothService.searchDevices(this);
         } else if (!waitingForBluetoothBeingEnabled) {
             askUserToEnableBluetooth();
         }
@@ -95,11 +89,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
     }
 
-    @VisibleForTesting
-    void searchForViewBoxes() {
-        bluetoothService.searchDevices(this);
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         bluetoothService.stopSearch();
@@ -115,17 +104,12 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
                     connect.get(5, TimeUnit.SECONDS);
                     viewBoxRemoteController.disconnect();
                     runOnUiThread(() -> {
-
                         Intent intent = new Intent(SearchViewBoxActivity.this, ViewBoxActivity.class);
                         intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
 
                         startActivity(intent);
                     });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
+                } catch (InterruptedException | ExecutionException | TimeoutException e) {
                     e.printStackTrace();
                 }
             }

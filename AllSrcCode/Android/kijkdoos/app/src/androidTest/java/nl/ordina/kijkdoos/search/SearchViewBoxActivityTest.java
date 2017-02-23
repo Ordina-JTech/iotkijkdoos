@@ -1,7 +1,7 @@
 package nl.ordina.kijkdoos.search;
 
 import android.app.Instrumentation;
-import android.content.Context;
+import android.app.Instrumentation.ActivityResult;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -11,6 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.Future;
+
 import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.ViewBoxActivity;
@@ -18,17 +20,16 @@ import nl.ordina.kijkdoos.ViewBoxApplication;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.OnConnectedListener;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.fail;
 import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static org.hamcrest.Matchers.allOf;
@@ -55,29 +56,49 @@ public class SearchViewBoxActivityTest {
     public IntentsTestRule<SearchViewBoxActivity> activityRule = new IntentsTestRule<SearchViewBoxActivity>(SearchViewBoxActivity.class) {
         @Override
         protected void beforeActivityLaunched() {
+            injectMocks();
+
+            mockedViewBoxRemoteController = mockViewBoxRemoteController();
+            mockBluetoothService();
+        }
+
+        @Override
+        protected void afterActivityLaunched() {
+            super.afterActivityLaunched();
+            mockViewBoxActivityNavigation();
+        }
+
+        private void injectMocks() {
             Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
             ViewBoxApplication context = (ViewBoxApplication) instrumentation.getTargetContext()
                     .getApplicationContext();
 
             MockedApplicationComponent component = (MockedApplicationComponent) context.getApplicationComponent();
             component.inject(SearchViewBoxActivityTest.this);
+        }
 
-            mockedViewBoxRemoteController = mock(ViewBoxRemoteController.class);
+        private ViewBoxRemoteController mockViewBoxRemoteController() {
+            final ViewBoxRemoteController mockedViewBoxRemoteController = mock(ViewBoxRemoteController.class);
             when(mockedViewBoxRemoteController.getName()).thenReturn("Mocked JTech Kijkdoos 1");
             when(mockedViewBoxRemoteController.getAddress()).thenReturn("00:11:22:33:44:55");
             when(mockedViewBoxRemoteController.wrapInParcelable()).thenReturn(bundleAsMockForParcelableViewBoxRemoteController);
+            when(mockedViewBoxRemoteController.connect(any())).thenReturn(mock(Future.class));
 
-            doAnswer(invocationOnMock -> {
-                invocationOnMock.getArgumentAt(1, OnConnectedListener.class).onConnected(mockedViewBoxRemoteController);
-                return null;
-            }).when(mockedViewBoxRemoteController).connect(any(Context.class), any(OnConnectedListener.class));
+            return mockedViewBoxRemoteController;
+        }
 
+        private void mockBluetoothService() {
             doAnswer(invocationOnMock -> {
                 invocationOnMock.getArgumentAt(0, DeviceFoundListener.class).onDeviceFound(mockedViewBoxRemoteController);
                 return null;
-            }).when(bluetoothService).searchDevices(any(DeviceFoundListener.class));
+            }).when(bluetoothService).searchDevices(any(SearchViewBoxActivity.class));
 
             when(bluetoothService.isBluetoothEnabled()).thenReturn(true);
+        }
+
+        private void mockViewBoxActivityNavigation() {
+            final ActivityResult mockViewBoxActivityInvocation = new ActivityResult(-1, null);
+            intending(hasComponent(ViewBoxActivity.class.getName())).respondWith(mockViewBoxActivityInvocation);
         }
     };
 
@@ -94,23 +115,12 @@ public class SearchViewBoxActivityTest {
     @Test
     public void connectToViewBox() throws Exception {
         onView(withText("Mocked JTech Kijkdoos 1")).perform(click());
-        verify(mockedViewBoxRemoteController).connect(eq(activityRule.getActivity()), any(OnConnectedListener.class));
+
+        verify(mockedViewBoxRemoteController).connect(eq(activityRule.getActivity()));
     }
 
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
         verify(bluetoothService).searchDevices(any(DeviceFoundListener.class));
     }
-
-    @Test
-    public void whenADeviceWasAlreadyFoundIgnoreTheNewDevice() throws Exception {
-        triggerAnotherSearch();
-
-        onView(withText("Mocked JTech Kijkdoos 1")).check(matches(isDisplayed()));
-    }
-
-    private void triggerAnotherSearch() {
-        activityRule.getActivity().searchForViewBoxes();
-    }
-
 }

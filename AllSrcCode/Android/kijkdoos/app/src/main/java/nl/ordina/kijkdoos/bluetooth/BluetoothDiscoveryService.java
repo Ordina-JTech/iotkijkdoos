@@ -10,10 +10,9 @@ import android.content.Context;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.UUID;
 
 import static junit.framework.Assert.assertNotNull;
 import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
@@ -25,14 +24,23 @@ import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
 public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
     private final BluetoothLeScanner bluetoothScanner;
-    private final ScanFilter scanFilter;
+
+    private ScanFilter scanFilter;
+    private ScanSettings scanSettings;
     private ScanCallback scanCallback;
 
     public BluetoothDiscoveryService(Context context) {
-        super(context);
-        bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
+        this(context, new ScanFilter.Builder().setServiceUuid(new ParcelUuid(SERVICE.getUuid())).build(),
+                new ScanSettings.Builder().build());
+    }
 
-        scanFilter = new ScanFilter.Builder().setServiceUuid(new ParcelUuid(SERVICE.getUuid())).build();
+    @VisibleForTesting
+    BluetoothDiscoveryService(Context context, ScanFilter scanFilter, ScanSettings scanSettings) {
+        super(context);
+
+        this.scanFilter = scanFilter;
+        this.scanSettings = scanSettings;
+        bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
     }
 
     @Override
@@ -45,7 +53,7 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
                 callback.onDeviceFound(new ViewBoxRemoteController(result.getDevice()));
             }
         };
-        bluetoothScanner.startScan(Collections.singletonList(scanFilter), new ScanSettings.Builder().build(), scanCallback);
+        bluetoothScanner.startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
     }
 
     @Override

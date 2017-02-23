@@ -1,9 +1,7 @@
 package nl.ordina.kijkdoos;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
@@ -16,7 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.threading.BackgroundService;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 

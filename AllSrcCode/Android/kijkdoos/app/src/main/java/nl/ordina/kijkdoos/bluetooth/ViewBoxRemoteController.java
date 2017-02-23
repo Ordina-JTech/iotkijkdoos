@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;

@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos;
+package nl.ordina.kijkdoos.search;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
 
@@ -24,6 +25,8 @@ public class ViewBoxListAdapter extends BaseAdapter {
     }
 
     public void addViewBoxRemoteController(ViewBoxRemoteController device) {
+        if (device == null) return;
+
         if (!viewBoxRemoteControllers.contains(device)) {
             viewBoxRemoteControllers.add(device);
             notifyDataSetChanged();
