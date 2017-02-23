@@ -18,7 +18,5 @@ class DisconnectButton: UIButton {
         self.setTitle("Disconnect", for: .normal)
         self.setTitleColor(UIColor.white, for: .normal)
         self.contentEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8)
-        
     }
-
 }

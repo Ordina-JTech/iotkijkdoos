@@ -11,7 +11,6 @@ import Foundation
 
 class SpeakerVC: NSObject, TableViewDelegate   {
     
-//Properties
     var settingView: SettingView!
     private var tableView: UITableView!
     private var tableViewObj: TableView!
@@ -29,29 +28,27 @@ class SpeakerVC: NSObject, TableViewDelegate   {
     
     private func addServoView() {
      
-    //TableView
-        
-        //Creation
+        //TableView
         tableView = UITableView()
         tableView.dataSource = tableViewObj
         tableView.delegate = tableViewObj
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         settingView.addSubview(tableView)
         
-        //Constraints
         tableView.heightAnchor.constraint(equalToConstant: settingView.frame.height/1.8).isActive = true
         tableView.leftAnchor.constraint(equalTo: settingView.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: settingView.rightAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: settingView.bottomAnchor).isActive = true
-        
-        //Properties
-        tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    //If user did select a row in table view.
+
     func userDidSelectRow(indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let index = indexPath as NSIndexPath
-        blue.sendMessage(string: speakerMessage[index.row])
+        if bluetooth.isReady    {
+            let index = indexPath as NSIndexPath
+            bluetooth.sendMessage(string: speakerMessage[index.row])
+        }
     }
 }

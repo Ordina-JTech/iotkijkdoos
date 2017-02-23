@@ -12,107 +12,85 @@ import CoreBluetooth
 
 class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
-//Properties
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var refreshBtn: UIBarButtonItem!
     
     private var tableViewObj: TableView!
     private var refreshControl: UIRefreshControl!
-    private var devices: [(peripheral: CBPeripheral, RSSI: Float)] = [] //Array met gescande devices
+    private var scannedDevices: [(peripheral: CBPeripheral, RSSI: Float)] = []
     private var isFirstChar: Bool = true
 
     
-//View Did Load
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Refreshbutton Disable
         refreshBtn.isEnabled = false
         
-        //Delegate en DataSource gelijk zetten aan TableView VC.
         tableViewObj = TableView(delegate: self, data: [])
         tableView.delegate = tableViewObj
         tableView.dataSource = tableViewObj
         
-        //Add refreshControl
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
-        //Bluetooth Connection
-        blue = BluetoothConnection(delegate: self)
+        bluetooth = BluetoothConnection(delegate: self)
     }
     
     
 //METHODS ScanVC
     
     
-    //Door naar onder te swipen wordt er opnieuw gescand.
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
-        
-        //Als blue manager al aan het scannen is, niet nog een keer gaan scannen.
-        if !blue.manager.isScanning{
+        if !bluetooth.manager.isScanning{
             refreshDevices()
         }
     }
     
-    //After 5 seconds of scanning.
+    
     func scanTimeOut()  {
-        
-        blue.stopScanning()
+        bluetooth.stopScanning()
         refreshControl.endRefreshing()
         refreshBtn.isEnabled = true
         
-        //ProgressMessage laten zien.
-        if devices.count == 0   {
+        if scannedDevices.count == 0   {
             BlueProgressMessage.show(state: .noDeviceDetected, currentView: self.view)
         }
     }
     
-    //Start scanning again.
+    
     func refreshDevices()  {
-        
-        //Array met devices leegmaken, tableview reloaden en refreshButton disabelen.
-        devices = []
+        scannedDevices = []
         tableView.reloadData()
         refreshBtn.isEnabled = false
-        
-        //Opnieuw scannen.
-        blue.startScanning()
-        
-        //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
+        bluetooth.startScanning()
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ScanVC.scanTimeOut), userInfo: nil, repeats: false)
     }
     
-    //Start refreshen programmatically: Starting app and pressing refresh button.
+    
     private func startRefreshControl()  {
         tableView.setContentOffset(CGPoint(x: 0, y: -25), animated: true)
         refreshControl.beginRefreshing()
     }
     
-    //ScanVC altijd in portrait laten zien.
+
     func setPortraitOrientation()   {
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
     }
     
     
+    
 //CB CENTRALMANAGER METHODE
     
     
-    //Als bluetoothState is veranderd (powerdOn/poweredOff).
+    
     func blueDidChangeState(_ poweredOn: Bool) {
         if poweredOn    {
-            //Scannen starten
-            blue.startScanning()
-            
-            //Start refresh programmatically
+            bluetooth.startScanning()
             startRefreshControl()
-            
-            //Disable refreshButton
             refreshBtn.isEnabled = false
-            
-            //Na 5 seconden de method scanTimeOut aanroepen en het scanne stoppen.
             Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
         else{
@@ -122,62 +100,48 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     
-    //Als devices zijn gevonden in array peripherals zetten.
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
         
-        //checken of de gevonden al in perpheral staan, zo ja return.
-        for exisiting in devices {
+        for exisiting in scannedDevices {
             if exisiting.peripheral.identifier == peripheral.identifier {
                 return
             }
         }
         
-        //Op basis van signaalsterkte (RSSI) sorteren.
         let theRSSI = RSSI?.floatValue ?? 0.0
-        devices.append(peripheral: peripheral, RSSI: theRSSI)
-        devices.sort {$0.RSSI < $1.RSSI }
+        scannedDevices.append(peripheral: peripheral, RSSI: theRSSI)
+        scannedDevices.sort {$0.RSSI < $1.RSSI }
         
         var deviceNames:[String] = []
         
-        for index in 0..<devices.count{
-            deviceNames.append(devices[index].peripheral.name!)
+        for index in 0..<scannedDevices.count{
+            deviceNames.append(scannedDevices[index].peripheral.name!)
         }
         
-        //Voeg namen toe op dezelfde volgorde als
         tableViewObj.reloadTableViewData(data: deviceNames)
-        
-        //Tableview reloaden
         tableView.reloadData()
     }
     
     
-    //Als de connectie is gemaakt 'r' zenden om arduino te resetten. Hierdoor blijven er geen componenten actief als de verbinding plotseling is verbroken.
     func blueDidConnect(_ peripheral: CBPeripheral) {
-        blue.sendMessage(string: "r")
+        bluetooth.sendMessage(string: "r")
     }
     
     
-    //Als de connectie mislukt.
     func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
         BlueProgressMessage.show(state: .failedToConnect, currentView: self.view)
     }
     
     
-    //Als de connectie wordt verbroken.
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
         BlueProgressMessage.show(state: .disconnected, currentView: self.view)
-        
-        //Notificate other VC's if connection lost
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
     
-    //Central Recieves 'r' from peripheral is resetting was succesfull.
     func blueDidReceiveString(_ message: String) {
-
-        //De ontvangen String scheiden bij /r/n en in array zetten.
         let newLineChars = NSCharacterSet.newlines
         let messageArray = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
@@ -186,37 +150,29 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             isFirstChar = false
         }
         else if messageArray[0] == "y"   {
-            blue.manager.cancelPeripheralConnection(blue.connectedPeripheral!)
+            bluetooth.manager.cancelPeripheralConnection(bluetooth.connectedPeripheral!)
         }
     }
     
     
-//Table View Delegate
+//TableViewDelegate
     
-    //Connect to the chosen peripheral.
+    
     func userDidSelectRow(indexPath: IndexPath) {
-        
-        //Stoppen met scannen.
-        blue.manager.stopScan()
-        
-        //Geselecteerde row deselecten.
+        bluetooth.manager.stopScan()
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        //selectedDevice gelijkstellen aan de gekozen device.
-        let selectedDevice = devices[(indexPath as NSIndexPath).row].peripheral
-        
-        //Connectie maken met het geselecteerde device.
-        blue.manager.connect(selectedDevice, options: nil)
+        let selectedDevice = scannedDevices[(indexPath as NSIndexPath).row].peripheral
+        bluetooth.manager.connect(selectedDevice, options: nil)
     }
     
     
 //BUTTONS
     
     
-    //Restart scanning for peripherals.
-    @IBAction func refreshWasTouched(_ sender: Any) {
+    @IBAction func refreshButtonWasPressed(_ sender: Any) {
         startRefreshControl()
         refreshDevices()
     }
+    
 }
 

@@ -11,8 +11,6 @@ import Foundation
 
 class ServoVC: NSObject {
     
-
-//Properties
     var settingView: SettingView!
     private var slider: UISlider!
     private var previousValue: Int = 0
@@ -20,7 +18,6 @@ class ServoVC: NSObject {
     private var imageView: UIImageView!
     
     
-//Constructor.
     init(frame: CGRect, title: String) {
         super.init()
         settingView = SettingView(frame: frame, title: title)
@@ -28,87 +25,72 @@ class ServoVC: NSObject {
     }
     
     
-    //Add the servo view
     private func addServoView() {
     
-    //ImageView
-        
-        //Creation
+        //ImageView
         let imageName = "Tv"
         let image = UIImage(named: imageName)
         imageView = UIImageView(image: image)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
         
         settingView.addSubview(imageView)
         
-        //Constraints
         let heightConstant = settingView.frame.width/2.5
         imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        
-        let yConstant = settingView.frame.height/12.5   //Ratio (30.0 iPhone 7)
+        let yConstant = settingView.frame.height/12.5
         imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
-        //Properties
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
 
-    //Slider
-
-        //Creation
+        //Slider
         slider = UISlider()
-        settingView.addSubview(slider)
-        
-        //Constraints
-        let topConstant = settingView.frame.height/12.5 //Ratio (30.0 iPhone 7)
-        slider.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
-        
-        let leftRightConstant = settingView.frame.height/15.0 //Ratio (25.0 iPhone 7)
-        slider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
-        slider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
-        
-        //Properties
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.value = 0
         slider.minimumValue = 0
         slider.maximumValue = 180
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
         
-    //Label
+        settingView.addSubview(slider)
         
-        //Creation
+        let topConstant = settingView.frame.height/12.5
+        slider.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
+        let leftRightConstant = settingView.frame.height/15.0
+        slider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
+        slider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
+        
+
+        //Label
         angleLabel = UILabel()
-        settingView.addSubview(angleLabel)
-        
-        //Constraints
-        angleLabel.rightAnchor.constraint(equalTo: slider.rightAnchor).isActive = true
-        angleLabel.bottomAnchor.constraint(equalTo: slider.topAnchor, constant: -5.0).isActive = true
-        
-        //Properties
         angleLabel.translatesAutoresizingMaskIntoConstraints = false
         angleLabel.text = "0°"
         angleLabel.font = UIFont(name: "Avenir Next", size: 20.0)
         angleLabel.textColor = UIColor.black
         angleLabel.sizeToFit()
+        
+        settingView.addSubview(angleLabel)
+        
+        angleLabel.rightAnchor.constraint(equalTo: slider.rightAnchor).isActive = true
+        angleLabel.bottomAnchor.constraint(equalTo: slider.topAnchor, constant: -5.0).isActive = true
     }
     
     
-    //Change servo angle every 5 degree if the previous slider value is not equal to the current value. It Reduces the amount of data send to peripheral.
     func sliderValueChanged()   {
         
-        guard blue.isReady else {return}
+        guard bluetooth.isReady else {return}
         
         let sliderValue = Int(slider.value)
         
         if (sliderValue % 5 == 0) && (sliderValue != previousValue)  {
             rotateImage(value: slider.value)
             angleLabel.text = "\(String((sliderValue)))°"
-            blue.sendMessage(string: "g\(sliderValue)\n")
+            bluetooth.sendMessage(string: "g\(sliderValue)\n")
             previousValue = sliderValue
         }
     }
     
-    //Convert slider value to radians, make transformation and change text angle label.
+
     private func rotateImage(value: Float)  {
         let radianAngle = value * .pi / 180
         imageView.transform = CGAffineTransform(rotationAngle: CGFloat(radianAngle))

@@ -17,31 +17,27 @@ protocol TableViewDelegate  {
 
 class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
     
-//Properties
     private var tableViewData: [String] = []
     private var delegate: TableViewDelegate?
  
     
-//Constructor
     init(delegate: TableViewDelegate, data: [String])  {
         super.init()
         self.delegate = delegate
         self.tableViewData = data
     }
     
-    //Als er nieuwe data.
+
     func reloadTableViewData(data: [String])  {
         tableViewData = data
     }
     
 
-    //Aantal rijen in array devices.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableViewData.count
     }
     
-    
-    //Wat er in de cellen moet komen.
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = UITableViewCell()
@@ -55,7 +51,6 @@ class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
     }
     
     
-    //Als er op een specifeke cel wordt geklikt.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.userDidSelectRow(indexPath: indexPath)
     }

@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 
-//TODO: Uit bluetooth delegate gehaald. Even kijken of het zo werkt. Waarschijnlijk wel.
-//Progress Message.
  enum EBlueProgressMessage{
      case scanning
      case noDeviceDetected
@@ -24,14 +22,10 @@ import UIKit
 
 
 //TODO: int seconds doorgeven. nu behoorlijke code duplicatie...
-
-//Message for the state of the bluetooth connection.
 class BlueProgressMessage{
     
-    //Progress Messages geven op basis van input.
     class func show(state: EBlueProgressMessage, currentView: UIView)   {
         
-        //Als er nog HUD actief is, eerst weghalen.
         MBProgressHUD.hide(for: currentView, animated: true)
         
         let progressHud = MBProgressHUD.showAdded(to: currentView, animated: true)
@@ -54,7 +48,7 @@ class BlueProgressMessage{
             
         case .connected:
             progressHud.mode = MBProgressHUDMode.text
-            progressHud.label.text = "Connected to: " + (blue.connectedPeripheral?.name)!
+            progressHud.label.text = "Connected to: " + (bluetooth.connectedPeripheral?.name)!
             progressHud.hide(animated: true, afterDelay: 1)
             
         case .disconnected:

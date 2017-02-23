@@ -16,20 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        //Customize statusbar, tabbar en tabbaritems.
         application.statusBarStyle = .lightContent
+        
         let navigationBarAppearance = UINavigationBar.appearance()
-        
-        //Kleur navigatiebar.
         navigationBarAppearance.barTintColor = UIColor.orange
-        
-        //Change is translucant property
-        //navigationBarAppearance.isTranslucent = false
-        
-        //Navigatiebar buttons.
         navigationBarAppearance.tintColor = UIColor.black
         
-        //Navigatiebar title.
         if let navBarFont = UIFont(name: "Avenir Next", size: 20.0) {
             navigationBarAppearance.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: navBarFont]}
         
@@ -57,12 +49,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         
-        //Try to reset arduinoComponents if user closes the app.
-        if blue.isReady {
-            blue.sendMessage(string: "r")
+        if bluetooth.isReady {
+            bluetooth.sendMessage(string: "r")
         }
     }
-
-
 }
 
