@@ -9,7 +9,6 @@
 import UIKit
 import CoreBluetooth
 
-//Delegate table view protocol
 protocol TableViewDelegate  {
     func userDidSelectRow(indexPath: IndexPath)
 }
@@ -17,7 +16,7 @@ protocol TableViewDelegate  {
 
 class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
     
-    private var tableViewData: [String] = []
+    private var tableViewData = [String]()
     private var delegate: TableViewDelegate?
  
     

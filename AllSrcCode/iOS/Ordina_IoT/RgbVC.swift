@@ -8,32 +8,45 @@
 
 import Foundation
 
+enum Color {
+    static let White = UIColor.white
+    static let Red = UIColor.red.withAlphaComponent(0.75)
+    static let Yellow = UIColor.yellow.withAlphaComponent(0.75)
+    static let Green = UIColor.green.withAlphaComponent(0.75)
+    static var Aqua = UIColor(red: 153/255, green: 241/255, blue: 250/255, alpha: 1.0)
+    static let Blue = UIColor.blue.withAlphaComponent(0.75)
+    static let Purple = UIColor.purple.withAlphaComponent(0.75)
+    
+    static let allColors = [White, Red, Yellow, Green, Aqua, Blue, Purple]
+}
+
+enum Slider {
+    static let Val0 = 0
+    static let Val1 = 50
+    static let Val2 = 100
+    static let Val3 = 150
+    static let Val4 = 200
+    static let Val5 = 250
+    static let Val6 = 300
+    
+    static let allValues = [Val0, Val1, Val2, Val3, Val4, Val5, Val6]
+}
+
 
 class RgbVC: NSObject    {
     
     var settingView: SettingView!
     private var rgbLabel: UILabel!
     private var rgbSlider: UISlider!
-    
-    private let white = UIColor.white
-    private let red = UIColor.red.withAlphaComponent(0.75)
-    private let yellow = UIColor.yellow.withAlphaComponent(0.75)
-    private let green = UIColor.green.withAlphaComponent(0.75)
-    private let aqua = UIColor(red: 153/255, green: 241/255, blue: 250/255, alpha: 1.0)
-    private let blue = UIColor.blue.withAlphaComponent(0.75)
-    private let purple = UIColor.purple.withAlphaComponent(0.75)
-    
-    private var colorArray: [UIColor] = []
-    private let messageArray = ["c0", "c1", "c2", "c3", "c4", "c5", "c6"]
-    private var valueArray: [Int] = [0, 50, 100, 150, 200, 250, 300]
-    private var currentColor: UIColor = UIColor.white
+    private var rgbLetter: String!
+    private var previousIndex = 0
 
 
-    init(frame: CGRect) {
+    init(frame: CGRect, headerText: String, rgbLetter: String) {
         super.init()
         
-        settingView = SettingView(frame: frame, title: "Control Rgb light")
-        colorArray = [white, red, yellow, green, aqua, blue, purple]
+        settingView = SettingView(frame: frame, headerText: headerText)
+        self.rgbLetter = rgbLetter
         addRgbView()
     }
     
@@ -81,13 +94,16 @@ class RgbVC: NSObject    {
 
         let sliderValue = Int(sender.value)
         
-        for index in 0..<valueArray.count   {
-            if sliderValue <= valueArray[index]  {
+        //TODO: kijken if init(rawValue werkt) geen kabel bij.
+        for index in 0..<Slider.allValues.count   {
+
+            if sliderValue <= Slider.allValues[index]  {
                 
-                if currentColor != colorArray[index] {
-                    currentColor = colorArray[index]
-                    bluetooth.sendMessage(string: messageArray[index])
-                    setComponentsColor(color: colorArray[index])
+                if previousIndex != index {
+                    previousIndex = index
+                    let message = rgbLetter + "\(index)"    //Index (0-6) -> white, red, yellow, green, aqua, blue, pruple
+                    bluetooth.sendMessage(string: message)
+                    setComponentsColor(color: Color.allColors[index])
                 }
                 
                 break

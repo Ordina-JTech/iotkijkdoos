@@ -11,7 +11,6 @@ import UIKit
 
 class MainVC: UIViewController{
     
-//Properties
     @IBOutlet weak var disconnectBtn: DisconnectButton!
     @IBOutlet weak var leftLedImage: UIImageView!
     @IBOutlet weak var rightLedImage: UIImageView!
@@ -24,10 +23,8 @@ class MainVC: UIViewController{
     private var rightLedVC: LedVC!
     private var servoVC: ServoVC!
     private var speakerVC: SpeakerVC!
-    
-    private var viewIsActive: [Bool] = []
+    private var viewIsActive = [Bool]()
     private var settingViewArray: [UIView]!
-    
     
     override open var shouldAutorotate: Bool {
             return true
@@ -60,11 +57,12 @@ class MainVC: UIViewController{
     
     override func viewDidAppear(_ animated: Bool) {
         
-        leftLedVC = LedVC(frame: settingViewFrame, title: "Control Left Light", blueMessage: "a")
-        rightLedVC = LedVC(frame: settingViewFrame, title: "Control Right Light", blueMessage: "b")
-        rgbVC = RgbVC(frame: settingViewFrame)
-        servoVC = ServoVC(frame: settingViewFrame, title: "Control Television")
-        speakerVC = SpeakerVC(frame: settingViewFrame, title: "Control Speaker")
+        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: Letter.Led1.rawValue)
+        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: Letter.Led2.rawValue)
+        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light", rgbLetter: Letter.Rgb.rawValue)
+        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television", servoLetter: Letter.Servo.rawValue)
+        let speakerLetter: [String] = [Letter.Alarm.rawValue, Letter.VaderJacob.rawValue, Letter.CreateOwn.rawValue]
+        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker", speakerLetter: speakerLetter)
 
         settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView]
         

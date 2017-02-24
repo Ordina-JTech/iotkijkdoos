@@ -16,11 +16,13 @@ class ServoVC: NSObject {
     private var previousValue: Int = 0
     private var angleLabel: UILabel!
     private var imageView: UIImageView!
+    private var servoLetter: String!
     
     
-    init(frame: CGRect, title: String) {
+    init(frame: CGRect, headerText: String, servoLetter: String) {
         super.init()
-        settingView = SettingView(frame: frame, title: title)
+        settingView = SettingView(frame: frame, headerText: headerText)
+        self.servoLetter = servoLetter
         addServoView()
     }
     
@@ -77,7 +79,6 @@ class ServoVC: NSObject {
     
     
     func sliderValueChanged()   {
-        
         guard bluetooth.isReady else {return}
         
         let sliderValue = Int(slider.value)
@@ -85,7 +86,9 @@ class ServoVC: NSObject {
         if (sliderValue % 5 == 0) && (sliderValue != previousValue)  {
             rotateImage(value: slider.value)
             angleLabel.text = "\(String((sliderValue)))°"
-            bluetooth.sendMessage(string: "g\(sliderValue)\n")
+            
+            let message = servoLetter + "\(sliderValue)\n"
+            bluetooth.sendMessage(string: message)
             previousValue = sliderValue
         }
     }

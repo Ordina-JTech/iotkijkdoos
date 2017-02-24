@@ -10,18 +10,26 @@ import UIKit
 
 class SettingView: UIView {
 
+    private var headerText: String!
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    init(frame: CGRect, title: String)  {
+    init(frame: CGRect, headerText: String)  {
         super.init(frame: frame)
+        self.headerText = headerText
         self.backgroundColor = UIColor.white
-        addTitleBar(text: title)
+    
+    }
+    
+    //TODO: kijken of dit goed wordt uitgevoerd -> geen kabel
+    override func layoutSubviews() {
+        addTitleBar()
     }
     
     
-    private func addTitleBar(text: String)  {
+    private func addTitleBar()  {
     
         //View
         let viewPoint = CGPoint(x: 0, y: 0)
@@ -36,7 +44,7 @@ class SettingView: UIView {
         //Label
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = text
+        titleLabel.text = headerText
         titleLabel.textColor = UIColor.black
         titleLabel.font = UIFont(name: "Avenir Next", size: 25.0)
         titleLabel.sizeToFit()

@@ -13,14 +13,14 @@ class LedVC: NSObject   {
     
     var settingView: SettingView!
     private var switchBtn: UISwitch!
-    private var message: String!
+    private var ledLetter: String!
     
     
-    init(frame: CGRect, title: String, blueMessage: String) {
+    init(frame: CGRect, headerText: String, ledLetter: String) {
         super.init()
         
-        settingView = SettingView(frame: frame, title: title)
-        self.message = blueMessage
+        settingView = SettingView(frame: frame, headerText: headerText)
+        self.ledLetter = ledLetter
         addLedView()
     }
     
@@ -64,7 +64,7 @@ class LedVC: NSObject   {
     
     func switchStateDidChangeState() {
         if bluetooth.isReady   {
-            bluetooth.sendMessage(string: message)
+            bluetooth.sendMessage(string: ledLetter)
         }
     }
 }

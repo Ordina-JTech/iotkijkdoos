@@ -9,19 +9,22 @@
 import Foundation
 
 
+
+
 class SpeakerVC: NSObject, TableViewDelegate   {
     
     var settingView: SettingView!
     private var tableView: UITableView!
     private var tableViewObj: TableView!
-    private let sounds: [String] = ["Alarm", "Vader Jacob", "Create Your Own"]
-    private let speakerMessage: [String] = ["d", "e", "f"]
+    private let soundName = ["Alarm", "Vader Jacob", "Create Your Own"]
+    private var speakerLetter = [String]()
     
-    init(frame: CGRect, title: String)  {
+    init(frame: CGRect, headerText: String, speakerLetter: [String])  {
         super.init()
         
-        settingView = SettingView(frame: frame, title: title)
-        tableViewObj = TableView(delegate: self, data: sounds)
+        settingView = SettingView(frame: frame, headerText: headerText)
+        self.speakerLetter = speakerLetter
+        tableViewObj = TableView(delegate: self, data: soundName)
         addServoView()
     }
     
@@ -48,7 +51,7 @@ class SpeakerVC: NSObject, TableViewDelegate   {
         
         if bluetooth.isReady    {
             let index = indexPath as NSIndexPath
-            bluetooth.sendMessage(string: speakerMessage[index.row])
+            bluetooth.sendMessage(string: speakerLetter[index.row])
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  BlueProgressMessage.swift
+//  ProgressMessage.swift
 //  PunchPad
 //
 //  Created by Rik Wout on 16-12-16.
@@ -10,67 +10,57 @@ import Foundation
 import UIKit
 
 
- enum EBlueProgressMessage{
-     case scanning
-     case noDeviceDetected
-     case connected
-     case disconnected
-     case failedToConnect
-     case poweredOff
-     case notConnected
- }
-
-
-//TODO: int seconds doorgeven. nu behoorlijke code duplicatie...
-class BlueProgressMessage{
+enum ProgressMessage{
+    case Scanning
+    case NoDevicesDetected
+    case Connected
+    case Disconnected
+    case FailedToConnect
+    case PoweredOff
+    case NotConnected
     
-    class func show(state: EBlueProgressMessage, currentView: UIView)   {
+    func show(view: UIView)   {
         
-        MBProgressHUD.hide(for: currentView, animated: true)
+        MBProgressHUD.hide(for: view, animated: true)
         
-        let progressHud = MBProgressHUD.showAdded(to: currentView, animated: true)
+        let progressHud = MBProgressHUD.showAdded(to: view, animated: true)
         progressHud.contentColor = UIColor.white
         progressHud.bezelView.color = UIColor.darkGray
         progressHud.label.font = UIFont(name: "Avenir Next", size: 17)
         progressHud.isUserInteractionEnabled = false
+        progressHud.hide(animated: true, afterDelay: 3)
         
-        switch state   {
+        switch self   {
             
-        case .scanning:
+        case .Scanning:
             progressHud.label.text = "Scanning..."
-            progressHud.hide(animated: true, afterDelay: 5)
-
-        case .noDeviceDetected:
+            
+        case .NoDevicesDetected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "No devices detected!"
             progressHud.detailsLabel.text = "Make sure your bluetooth device is powered on."
-            progressHud.hide(animated: true, afterDelay: 3)
             
-        case .connected:
+        case .Connected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Connected to: " + (bluetooth.connectedPeripheral?.name)!
-            progressHud.hide(animated: true, afterDelay: 1)
             
-        case .disconnected:
+        case .Disconnected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Disconnected!"
-            progressHud.hide(animated: true, afterDelay: 2)
             
-        case .failedToConnect:
+        case .FailedToConnect:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Failed to connect!"
             progressHud.detailsLabel.text = "Please try again."
-            progressHud.hide(animated: true, afterDelay: 2)
             
-        case .poweredOff:
+        case .PoweredOff:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Your bluetooth is turned off!"
-            progressHud.hide(animated: true, afterDelay: 2)
             
-        case .notConnected:
+        case .NotConnected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Not connected!"
-            progressHud.hide(animated: true, afterDelay: 2)
         }
     }
 }
+
