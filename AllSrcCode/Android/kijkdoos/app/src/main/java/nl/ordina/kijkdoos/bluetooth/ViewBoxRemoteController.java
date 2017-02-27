@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.annimon.stream.Stream;
@@ -70,6 +71,10 @@ public class ViewBoxRemoteController {
     @Transient
     private BluetoothGattCharacteristic bluetoothGattCharacteristic;
 
+    @VisibleForTesting
+    protected ViewBoxRemoteController() {
+    }
+
     @ParcelConstructor
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
@@ -104,6 +109,11 @@ public class ViewBoxRemoteController {
         if (bluetoothGatt != null) {
             bluetoothGatt.disconnect();
         }
+    }
+
+    public void toggleLed() {
+        bluetoothGattCharacteristic.setValue("a");
+        bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
     }
 
     public Parcelable wrapInParcelable() {
