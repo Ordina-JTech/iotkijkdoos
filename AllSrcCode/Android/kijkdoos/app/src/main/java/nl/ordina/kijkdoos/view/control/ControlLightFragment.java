@@ -19,15 +19,17 @@ import nl.ordina.kijkdoos.R;
 
 public class ControlLightFragment extends Fragment {
 
+    public static final String ARGUMENT_COMPONENT = "COMPONENT";
+
     private OnSwitchChangedListener activity;
-    private ControlViewBoxActivity.Components component;
+    private ControlViewBoxActivity.Component component;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         final Bundle arguments = getArguments();
-        component = (ControlViewBoxActivity.Components) arguments.getSerializable("bla");
+        component = (ControlViewBoxActivity.Component) arguments.getSerializable(ARGUMENT_COMPONENT);
 
         try {
             activity = (OnSwitchChangedListener) getActivity();
@@ -53,7 +55,7 @@ public class ControlLightFragment extends Fragment {
     }
 
     public interface OnSwitchChangedListener {
-        void onSwitchChanged(ControlViewBoxActivity.Components component);
+        void onSwitchChanged(ControlViewBoxActivity.Component component);
     }
 
 }

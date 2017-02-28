@@ -111,8 +111,13 @@ public class ViewBoxRemoteController {
         }
     }
 
-    public void toggleLed() {
+    public void toggleLeftLamp() {
         bluetoothGattCharacteristic.setValue("a");
+        bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+    }
+
+    public void toggleRightLamp() {
+        bluetoothGattCharacteristic.setValue("b");
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
     }
 

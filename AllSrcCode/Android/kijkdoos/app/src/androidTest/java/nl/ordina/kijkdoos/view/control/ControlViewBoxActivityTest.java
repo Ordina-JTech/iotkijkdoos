@@ -1,9 +1,10 @@
-package nl.ordina.kijkdoos;
+package nl.ordina.kijkdoos.view.control;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -11,9 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.parceler.Parcels;
 
+import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.MockedViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -55,13 +56,23 @@ public class ControlViewBoxActivityTest {
     };
 
     @Test
-    public void givenTheLampIsOffWhenSwitchingTheLeftLampThenItShouldDisplayOn() throws Exception {
-        onView(withId(R.id.ivLeftLamp)).perform(click());
+    public void givenTheLeftLampIsOffWhenSwitchingTheLeftLampThenItShouldDisplayOn() throws Exception {
+        onView(ViewMatchers.withId(R.id.ivLeftLamp)).perform(click());
         onView(withId(R.id.component_controller)).check(matches(isDisplayed()));
         onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
                 .perform(click()).check(matches(isChecked()));
 
-        verify(mockedViewBoxRemoteController).toggleLed();
+        verify(mockedViewBoxRemoteController).toggleLeftLamp();
+    }
+
+    @Test
+    public void givenTheRightLampIsOffWhenSwitchingTheRightLampThenItShouldDisplayOn() throws Exception {
+        onView(withId(R.id.ivRightLamp)).perform(click());
+        onView(withId(R.id.component_controller)).check(matches(isDisplayed()));
+        onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
+                .perform(click()).check(matches(isChecked()));
+
+        verify(mockedViewBoxRemoteController).toggleRightLamp();
     }
 
     @Test

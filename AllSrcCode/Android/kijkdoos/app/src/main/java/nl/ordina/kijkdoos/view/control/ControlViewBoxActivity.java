@@ -2,48 +2,53 @@ package nl.ordina.kijkdoos.view.control;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.IdRes;
 import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.KeyEvent;
+import android.view.View;
 import android.widget.ImageView;
 
+import com.annimon.stream.Optional;
+import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import dagger.Component;
 import lombok.AccessLevel;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
+import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements ControlLightFragment.OnSwitchChangedListener {
     
-    enum Components {
-        LAMP_LEFT(R.id.ivLeftLamp, ViewBoxRemoteController::toggleLed);
+    enum Component {
+        LAMP_LEFT(R.id.ivLeftLamp, ViewBoxRemoteController::toggleLeftLamp), //
+        LAMP_RIGHT(R.id.ivRightLamp, ViewBoxRemoteController::toggleRightLamp);
 
-        private final int ivLeftLamp;
+        private final int viewReference;
         private final Consumer<ViewBoxRemoteController> action;
 
-        Components(int ivLeftLamp, Consumer<ViewBoxRemoteController> action) {
-
-            this.ivLeftLamp = ivLeftLamp;
+        Component(@IdRes int ivLeftLamp, Consumer<ViewBoxRemoteController> action) {
+            this.viewReference = ivLeftLamp;
             this.action = action;
         }
 
         public void performAction(ViewBoxRemoteController viewBoxRemoteController) {
             action.accept(viewBoxRemoteController);
+        }
+
+        public static Component get(@IdRes int viewReference) {
+            final Optional<Component> optional = Stream.of(values()).filter(value -> value.viewReference == viewReference).findSingle();
+            return optional.get();
         }
     }
 
@@ -100,19 +105,23 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Control
 
     }
 
-    @OnClick(R.id.ivLeftLamp)
-    public void onLeftLampClicked() {
-        final ControlLightFragment fragment = new ControlLightFragment();
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp})
+    public void onLampClicked(View clickedView) {
+        final Component component = Component.get(clickedView.getId());
+
         final Bundle args = new Bundle();
-        args.putSerializable("bla", Components.LAMP_LEFT);
+        args.putSerializable(ARGUMENT_COMPONENT, component);
+
+        final ControlLightFragment fragment = new ControlLightFragment();
         fragment.setArguments(args);
+
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.left_drawer, fragment).commit();
         componentController.openDrawer(GravityCompat.START);
     }
 
     @Override
-    public void onSwitchChanged(Components component) {
+    public void onSwitchChanged(Component component) {
         component.performAction(viewBoxRemoteController);
     }
 }
