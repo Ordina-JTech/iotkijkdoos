@@ -1,9 +1,14 @@
-package nl.ordina.kijkdoos.search;
+package nl.ordina.kijkdoos.view.search;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,13 +25,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.R;
-import nl.ordina.kijkdoos.ViewBoxActivity;
+import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
-import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
-import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
@@ -56,12 +61,33 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     protected void onResume() {
+        handleAppPermissions();
+        handleBluetooth();
+
+        super.onResume();
+    }
+
+    private void handleBluetooth() {
         if (bluetoothService.isBluetoothEnabled()) {
             bluetoothService.searchDevices(this);
         } else if (!waitingForBluetoothBeingEnabled) {
             askUserToEnableBluetooth();
         }
-        super.onResume();
+    }
+
+    private void handleAppPermissions() {
+        final int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            handleBluetooth();
+        }
     }
 
     @Override
@@ -104,7 +130,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
                     connect.get(5, TimeUnit.SECONDS);
                     viewBoxRemoteController.disconnect();
                     runOnUiThread(() -> {
-                        Intent intent = new Intent(SearchViewBoxActivity.this, ViewBoxActivity.class);
+                        Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
                         intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
 
                         startActivity(intent);

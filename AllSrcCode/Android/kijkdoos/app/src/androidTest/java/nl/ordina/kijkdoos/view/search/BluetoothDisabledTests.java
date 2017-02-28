@@ -1,12 +1,10 @@
-package nl.ordina.kijkdoos.search;
+package nl.ordina.kijkdoos.view.search;
 
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.bluetooth.BluetoothAdapter;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 

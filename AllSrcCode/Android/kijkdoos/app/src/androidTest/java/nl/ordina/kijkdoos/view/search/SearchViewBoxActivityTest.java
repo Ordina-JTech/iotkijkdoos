@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.search;
+package nl.ordina.kijkdoos.view.search;
 
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityResult;
@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import nl.ordina.kijkdoos.ViewBoxActivity;
+import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxApplication;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
@@ -30,8 +30,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.fail;
-import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
-import static nl.ordina.kijkdoos.ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
+import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -98,7 +98,7 @@ public class SearchViewBoxActivityTest {
 
         private void mockViewBoxActivityNavigation() {
             final ActivityResult mockViewBoxActivityInvocation = new ActivityResult(-1, null);
-            intending(hasComponent(ViewBoxActivity.class.getName())).respondWith(mockViewBoxActivityInvocation);
+            intending(hasComponent(ControlViewBoxActivity.class.getName())).respondWith(mockViewBoxActivityInvocation);
         }
     };
 
@@ -108,7 +108,7 @@ public class SearchViewBoxActivityTest {
         expectedIntentBundle.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, new Bundle());
 
         onView(withText("Mocked JTech Kijkdoos 1")).perform(click());
-        intended(allOf(hasComponent(ViewBoxActivity.class.getName()),
+        intended(allOf(hasComponent(ControlViewBoxActivity.class.getName()),
                 hasExtra(org.hamcrest.Matchers.equalTo(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER), org.hamcrest.Matchers.any(Bundle.class))));
     }
 

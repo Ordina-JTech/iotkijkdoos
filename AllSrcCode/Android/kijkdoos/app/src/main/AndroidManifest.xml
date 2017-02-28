@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -17,14 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".search.SearchViewBoxActivity">
+        <activity android:name=".view.search.SearchViewBoxActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewBoxActivity" android:screenOrientation="sensorLandscape" android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".view.control.ControlViewBoxActivity" android:screenOrientation="sensorLandscape" android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>

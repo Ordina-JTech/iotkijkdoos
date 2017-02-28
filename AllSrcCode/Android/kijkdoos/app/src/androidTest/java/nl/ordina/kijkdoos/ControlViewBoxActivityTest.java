@@ -13,6 +13,7 @@ import org.parceler.Parcels;
 
 import nl.ordina.kijkdoos.bluetooth.MockedViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -27,21 +28,21 @@ import static org.mockito.Mockito.verify;
  * Created by coenhoutman on 13-2-2017.
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewBoxActivityTest {
+public class ControlViewBoxActivityTest {
 
     private ViewBoxRemoteController mockedViewBoxRemoteController;
 
     @Rule
-    public IntentsTestRule<ViewBoxActivity> activityRule = new IntentsTestRule(ViewBoxActivity.class) {
+    public IntentsTestRule<ControlViewBoxActivity> activityRule = new IntentsTestRule(ControlViewBoxActivity.class) {
         @Override
         protected Intent getActivityIntent() {
 
             final MockedViewBoxRemoteController mockedViewBoxApplication = new MockedViewBoxRemoteController();
 
-            final Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), ViewBoxActivity.class);
+            final Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), ControlViewBoxActivity.class);
             final Bundle bundleWrap = new Bundle();
-            bundleWrap.putParcelable(ViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, Parcels.wrap(mockedViewBoxApplication));
-            intent.putExtra(ViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundleWrap);
+            bundleWrap.putParcelable(ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, Parcels.wrap(mockedViewBoxApplication));
+            intent.putExtra(ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundleWrap);
 
             return intent;
         }

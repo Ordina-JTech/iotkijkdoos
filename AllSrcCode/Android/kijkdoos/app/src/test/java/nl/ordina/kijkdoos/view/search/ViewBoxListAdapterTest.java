@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.search;
+package nl.ordina.kijkdoos.view.search;
 
 import android.bluetooth.BluetoothDevice;
 
@@ -6,8 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
-import nl.ordina.kijkdoos.search.ViewBoxListAdapter;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.doNothing;
