@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
 import nl.ordina.kijkdoos.threading.BackgroundService;
+import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 
 import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
@@ -120,8 +121,8 @@ public class ViewBoxRemoteController {
         sendMessage("b");
     }
 
-    public void setDiscoBallColor(int color) {
-
+    public void setDiscoBallColor(ControlDiscoBallFragment.DiscoBallColor color) {
+        sendMessage(color.getMessage());
     }
 
     public Parcelable wrapInParcelable() {

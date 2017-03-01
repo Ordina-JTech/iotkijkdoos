@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +31,9 @@ public abstract class AbstractControlFragment extends Fragment {
 
     @Getter
     private ControlViewBoxActivity.Component component;
+
+    @BindView(R.id.tvTitle)
+    public TextView tvTitle;
 
     @Override
     public void onAttach(Context context) {
@@ -55,8 +59,12 @@ public abstract class AbstractControlFragment extends Fragment {
         stub.inflate();
         ButterKnife.bind(this, inflatedView);
 
+        tvTitle.setText(getTitle());
+
         return inflatedView;
     }
+
+    protected abstract String getTitle();
 
     protected abstract int getControlLayoutId();
 

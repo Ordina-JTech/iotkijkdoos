@@ -106,7 +106,7 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.ivDiscoBall)).perform(click());
         onView(withId(R.id.colorSlider)).perform(swipeRight());
 
-        verify(mockedViewBoxRemoteController, atLeastOnce()).setDiscoBallColor(anyInt());
+        verify(mockedViewBoxRemoteController, atLeastOnce()).setDiscoBallColor(any(ControlDiscoBallFragment.DiscoBallColor.class));
     }
 
     @Test

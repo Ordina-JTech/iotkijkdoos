@@ -36,7 +36,8 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     enum Component {
         LAMP_LEFT(R.id.ivLeftLamp, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
         LAMP_RIGHT(R.id.ivRightLamp, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
-        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> controller.setDiscoBallColor((int)color)) ;
+        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> controller.setDiscoBallColor(
+                (ControlDiscoBallFragment.DiscoBallColor) color)) ;
 
         private final int viewReference;
         private final Class<? extends AbstractControlFragment> fragmentClass;
