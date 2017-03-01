@@ -117,7 +117,10 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Control
 
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.left_drawer, fragment).commit();
+
         componentController.openDrawer(GravityCompat.START);
+        componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        componentController.setFocusableInTouchMode(true);
     }
 
     @Override

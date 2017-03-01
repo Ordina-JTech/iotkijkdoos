@@ -112,17 +112,20 @@ public class ViewBoxRemoteController {
     }
 
     public void toggleLeftLamp() {
-        bluetoothGattCharacteristic.setValue("a");
-        bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+        sendMessage("a");
     }
 
     public void toggleRightLamp() {
-        bluetoothGattCharacteristic.setValue("b");
-        bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+        sendMessage("b");
     }
 
     public Parcelable wrapInParcelable() {
         return Parcels.wrap(this);
+    }
+
+    private void sendMessage(String value) {
+        bluetoothGattCharacteristic.setValue(value);
+        bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
     }
 
     @Override
@@ -140,25 +143,7 @@ public class ViewBoxRemoteController {
                 '}';
     }
 
-    public interface OnConnectedListener {
-        void onConnected();
-    }
-
-    public interface OnDisconnectedListener {
-        void onDisconnected();
-    }
-
     private class BluetoothCallbackRegister extends BluetoothGattCallback {
-        private Set<OnConnectedListener> onConnectedListeners = new HashSet<>();
-        private Set<OnDisconnectedListener> onDisconnectedListeners = new HashSet<>();
-
-        private void registerOnConnectedListener(OnConnectedListener listener) {
-            onConnectedListeners.add(listener);
-        }
-
-        private void registerOnDisconnectedListener(OnDisconnectedListener listener) {
-            onDisconnectedListeners.add(listener);
-        }
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -172,8 +157,7 @@ public class ViewBoxRemoteController {
 
                 bluetoothGatt.discoverServices();
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Stream.of(onDisconnectedListeners).filter(value -> value != null).forEach(OnDisconnectedListener::onDisconnected);
-                onDisconnectedListeners.clear();
+                bluetoothGatt.close();
             }
         }
 

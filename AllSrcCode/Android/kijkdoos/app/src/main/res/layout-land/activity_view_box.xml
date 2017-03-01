@@ -12,7 +12,7 @@
     <FrameLayout
         android:id="@+id/left_drawer"
         android:layout_gravity="start"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent">
     </FrameLayout>
 </android.support.v4.widget.DrawerLayout>
