@@ -57,11 +57,11 @@ class MainVC: UIViewController{
     
     override func viewDidAppear(_ animated: Bool) {
         
-        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: Letter.Led1.rawValue)
-        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: Letter.Led2.rawValue)
-        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light", rgbLetter: Letter.Rgb.rawValue)
-        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television", servoLetter: Letter.Servo.rawValue)
-        let speakerLetter: [String] = [Letter.Alarm.rawValue, Letter.VaderJacob.rawValue, Letter.CreateOwn.rawValue]
+        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: PeripheralMsg.Led1.rawValue)
+        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: PeripheralMsg.Led2.rawValue)
+        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light", rgbLetter: PeripheralMsg.Rgb.rawValue)
+        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television", servoLetter: PeripheralMsg.Servo.rawValue)
+        let speakerLetter: [String] = [PeripheralMsg.Alarm.rawValue, PeripheralMsg.VaderJacob.rawValue, PeripheralMsg.CreateOwn.rawValue]
         speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker", speakerLetter: speakerLetter)
 
         settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView]
@@ -135,7 +135,7 @@ class MainVC: UIViewController{
     
     
     @IBAction func disconnectWasPressed(_ sender: Any) {
-        bluetooth.sendMessage(string: "r")
+        bluetooth.sendMessage(string: PeripheralMsg.Reset.rawValue)
     }
     
 

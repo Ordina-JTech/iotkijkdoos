@@ -26,39 +26,46 @@ class LedVC: NSObject   {
     
     
     private func addLedView()   {
-    
+        
         //ImageView
         let imageName = "lamp_transparant"
-        let image = UIImage(named: imageName)
-        let imageView = UIImageView(image: image)
-        settingView.addSubview(imageView)
         
+        if let image = UIImage(named: imageName)    {
+            let imageView = UIImageView(image: image)
+            settingView.addSubview(imageView)
+            
 
-        let heightConstant = settingView.frame.width/2.5
-        imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        let yConstant = settingView.frame.height/12.5
-        imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+            let heightConstant = settingView.frame.width/2.5
+            imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+            let yConstant = settingView.frame.height/12.5
+            imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+            imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
 
 
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFit
+
         
-        //Switch
-        switchBtn = UISwitch()
-        settingView.addSubview(switchBtn)
-        
-        let bottomConstant = settingView.frame.height/20
-        switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-        switchBtn.centerYAnchor.constraint(equalTo: imageView.bottomAnchor, constant: bottomConstant).isActive = true
-        
-        switchBtn.translatesAutoresizingMaskIntoConstraints = false
-        switchBtn.thumbTintColor = UIColor.lightGray
-        switchBtn.tintColor = UIColor.lightGray
-        switchBtn.onTintColor = UIColor.orange
-        switchBtn.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
-        switchBtn.addTarget(self, action: #selector(switchStateDidChangeState), for: .valueChanged)
+            //Switch
+            switchBtn = UISwitch()
+            settingView.addSubview(switchBtn)
+            
+            let bottomConstant = settingView.frame.height/20
+            switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+            switchBtn.centerYAnchor.constraint(equalTo: imageView.bottomAnchor, constant: bottomConstant).isActive = true
+            
+            switchBtn.translatesAutoresizingMaskIntoConstraints = false
+            switchBtn.thumbTintColor = UIColor.lightGray
+            switchBtn.tintColor = UIColor.lightGray
+            switchBtn.onTintColor = UIColor.orange
+            switchBtn.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
+            switchBtn.addTarget(self, action: #selector(switchStateDidChangeState), for: .valueChanged)
+        }
+        else    {
+            print("No Image Found")
+            return
+        }
     }
     
     

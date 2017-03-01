@@ -39,11 +39,14 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
 //METHODS ScanVC
     
-    
+    //TODO: performseque weghalen. Controleren op simulator, kabekltje nog niet binnen.
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
-        if !bluetooth.manager.isScanning{
+        
+        performSegue(withIdentifier: "scanToMain", sender: self)
+        
+        /*if !bluetooth.manager.isScanning{
             refreshDevices()
-        }
+        }*/
     }
     
     
@@ -97,7 +100,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         }
     }
     
-    
+    //TODO: Voeg het appenden en sorteren toe aan delegate en niet hier.
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
         
         for exisiting in scannedDevices {
@@ -122,7 +125,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     
     func blueDidConnect(_ peripheral: CBPeripheral) {
-        bluetooth.sendMessage(string: Letter.Reset.rawValue)
+        bluetooth.sendMessage(string: PeripheralMsg.Reset.rawValue)
     }
     
     
@@ -143,11 +146,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         let newLineChars = NSCharacterSet.newlines
         let messageArray = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
-        if messageArray[0] == Letter.Resetted.rawValue && isFirstChar    {
+        if messageArray[0] == PeripheralMsg.Response.rawValue && isFirstChar    {
             performSegue(withIdentifier: "scanToMain", sender: self)
             isFirstChar = false
         }
-        else if messageArray[0] == Letter.Resetted.rawValue   {
+        else if messageArray[0] == PeripheralMsg.Response.rawValue   {
             bluetooth.manager.cancelPeripheralConnection(bluetooth.connectedPeripheral!)
         }
     }
@@ -171,6 +174,5 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         startRefreshControl()
         refreshDevices()
     }
-    
 }
 

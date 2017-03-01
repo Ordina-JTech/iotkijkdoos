@@ -8,9 +8,6 @@
 
 import Foundation
 
-
-
-
 class SpeakerVC: NSObject, TableViewDelegate   {
     
     var settingView: SettingView!

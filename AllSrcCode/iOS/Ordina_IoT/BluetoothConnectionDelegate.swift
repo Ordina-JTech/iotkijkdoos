@@ -11,7 +11,6 @@ import CoreBluetooth
 
 var bluetooth: BluetoothConnection!
 
-
 protocol BluetoothConnectionDelegate    {
     
     func blueDidChangeState(_ poweredOn: Bool)
@@ -32,13 +31,6 @@ extension BluetoothConnectionDelegate   {
 }
 
 
-enum Message {
-    case quit
-    case start
-    case pause
-    case result
-}
-
 
 final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate   {
     
@@ -47,8 +39,12 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     private(set) var connectedPeripheral: CBPeripheral?
     weak var writeCharacteristic: CBCharacteristic?
     private var writeType: CBCharacteristicWriteType = .withoutResponse
-    private let serviceUUID: CBUUID = CBUUID(string: "FFE0")
-    private let characteristicUUID: CBUUID = CBUUID(string: "FFE1")
+
+    
+    private enum UUID   {
+        static let Service = CBUUID(string: "FFE0")
+        static let Characteristic = CBUUID(string: "FFE1")
+    }
     
     var isReady: Bool {
         get {
@@ -87,7 +83,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.delegate = self      //Strong reference to keep connected
         connectedPeripheral = peripheral
-        peripheral.discoverServices([serviceUUID])
+        peripheral.discoverServices([UUID.Service])
     }
     
 
@@ -105,14 +101,14 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
 //Peripheral
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        peripheral.discoverCharacteristics([characteristicUUID], for: peripheral.services![0])
+        peripheral.discoverCharacteristics([UUID.Characteristic], for: peripheral.services![0])
     }
     
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         
         for characteristic in service.characteristics!   {
-            if characteristic.uuid == characteristicUUID    {
+            if characteristic.uuid == UUID.Characteristic    {
                 peripheral.setNotifyValue(true, for: characteristic)
             }
             
@@ -135,7 +131,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     func startScanning()    {
         guard manager.state == .poweredOn else {return}
         
-        let uuid = serviceUUID
+        let uuid = UUID.Service
         manager.scanForPeripherals(withServices: [uuid], options: nil)
     }
     

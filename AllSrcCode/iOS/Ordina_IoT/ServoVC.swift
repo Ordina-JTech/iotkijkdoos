@@ -31,20 +31,25 @@ class ServoVC: NSObject {
     
         //ImageView
         let imageName = "Tv"
-        let image = UIImage(named: imageName)
-        imageView = UIImageView(image: image)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        
-        settingView.addSubview(imageView)
-        
-        let heightConstant = settingView.frame.width/2.5
-        imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        let yConstant = settingView.frame.height/12.5
-        imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
-        imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-        
+    
+        if let image = UIImage(named: imageName)    {
+            imageView = UIImageView(image: image)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFit
+            
+            settingView.addSubview(imageView)
+            
+            let heightConstant = settingView.frame.width/2.5
+            imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+            let yConstant = settingView.frame.height/12.5
+            imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+            imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        }
+        else {
+            print("No Image Found")
+            return
+        }
 
         //Slider
         slider = UISlider()

@@ -23,13 +23,13 @@ class SettingView: UIView {
     
     }
     
-    //TODO: kijken of dit goed wordt uitgevoerd -> geen kabel
+
     override func layoutSubviews() {
-        addTitleBar()
+        addViewComponents()
     }
     
     
-    private func addTitleBar()  {
+    private func addViewComponents()  {
     
         //View
         let viewPoint = CGPoint(x: 0, y: 0)
@@ -58,17 +58,23 @@ class SettingView: UIView {
 
         //ImageView
         let imageName = "jtech_logo"
-        let image = UIImage(named: imageName)
-        let imageView = UIImageView(image: image)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
         
-        titleView.addSubview(imageView)
+        if let image = UIImage(named: imageName)    {
+            let imageView = UIImageView(image: image)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFit
+            
+            titleView.addSubview(imageView)
 
-        let widthAnchor = titleView.frame.width/2.4
-        imageView.widthAnchor.constraint(equalToConstant: widthAnchor).isActive = true
-        imageView.rightAnchor.constraint(equalTo: titleView.rightAnchor, constant: 0.0).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: titleLabel.frame.height).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: titleLabel.frame.height*2).isActive = true
+            let widthAnchor = titleView.frame.width/2.4
+            imageView.widthAnchor.constraint(equalToConstant: widthAnchor).isActive = true
+            imageView.rightAnchor.constraint(equalTo: titleView.rightAnchor, constant: 0.0).isActive = true
+            imageView.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: titleLabel.frame.height).isActive = true
+            imageView.heightAnchor.constraint(equalToConstant: titleLabel.frame.height*2).isActive = true
+        }
+        else {
+            print("No Image Found")
+            return
+        }
     }
 }

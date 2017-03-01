@@ -8,32 +8,32 @@
 
 import Foundation
 
-enum Color {
-    static let White = UIColor.white
-    static let Red = UIColor.red.withAlphaComponent(0.75)
-    static let Yellow = UIColor.yellow.withAlphaComponent(0.75)
-    static let Green = UIColor.green.withAlphaComponent(0.75)
-    static var Aqua = UIColor(red: 153/255, green: 241/255, blue: 250/255, alpha: 1.0)
-    static let Blue = UIColor.blue.withAlphaComponent(0.75)
-    static let Purple = UIColor.purple.withAlphaComponent(0.75)
-    
-    static let allColors = [White, Red, Yellow, Green, Aqua, Blue, Purple]
-}
-
-enum Slider {
-    static let Val0 = 0
-    static let Val1 = 50
-    static let Val2 = 100
-    static let Val3 = 150
-    static let Val4 = 200
-    static let Val5 = 250
-    static let Val6 = 300
-    
-    static let allValues = [Val0, Val1, Val2, Val3, Val4, Val5, Val6]
-}
-
 
 class RgbVC: NSObject    {
+    
+    enum Color {
+        static let White = UIColor.white
+        static let Red = UIColor.red.withAlphaComponent(0.75)
+        static let Yellow = UIColor.yellow.withAlphaComponent(0.75)
+        static let Green = UIColor.green.withAlphaComponent(0.75)
+        static var Aqua = UIColor(red: 153/255, green: 241/255, blue: 250/255, alpha: 1.0)
+        static let Blue = UIColor.blue.withAlphaComponent(0.75)
+        static let Purple = UIColor.purple.withAlphaComponent(0.75)
+        
+        static let allColors = [White, Red, Yellow, Green, Aqua, Blue, Purple]
+    }
+    
+    enum Slider {
+        static let Val0 = 0
+        static let Val1 = 50
+        static let Val2 = 100
+        static let Val3 = 150
+        static let Val4 = 200
+        static let Val5 = 250
+        static let Val6 = 300
+        
+        static let allValues = [Val0, Val1, Val2, Val3, Val4, Val5, Val6]
+    }
     
     var settingView: SettingView!
     private var rgbLabel: UILabel!
@@ -94,7 +94,6 @@ class RgbVC: NSObject    {
 
         let sliderValue = Int(sender.value)
         
-        //TODO: kijken if init(rawValue werkt) geen kabel bij.
         for index in 0..<Slider.allValues.count   {
 
             if sliderValue <= Slider.allValues[index]  {
