@@ -3,7 +3,8 @@ package nl.ordina.kijkdoos.dagger;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
+import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
+import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 
 /**
  * Created by coenhoutman on 15-2-2017.
@@ -14,4 +15,5 @@ import nl.ordina.kijkdoos.search.SearchViewBoxActivity;
         BluetoothServiceModule.class})
 public interface ApplicationComponent {
     void inject(SearchViewBoxActivity activity);
+    void inject(ControlViewBoxActivity activity);
 }

@@ -10,10 +10,11 @@
     <color name="colorPrimaryBackground">#fceddd</color>
 
     <!-- (Old settings) Menu for scanning BLE devices -->
-    <color name="colorPrimaryBackgroundMenu">#FF7B00</color>
+    <color name="colorPrimaryBackgroundMenu">#ff7b00</color>
 
     <!-- Dark Orange for the TAB (action) bar -->
     <color name="colorAccent">#fc8d25</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="primary_text">#212121</color>
 </resources>
