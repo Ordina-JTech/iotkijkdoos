@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -117,6 +118,10 @@ public class ViewBoxRemoteController {
 
     public void toggleRightLamp() {
         sendMessage("b");
+    }
+
+    public void setDiscoBallColor(int color) {
+
     }
 
     public Parcelable wrapInParcelable() {
