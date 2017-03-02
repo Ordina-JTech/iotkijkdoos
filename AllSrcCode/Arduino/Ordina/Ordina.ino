@@ -6,11 +6,8 @@
 
 //Instance variables
 SoftwareSerial bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(10)
-
-const int pinLed1 = 5;
-const int pinLed2 = 6;
-Led led1(pinLed1);
-Led led2(pinLed2);
+Led led1(5);
+Led led2(6);
 RgbLed rgbLed(7, 8, 9);
 Buzzer buzzer(4);
 ServoMotor servo(2);
@@ -22,29 +19,32 @@ void setup()  {
   led2.begin();
   rgbLed.begin();
   buzzer.begin();
-  servo.reset();
 }
 
 void loop() {
-    //If the app has send data
+  
   if (bluetooth.available() > 0) {
     char input = bluetooth.read(); 
+    char nextChar;
     
     switch (input)  {
     case 'a':
-      led1.setLed();
+      nextChar = readNextChar();
+      led1.setLed(nextChar);
       break;
     case 'b':
-      led2.setLed();
+      nextChar = readNextChar();
+      led2.setLed(nextChar);
       break;
     case'c':
-      readCharForColor();
+      nextChar = readNextChar();
+      rgbLed.getAndSetColor(nextChar);
       break;
     case 'd':
-      buzzer.alarm(pinLed1, led1.getStatus(), pinLed2, led2.getStatus()); //Parameters: if led is on or off
+      buzzer.alarm(led1, led2); //Parameters: if led is on or off
       break;
     case 'e':
-      buzzer.vaderJacob(pinLed1, led1.getStatus(), pinLed2, led2.getStatus());
+      buzzer.vaderJacob(led1, led2);
       break;
     case 'f':
       buzzer.yourCustomSound();
@@ -61,16 +61,17 @@ void loop() {
   }   
 }
 
-void readCharForColor() {
+char readNextChar() {
   int count = 0;
+  char input = '\0';
   
   while (count == 0) {
     if (bluetooth.available() > 0) {
-      char input = bluetooth.read();
-      rgbLed.getAndSetColor(input);
+      input = bluetooth.read();
       count++;
     } 
-  } 
+  }
+  return input;
 }
 
 void getAndSetServoAngle() {

@@ -14,8 +14,7 @@ class LedVC: NSObject   {
     var settingView: SettingView!
     private var switchBtn: UISwitch!
     private var ledLetter: String!
-    
-    
+
     init(frame: CGRect, headerText: String, ledLetter: String) {
         super.init()
         
@@ -42,11 +41,9 @@ class LedVC: NSObject   {
             imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
             imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
 
-
             imageView.translatesAutoresizingMaskIntoConstraints = false
             imageView.contentMode = .scaleAspectFit
 
-        
             //Switch
             switchBtn = UISwitch()
             settingView.addSubview(switchBtn)
@@ -60,7 +57,7 @@ class LedVC: NSObject   {
             switchBtn.tintColor = UIColor.lightGray
             switchBtn.onTintColor = UIColor.orange
             switchBtn.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
-            switchBtn.addTarget(self, action: #selector(switchStateDidChangeState), for: .valueChanged)
+            switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
         }
         else    {
             print("No Image Found")
@@ -69,9 +66,19 @@ class LedVC: NSObject   {
     }
     
     
-    func switchStateDidChangeState() {
+    func switchStateDidChange() {
+        var status = ""
+        
+        if switchBtn.isOn {
+            status = "1"
+        }
+        else {
+            status = "0"
+        }
+        
         if bluetooth.isReady   {
-            bluetooth.sendMessage(string: ledLetter)
+            let msg = ledLetter + status
+            bluetooth.sendMessage(string: msg)
         }
     }
 }

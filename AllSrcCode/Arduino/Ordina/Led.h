@@ -5,41 +5,43 @@ class Led{
  public:
   Led(int pin); //constructor
   void begin();
-  void setLed();
+  void setLed(char input);
   bool getStatus();
+  int getPinNumber();
   void reset();
   
  private:
+  int _pin; 
   bool isOn = false;
-  int _pin;  
+ 
 };
 
-//Constructor
 Led::Led(int pin)  {
   _pin = pin;
 }
 
-//Output
 void Led::begin() {
   pinMode(_pin, OUTPUT);
 }
 
-//Set led on or off, depending on the bool 'isOn'.
-void Led::setLed() {
-  if (!isOn) {
-    isOn = true;
+void Led::setLed(char input) {
+  if (input == '1') {
     digitalWrite(_pin, HIGH);
+    isOn = true;
   }
-  else  {
-    isOn = false;
+  else if (input == '0')  {
     digitalWrite(_pin, LOW); 
+    isOn = false;
   }
+}
+
+int Led::getPinNumber() {
+  return _pin;
 }
 
 bool Led::getStatus() {
   return isOn;
 }
-
 
 void Led::reset()  {
   digitalWrite(_pin, LOW);

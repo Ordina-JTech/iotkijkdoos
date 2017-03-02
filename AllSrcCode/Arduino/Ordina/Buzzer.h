@@ -1,17 +1,19 @@
 #include "arduino.h"
 
+
 class Buzzer  {
 
  public:
   Buzzer(int pin);
   void begin();
-  void alarm(int pinLed1, bool isOnLed1, int pinLed2, bool isOnled2);
-  void vaderJacob(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2);
+  void alarm(Led led1, Led led2);
+  void vaderJacob(Led led1, Led led2);
   void yourCustomSound();
 
  private:
-  void checkLedStatus(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2);
+  void checkLedStatus(Led led1, bool isOnLed1, Led led2, bool isOnLed2);
   int _pin;
+  
   //Vader Jacob
   int frequence[16] = {523, 587, 659, 523, 659, 699, 784, 784, 880, 784, 699, 659, 523, 523, 659, 523};
   int beginCouplet[4] = {0, 4, 7, 13};
@@ -31,38 +33,43 @@ void Buzzer::begin()  {
 }
 
 
-void Buzzer::alarm(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2)  {
+void Buzzer::alarm(Led led1, Led led2)  {
+  bool statusLed1 = led1.getStatus();
+  bool statusLed2 = led2.getStatus();
+  
   long startTimer = millis();
 
   while (millis() - startTimer < 3000) {    //Play alarm for 3 seconds (3000 ms)
-      digitalWrite(pinLed1, HIGH);
-      digitalWrite(pinLed2, HIGH);
+      led1.setLed('1');
+      led2.setLed('1');
       tone(_pin, 1000, 500);
       delay(500);
 
-      digitalWrite(pinLed1, LOW);
-      digitalWrite(pinLed2, LOW);
+      led1.setLed('0');
+      led2.setLed('0');
       tone(_pin, 500, 500);
       delay(500);   
   }
-
-  checkLedStatus(pinLed1, isOnLed1, pinLed2, isOnLed2);
+  checkLedStatus(led1, statusLed1, led2, statusLed2);
 }
 
-void Buzzer::vaderJacob(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2) {
-  digitalWrite(pinLed1, LOW);
-  digitalWrite(pinLed2, LOW);
+void Buzzer::vaderJacob(Led led1, Led led2) {
+  bool statusLed1 = led1.getStatus();
+  bool statusLed2 = led2.getStatus();
+  
+  led1.setLed('0');
+  led2.setLed('0');
   
   for(int i = 0; i < nCouplets; i++)  {
     for (int j = 0; j < 2; j++)   {
       for (int k = beginCouplet[i]; k < endCouplet[i]; k++) {
         if (k%2 == 0) {
-            digitalWrite(pinLed1, HIGH);
-            digitalWrite(pinLed2, LOW);
+            led1.setLed('1');
+            led2.setLed('0');
         }
         else {
-            digitalWrite(pinLed1, LOW);
-            digitalWrite(pinLed2, HIGH);
+            led1.setLed('0');
+            led2.setLed('1');
         }
         tone(_pin, frequence[k], milliSec);
         delay(nSeconds[i]);
@@ -71,8 +78,7 @@ void Buzzer::vaderJacob(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2) 
     }
     delay(200);
   }
-  
-  checkLedStatus(pinLed1, isOnLed1, pinLed2, isOnLed2);
+  checkLedStatus(led1, statusLed1, led2, statusLed2);
 }
 
 
@@ -87,19 +93,19 @@ void Buzzer::yourCustomSound()  {
 
 
   
-void Buzzer::checkLedStatus(int pinLed1, bool isOnLed1, int pinLed2, bool isOnLed2) {
-  if (isOnLed1) {
-    digitalWrite(pinLed1, HIGH);
+void Buzzer::checkLedStatus(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
+  if (wasOnLed1) {
+    led1.setLed('1');
   }
   else {
-    digitalWrite(pinLed1, LOW);
+    led1.setLed('0');
   }
   
-  if (isOnLed2) {
-    digitalWrite(pinLed2, HIGH);
+  if (wasOnLed2) {
+    led2.setLed('1');
   }
   else {
-    digitalWrite(pinLed2, LOW);
+    led2.setLed('0');
   }
 }
 
