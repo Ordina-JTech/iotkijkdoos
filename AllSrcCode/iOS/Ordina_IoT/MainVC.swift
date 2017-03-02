@@ -26,21 +26,20 @@ class MainVC: UIViewController{
     private var viewIsActive = [Bool]()
     private var settingViewArray: [UIView]!
     
+    private var settingViewFrame: CGRect    {
+        let point = CGPoint(x: -self.view.frame.width, y: 0)
+        let size = CGSize(width: self.view.frame.width/2, height: self.view.frame.height)
+        let rect = CGRect(origin: point, size: size)
+        
+        return rect
+    }
+    
     override open var shouldAutorotate: Bool {
             return true
     }
     
     override open var supportedInterfaceOrientations: UIInterfaceOrientationMask    {
         return .landscape
-    }
-    
-    private final var settingViewFrame: CGRect    {
-
-        let point = CGPoint(x: -self.view.frame.width, y: 0)
-        let size = CGSize(width: self.view.frame.width/2, height: self.view.frame.height)
-        let rect = CGRect(origin: point, size: size)
-        
-        return rect
     }
     
 
@@ -83,7 +82,6 @@ class MainVC: UIViewController{
     
 
     private func addImageTapGestures()    {
-        
         let imageViewArray = [leftLedImage, rightLedImage, rgbImage, tvImage, speakerImage]
     
         for i in 0..<imageViewArray.count    {
@@ -96,7 +94,6 @@ class MainVC: UIViewController{
     
 
     func imageWasTapped(tapGestureRecognizer: UITapGestureRecognizer)   {
-        
         let index = tapGestureRecognizer.view!.tag
 
         if !viewIsActive[index] && !viewIsActive.contains(true)    {
@@ -107,7 +104,6 @@ class MainVC: UIViewController{
     
     
     func userSwipedSettingView(tapGestureRecognizer: UITapGestureRecognizer)  {
-        
         let index = tapGestureRecognizer.view!.tag
 
         if viewIsActive[index]    {

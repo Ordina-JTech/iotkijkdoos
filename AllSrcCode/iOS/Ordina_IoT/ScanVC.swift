@@ -39,14 +39,12 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
 //METHODS ScanVC
     
-    //TODO: performseque weghalen. Controleren op simulator, kabekltje nog niet binnen.
+
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
         
-        performSegue(withIdentifier: "scanToMain", sender: self)
-        
-        /*if !bluetooth.manager.isScanning{
+        if !bluetooth.manager.isScanning{
             refreshDevices()
-        }*/
+        }
     }
     
     
