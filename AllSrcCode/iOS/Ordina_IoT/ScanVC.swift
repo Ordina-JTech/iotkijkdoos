@@ -23,8 +23,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshBtn.isEnabled = false
-        
         tableViewObj = TableView(delegate: self, data: [])
         tableView.delegate = tableViewObj
         tableView.dataSource = tableViewObj
@@ -39,9 +37,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
 //METHODS ScanVC
     
-
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
-        
         if !bluetooth.manager.isScanning{
             refreshDevices()
         }
@@ -61,6 +57,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     func refreshDevices()  {
         scannedDevices = []
+        tableViewObj.reloadTableViewData(data: [])
         tableView.reloadData()
         refreshBtn.isEnabled = false
         bluetooth.startScanning()
@@ -83,24 +80,20 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
 //CB CENTRALMANAGER METHODE
     
-    
-    
     func blueDidChangeState(_ poweredOn: Bool) {
         if poweredOn    {
             bluetooth.startScanning()
             startRefreshControl()
-            refreshBtn.isEnabled = false
             Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
-        else{
+        else    {
             ProgressMessage.PoweredOff.show(view: self.view)
             refreshBtn.isEnabled = false
         }
     }
     
-    //TODO: Voeg het appenden en sorteren toe aan delegate en niet hier.
+    
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
-        
         for exisiting in scannedDevices {
             if exisiting.peripheral.identifier == peripheral.identifier {
                 return
@@ -111,7 +104,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         scannedDevices.append(peripheral: peripheral, RSSI: theRSSI)
         scannedDevices.sort {$0.RSSI < $1.RSSI }
         
-        var deviceNames:[String] = []
+        var deviceNames = [String]()
         
         for index in 0..<scannedDevices.count{
             deviceNames.append(scannedDevices[index].peripheral.name!)
@@ -156,7 +149,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
 //TableViewDelegate
     
-    
     func userDidSelectRow(indexPath: IndexPath) {
         bluetooth.manager.stopScan()
         tableView.deselectRow(at: indexPath, animated: true)
@@ -166,7 +158,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     
 //BUTTONS
-    
     
     @IBAction func refreshButtonWasPressed(_ sender: Any) {
         startRefreshControl()

@@ -34,7 +34,7 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Devices" id="usK-9U-Scr">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="0s5-2Y-3Mz">
+                                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="refresh" id="0s5-2Y-3Mz">
                                             <connections>
                                                 <action selector="refreshButtonWasPressed:" destination="BYZ-38-t0r" id="apr-3w-4rc"/>
                                             </connections>

@@ -9,19 +9,16 @@
 import Foundation
 
 
-//TODO: kijken of dit werkt. Geen Kabel
 enum PeripheralMsg: String{
-
-        case Led1       = "a"
-        case Led2       = "b"
-        case Rgb        = "c"
-        case Alarm      = "d"
-        case VaderJacob = "e"
-        case CreateOwn  = "f"
-        case Servo      = "g"
-        case Reset      = "r"
-        case Response   = "y"
-    
+    case Led1       = "a"
+    case Led2       = "b"
+    case Rgb        = "c"
+    case Alarm      = "d"
+    case VaderJacob = "e"
+    case CreateOwn  = "f"
+    case Servo      = "g"
+    case Reset      = "r"
+    case Response   = "y"
 }
 
 

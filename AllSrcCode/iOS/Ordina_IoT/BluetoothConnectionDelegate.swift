@@ -12,7 +12,6 @@ import CoreBluetooth
 var bluetooth: BluetoothConnection!
 
 protocol BluetoothConnectionDelegate    {
-    
     func blueDidChangeState(_ poweredOn: Bool)
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?)
     func blueDidConnect(_ peripheral: CBPeripheral)
@@ -22,14 +21,12 @@ protocol BluetoothConnectionDelegate    {
 }
 
 extension BluetoothConnectionDelegate   {
-    
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?){}
     func blueDidConnect(_ peripheral: CBPeripheral){}
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?){}
     func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?){}
     func blueDidReceiveString(_ message: String){}
 }
-
 
 
 final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate   {
@@ -40,7 +37,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     weak var writeCharacteristic: CBCharacteristic?
     private var writeType: CBCharacteristicWriteType = .withoutResponse
 
-    
     private enum UUID   {
         static let Service = CBUUID(string: "FFE0")
         static let Characteristic = CBUUID(string: "FFE1")
@@ -106,12 +102,10 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        
         for characteristic in service.characteristics!   {
             if characteristic.uuid == UUID.Characteristic    {
                 peripheral.setNotifyValue(true, for: characteristic)
             }
-            
             writeCharacteristic = characteristic
             delegate?.blueDidConnect(peripheral)
         }
@@ -121,7 +115,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         let data = characteristic.value
         guard data != nil else {return}
-
         if let message = String(data: data!, encoding: String.Encoding.utf8) {
             delegate?.blueDidReceiveString(message)
         }
@@ -130,7 +123,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
 
     func startScanning()    {
         guard manager.state == .poweredOn else {return}
-        
         let uuid = UUID.Service
         manager.scanForPeripherals(withServices: [uuid], options: nil)
     }
@@ -142,7 +134,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
     
     func sendMessage(string: String)  {
-        
         if string != "" && isReady {
             let data = string.data(using: String.Encoding.utf8)
             connectedPeripheral!.writeValue(data!, for: writeCharacteristic!, type: writeType)
