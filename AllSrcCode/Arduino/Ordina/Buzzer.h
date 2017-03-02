@@ -11,7 +11,7 @@ class Buzzer  {
   void yourCustomSound();
 
  private:
-  void checkLedStatus(Led led1, bool isOnLed1, Led led2, bool isOnLed2);
+  void checkLedStatus(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2);
   int _pin;
   
   //Vader Jacob
