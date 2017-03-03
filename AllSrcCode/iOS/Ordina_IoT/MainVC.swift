@@ -17,7 +17,8 @@ class MainVC: UIViewController{
     @IBOutlet weak var tvImage: UIImageView!
     @IBOutlet weak var rgbImage: UIImageView!
     @IBOutlet weak var speakerImage: UIImageView!
-    
+    private var transparantView: UIView!
+
     private var rgbVC: RgbVC!
     private var leftLedVC: LedVC!
     private var rightLedVC: LedVC!
@@ -42,27 +43,32 @@ class MainVC: UIViewController{
         return .landscape
     }
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(blueDidDisconnect), name: Notification.Name("disconnected"), object: nil)
         addImageTapGestures()
     }
     
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        createAndAddSettingViews()
+        addTransparantView()
+    }
+    
+//Gestures
+    
+    private func createAndAddSettingViews()   {
         leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: PeripheralMsg.Led1.rawValue)
         rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: PeripheralMsg.Led2.rawValue)
         rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light", rgbLetter: PeripheralMsg.Rgb.rawValue)
         servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television", servoLetter: PeripheralMsg.Servo.rawValue)
         let speakerLetter: [String] = [PeripheralMsg.Alarm.rawValue, PeripheralMsg.VaderJacob.rawValue, PeripheralMsg.CreateOwn.rawValue]
         speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker", speakerLetter: speakerLetter)
-
+        
         settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView]
         
         for index in 0..<settingViewArray.count {
@@ -72,15 +78,25 @@ class MainVC: UIViewController{
             gesture.direction = .left
             
             viewIsActive.append(false)
-            
             settingViewArray[index].tag = index
             settingViewArray[index].addGestureRecognizer(gesture)
         }
     }
     
-//Gestures
+    private func addTransparantView()   {
+        let viewPoint = CGPoint(x: self.view.center.x, y: 0)
+        let viewSize = CGSize(width: self.view.frame.width/2, height: self.view.frame.height)
+        let viewRect = CGRect(origin: viewPoint, size: viewSize)
+        transparantView = UIView(frame: viewRect)
+        
+        transparantView.backgroundColor = UIColor.black
+        transparantView.alpha = 0.0
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(userTappedTransparantView(tapGestureRecognizer:)))
+        transparantView.addGestureRecognizer(tapGesture)
+        self.view.addSubview(transparantView)
+    }
     
-
     private func addImageTapGestures()    {
         let imageViewArray = [leftLedImage, rightLedImage, rgbImage, tvImage, speakerImage]
     
@@ -92,30 +108,38 @@ class MainVC: UIViewController{
         }        
     }
     
-
     func imageWasTapped(tapGestureRecognizer: UITapGestureRecognizer)   {
         let index = tapGestureRecognizer.view!.tag
 
         if !viewIsActive[index] && !viewIsActive.contains(true)    {
-            moveSettingView(view: settingViewArray[index], x: 0)
+            moveSettingView(view: settingViewArray[index], x: 0, alpha: 0.6)
             viewIsActive[index] = true
         }
     }
-    
     
     func userSwipedSettingView(tapGestureRecognizer: UITapGestureRecognizer)  {
         let index = tapGestureRecognizer.view!.tag
 
         if viewIsActive[index]    {
-            moveSettingView(view: settingViewArray[index], x: -self.view.frame.width/2)
+            moveSettingView(view: settingViewArray[index], x: -self.view.frame.width/2, alpha: 0.0)
             viewIsActive[index] = false
         }
     }
     
-
-    private func moveSettingView(view: UIView, x: CGFloat)   {
+    func userTappedTransparantView(tapGestureRecognizer: UITapGestureRecognizer)    {
+        for index in 0..<settingViewArray.count  {
+            if viewIsActive[index] == true{
+                moveSettingView(view: settingViewArray[index], x: -self.view.frame.width/2, alpha: 0.0)
+                viewIsActive[index] = false
+                break
+            }
+        }
+    }
+    
+    private func moveSettingView(view: UIView, x: CGFloat, alpha: CGFloat)   {
         UIView.animate(withDuration: 0.4, delay: 0.0, options: UIViewAnimationOptions.curveEaseIn, animations: {
             view.frame.origin.x = x
+            self.transparantView.alpha = alpha
         }, completion: nil)
     }
 
@@ -129,7 +153,6 @@ class MainVC: UIViewController{
     
 //Buttons
     
-    
     @IBAction func disconnectWasPressed(_ sender: Any) {
         bluetooth.sendMessage(string: PeripheralMsg.Reset.rawValue)
     }
@@ -137,7 +160,6 @@ class MainVC: UIViewController{
 
 //Prepare Seque
     
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "mainToScan"    {
             if let scanVC = segue.destination as? ScanVC    {
