@@ -6,7 +6,7 @@ class Led{
   Led(int pin); //constructor
   void begin();
   void setLed(char input);
-  bool getStatus();
+  bool getState();
   int getPinNumber();
   void reset();
   
@@ -39,7 +39,7 @@ int Led::getPinNumber() {
   return _pin;
 }
 
-bool Led::getStatus() {
+bool Led::getState() {
   return isOn;
 }
 

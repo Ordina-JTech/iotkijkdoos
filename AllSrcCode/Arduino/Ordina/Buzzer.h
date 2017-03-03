@@ -11,7 +11,7 @@ class Buzzer  {
   void yourCustomSound();
 
  private:
-  void checkLedStatus(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2);
+  void setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2);
   int _pin;
   
   //Vader Jacob
@@ -32,10 +32,9 @@ void Buzzer::begin()  {
   pinMode(_pin, OUTPUT);
 }
 
-
 void Buzzer::alarm(Led led1, Led led2)  {
-  bool statusLed1 = led1.getStatus();
-  bool statusLed2 = led2.getStatus();
+  bool stateLed1 = led1.getState();
+  bool stateLed2 = led2.getState();
   
   long startTimer = millis();
 
@@ -50,12 +49,12 @@ void Buzzer::alarm(Led led1, Led led2)  {
       tone(_pin, 500, 500);
       delay(500);   
   }
-  checkLedStatus(led1, statusLed1, led2, statusLed2);
+  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
 }
 
 void Buzzer::vaderJacob(Led led1, Led led2) {
-  bool statusLed1 = led1.getStatus();
-  bool statusLed2 = led2.getStatus();
+  bool stateLed1 = led1.getState();
+  bool stateLed2 = led2.getState();
   
   led1.setLed('0');
   led2.setLed('0');
@@ -78,7 +77,7 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
     }
     delay(200);
   }
-  checkLedStatus(led1, statusLed1, led2, statusLed2);
+  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
 }
 
 
@@ -93,7 +92,7 @@ void Buzzer::yourCustomSound()  {
 
 
   
-void Buzzer::checkLedStatus(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
+void Buzzer::setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
   if (wasOnLed1) {
     led1.setLed('1');
   }
