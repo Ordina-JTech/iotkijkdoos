@@ -10,11 +10,6 @@ import nl.ordina.kijkdoos.R;
 public class ControlLightFragment extends AbstractControlFragment {
 
     @Override
-    protected String getTitle() {
-        return "Bedien lamp";
-    }
-
-    @Override
     protected int getControlLayoutId() {
         return R.layout.control_ligt_component;
     }

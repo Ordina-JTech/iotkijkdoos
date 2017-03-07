@@ -3,18 +3,17 @@ package nl.ordina.kijkdoos.view.control;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 
@@ -54,7 +53,7 @@ public abstract class AbstractControlFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.control_fragment, container, false);
 
-        final ViewStub stub = ButterKnife.findById(inflatedView, R.id.stubControl);
+        final ViewStub stub = getViewStub(inflatedView);
         stub.setLayoutResource(getControlLayoutId());
         stub.inflate();
         ButterKnife.bind(this, inflatedView);
@@ -64,7 +63,14 @@ public abstract class AbstractControlFragment extends Fragment {
         return inflatedView;
     }
 
-    protected abstract String getTitle();
+    protected ViewStub getViewStub(View inflatedView) {
+        return ButterKnife.findById(inflatedView, R.id.centeredControlStub);
+    }
+
+    @StringRes
+    protected int getTitle() {
+        return component.getTitleString();
+    };
 
     protected abstract int getControlLayoutId();
 

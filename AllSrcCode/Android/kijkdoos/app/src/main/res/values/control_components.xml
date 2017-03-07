@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="controlLampTitle">Bedien lamp</string>
+    <string name="controlDiscoBallTitle">Bedien disco bal</string>
+    <string name="controlSpeakerTitle">Bedien muziek</string>
+</resources>

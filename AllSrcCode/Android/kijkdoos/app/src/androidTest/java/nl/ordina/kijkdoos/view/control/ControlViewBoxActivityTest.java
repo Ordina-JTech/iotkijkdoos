@@ -1,7 +1,6 @@
 package nl.ordina.kijkdoos.view.control;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -16,8 +15,10 @@ import org.parceler.Parcels;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.MockedViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -26,13 +27,11 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
@@ -82,6 +81,11 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
+
+        onView(withId(R.id.ivGuitar)).perform(click());
+        onView(withId(R.id.component_controller)).check(matches(isOpen()));
+        pressBack();
+        onView(withId(R.id.component_controller)).check(matches(isClosed()));
     }
 
     @Test
@@ -116,6 +120,13 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.discoBallSwitch)).perform(click());
 
         verify(mockedViewBoxRemoteController).switchOffDiscoBall();
+    }
+
+    public void testTheSpeaker() throws Exception {
+        onView(withId(R.id.ivGuitar)).perform(click());
+        onData(equalTo(ControlSpeakerFragment.Song.VADER_JACOB)).perform(click());
+
+        verify(mockedViewBoxRemoteController).playSong(ControlSpeakerFragment.Song.VADER_JACOB);
     }
 
     @Test

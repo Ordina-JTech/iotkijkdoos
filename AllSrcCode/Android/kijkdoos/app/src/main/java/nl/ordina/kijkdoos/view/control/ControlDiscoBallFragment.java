@@ -7,8 +7,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.animation.AnimatorCompatHelper;
-import android.support.v4.animation.ValueAnimatorCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,17 +70,15 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
             final int color2Green = (color2 >> 8) & 0xFF;
             final int color2Blue = (color2) & 0xFF;
 
-            return (int) sqrt(pow(color2Red-color1Red, 2) + pow(color2Green-color1Green, 2) + pow(color2Blue-color1Blue, 2));
+            return (int) sqrt(pow(color2Red - color1Red, 2) + pow(color2Green - color1Green, 2) + pow(color2Blue - color1Blue, 2));
         }
     }
-
 
     @BindView(R.id.colorSlider)
     public ColorPicker colorSlider;
 
     @BindView(R.id.discoBallSwitch)
     public Switch discoBallSwitch;
-
 
     @Nullable
     @Override
@@ -97,11 +93,6 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
         colorSlider.setOnColorChangedListener(this);
 
         return view;
-    }
-
-    @Override
-    protected String getTitle() {
-        return "Bedien disco bal";
     }
 
     @Override
@@ -133,8 +124,8 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
         final ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), colorSlider.getColor(), color);
         colorAnimator.setDuration(50);
         colorAnimator.addUpdateListener(animator -> {
-            discoBallSwitch.getThumbDrawable().setColorFilter((int)animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
-            discoBallSwitch.getTrackDrawable().setColorFilter((int)animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+            discoBallSwitch.getThumbDrawable().setColorFilter((int) animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
+            discoBallSwitch.getTrackDrawable().setColorFilter((int) animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
         });
 
         colorAnimator.start();

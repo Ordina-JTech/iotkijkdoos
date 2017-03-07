@@ -30,6 +30,7 @@ import lombok.Getter;
 import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
 import nl.ordina.kijkdoos.threading.BackgroundService;
 import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
+import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
@@ -127,6 +128,10 @@ public class ViewBoxRemoteController {
 
     public void switchOffDiscoBall() {
         sendMessage("c0");
+    }
+
+    public void playSong(ControlSpeakerFragment.Song song) {
+        sendMessage("e");
     }
 
     public Parcelable wrapInParcelable() {

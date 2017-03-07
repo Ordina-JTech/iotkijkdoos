@@ -3,6 +3,7 @@ package nl.ordina.kijkdoos.view.control;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
+import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
@@ -32,19 +34,24 @@ import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMP
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener {
 
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
-        LAMP_RIGHT(R.id.ivRightLamp, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
-        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> {
+        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
+        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
+        DISCO_BALL(R.id.ivDiscoBall, R.string.controlDiscoBallTitle, ControlDiscoBallFragment.class, (controller, color) -> {
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
-        }) ;
+        }),
+        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song)song));
 
         private final int viewReference;
+        @Getter
+        private final int titleString;
         private final Class<? extends AbstractControlFragment> fragmentClass;
         private final BiConsumer<ViewBoxRemoteController, Object> action;
 
-        Component(@IdRes int ivLeftLamp, Class<? extends AbstractControlFragment> fragmentClass, BiConsumer<ViewBoxRemoteController, Object> action) {
-            this.viewReference = ivLeftLamp;
+        Component(@IdRes int viewReference, @StringRes int titleString, Class<? extends AbstractControlFragment> fragmentClass,
+                  BiConsumer<ViewBoxRemoteController, Object> action) {
+            this.viewReference = viewReference;
+            this.titleString = titleString;
             this.fragmentClass = fragmentClass;
             this.action = action;
         }
@@ -111,12 +118,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    @OnClick(R.id.ivTelevision)
-    public void onTelevisionClicked() {
-
-    }
-
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 
