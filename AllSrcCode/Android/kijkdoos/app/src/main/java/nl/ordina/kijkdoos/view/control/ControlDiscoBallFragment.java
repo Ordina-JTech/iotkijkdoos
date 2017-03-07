@@ -35,6 +35,8 @@ import static java.lang.Math.sqrt;
 
 public class ControlDiscoBallFragment extends AbstractControlFragment implements ColorPicker.OnColorChangedListener {
 
+    public static final int VERY_SHORT_ANIMATION_DURATION = 50;
+
     public enum DiscoBallColor {
         RED(Color.RED, "c1"),
         YELLOW(Color.YELLOW, "c2"),
@@ -145,7 +147,7 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
 
     protected void changeSwitchColor(int color) {
         final ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), colorSlider.getColor(), color);
-        colorAnimator.setDuration(50);
+        colorAnimator.setDuration(VERY_SHORT_ANIMATION_DURATION);
         colorAnimator.addUpdateListener(animator -> {
             discoBallSwitch.getThumbDrawable().setColorFilter((int) animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
             discoBallSwitch.getTrackDrawable().setColorFilter((int) animator.getAnimatedValue(), PorterDuff.Mode.MULTIPLY);
