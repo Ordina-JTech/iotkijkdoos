@@ -1,6 +1,5 @@
 package nl.ordina.kijkdoos.view.control;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
@@ -27,7 +26,6 @@ import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
-import static android.R.attr.fragment;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
@@ -36,8 +34,10 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     enum Component {
         LAMP_LEFT(R.id.ivLeftLamp, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
         LAMP_RIGHT(R.id.ivRightLamp, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
-        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> controller.setDiscoBallColor(
-                (ControlDiscoBallFragment.DiscoBallColor) color)) ;
+        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> {
+            if (color == null) controller.switchOffDiscoBall();
+            else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
+        }) ;
 
         private final int viewReference;
         private final Class<? extends AbstractControlFragment> fragmentClass;

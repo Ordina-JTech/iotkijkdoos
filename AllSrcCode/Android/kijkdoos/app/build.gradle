@@ -51,7 +51,7 @@ dependencies {
     androidTestAnnotationProcessor 'org.parceler:parceler:1.1.6'
 
     compile 'com.annimon:stream:1.1.5'
-    compile 'uz.shift:colorpicker:0.5@aar'
+    compile 'com.larswerkman:HoloColorPicker:1.5'
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

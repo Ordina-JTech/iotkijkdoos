@@ -17,6 +17,7 @@ import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.MockedViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -102,7 +103,7 @@ public class ControlViewBoxActivityTest {
     }
 
     @Test
-    public void testTheDiscoBall() throws Exception {
+    public void testChangingColorsOfTheDiscoBall() throws Exception {
         onView(withId(R.id.ivDiscoBall)).perform(click());
         onView(withId(R.id.colorSlider)).perform(swipeRight());
 
@@ -110,8 +111,18 @@ public class ControlViewBoxActivityTest {
     }
 
     @Test
+    public void testSwitchingOffTheDiscoBall() throws Exception {
+        onView(withId(R.id.ivDiscoBall)).perform(click());
+        onView(withId(R.id.discoBallSwitch)).perform(click());
+
+        verify(mockedViewBoxRemoteController).switchOffDiscoBall();
+    }
+
+    @Test
     public void disconnectTheViewBoxInOnPause() throws Exception {
         activityRule.getActivity().finish();
+        getInstrumentation().waitForIdleSync();
+
         verify(mockedViewBoxRemoteController).disconnect();
     }
 }

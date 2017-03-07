@@ -125,6 +125,10 @@ public class ViewBoxRemoteController {
         sendMessage(color.getMessage());
     }
 
+    public void switchOffDiscoBall() {
+        sendMessage("c0");
+    }
+
     public Parcelable wrapInParcelable() {
         return Parcels.wrap(this);
     }

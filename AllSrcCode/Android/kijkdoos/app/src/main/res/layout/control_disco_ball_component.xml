@@ -6,22 +6,28 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="127dp"
-        android:layout_height="135dp"
-        app:srcCompat="@drawable/disco_ball1_geshoped"
-        android:id="@+id/imageView"
-        tools:layout_editor_absoluteY="0dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <uz.shift.colorpicker.LineColorPicker
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.larswerkman.holocolorpicker.ColorPicker
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/colorSlider"
-        app:orientation="horizontal"
-        android:layout_width="212dp"
-        android:layout_height="76dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:color_center_radius="0dp"
+        app:color_wheel_radius="80dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/discoBallSwitch"
+        app:layout_constraintTop_toTopOf="@+id/colorSlider"
+        app:layout_constraintBottom_toBottomOf="@+id/colorSlider"
+        app:layout_constraintLeft_toLeftOf="@+id/colorSlider"
+        app:layout_constraintRight_toRightOf="@+id/colorSlider"
+        android:checked="true"/>
+
 </android.support.constraint.ConstraintLayout>
