@@ -8,12 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
-import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.BiConsumer;
 
 import org.parceler.Parcels;
 
@@ -28,22 +29,32 @@ import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
-public class ControlViewBoxActivity extends AppCompatActivity implements ControlLightFragment.OnSwitchChangedListener {
-    
+public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener {
+
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, ViewBoxRemoteController::toggleLeftLamp), //
-        LAMP_RIGHT(R.id.ivRightLamp, ViewBoxRemoteController::toggleRightLamp);
+        LAMP_LEFT(R.id.ivLeftLamp, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
+        LAMP_RIGHT(R.id.ivRightLamp, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
+        DISCO_BALL(R.id.ivDiscoBall, ControlDiscoBallFragment.class, (controller, color) -> {
+            if (color == null) controller.switchOffDiscoBall();
+            else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
+        }) ;
 
         private final int viewReference;
-        private final Consumer<ViewBoxRemoteController> action;
+        private final Class<? extends AbstractControlFragment> fragmentClass;
+        private final BiConsumer<ViewBoxRemoteController, Object> action;
 
-        Component(@IdRes int ivLeftLamp, Consumer<ViewBoxRemoteController> action) {
+        Component(@IdRes int ivLeftLamp, Class<? extends AbstractControlFragment> fragmentClass, BiConsumer<ViewBoxRemoteController, Object> action) {
             this.viewReference = ivLeftLamp;
+            this.fragmentClass = fragmentClass;
             this.action = action;
         }
 
-        public void performAction(ViewBoxRemoteController viewBoxRemoteController) {
-            action.accept(viewBoxRemoteController);
+        public void performAction(ViewBoxRemoteController viewBoxRemoteController, Object value) {
+            action.accept(viewBoxRemoteController, value);
+        }
+
+        public AbstractControlFragment getFragment() throws IllegalAccessException, InstantiationException {
+            return fragmentClass.newInstance();
         }
 
         public static Component get(@IdRes int viewReference) {
@@ -105,14 +116,20 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Control
 
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp})
-    public void onLampClicked(View clickedView) {
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall})
+    public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 
         final Bundle args = new Bundle();
         args.putSerializable(ARGUMENT_COMPONENT, component);
 
-        final ControlLightFragment fragment = new ControlLightFragment();
+        final AbstractControlFragment fragment;
+        try {
+            fragment = component.getFragment();
+        } catch (Exception e) {
+            Log.w(ControlViewBoxActivity.class.getSimpleName(), "Unable to create controller");
+            return;
+        }
         fragment.setArguments(args);
 
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -124,7 +141,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Control
     }
 
     @Override
-    public void onSwitchChanged(Component component) {
-        component.performAction(viewBoxRemoteController);
+    public void onComponentChanged(Component component, Object value) {
+        component.performAction(viewBoxRemoteController, value);
     }
 }

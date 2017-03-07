@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 import lombok.Getter;
 import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
 import nl.ordina.kijkdoos.threading.BackgroundService;
+import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 
 import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
@@ -117,6 +119,14 @@ public class ViewBoxRemoteController {
 
     public void toggleRightLamp() {
         sendMessage("b");
+    }
+
+    public void setDiscoBallColor(ControlDiscoBallFragment.DiscoBallColor color) {
+        sendMessage(color.getMessage());
+    }
+
+    public void switchOffDiscoBall() {
+        sendMessage("c0");
     }
 
     public Parcelable wrapInParcelable() {
