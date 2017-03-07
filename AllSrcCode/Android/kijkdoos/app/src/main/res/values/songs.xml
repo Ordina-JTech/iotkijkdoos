@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="songTitleFatherJacob">Vader Jacob</string>
+    <string name="songTitleAlarm">Alarm</string>
+    <string name="songTitleCustom">My custom sound</string>
+</resources>

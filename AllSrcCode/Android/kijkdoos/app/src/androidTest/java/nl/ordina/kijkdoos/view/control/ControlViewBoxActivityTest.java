@@ -122,11 +122,16 @@ public class ControlViewBoxActivityTest {
         verify(mockedViewBoxRemoteController).switchOffDiscoBall();
     }
 
+    @Test
     public void testTheSpeaker() throws Exception {
         onView(withId(R.id.ivGuitar)).perform(click());
         onData(equalTo(ControlSpeakerFragment.Song.VADER_JACOB)).perform(click());
+        onData(equalTo(ControlSpeakerFragment.Song.ALARM)).perform(click());
+        onData(equalTo(ControlSpeakerFragment.Song.CUSTOM)).perform(click());
 
         verify(mockedViewBoxRemoteController).playSong(ControlSpeakerFragment.Song.VADER_JACOB);
+        verify(mockedViewBoxRemoteController).playSong(ControlSpeakerFragment.Song.ALARM);
+        verify(mockedViewBoxRemoteController).playSong(ControlSpeakerFragment.Song.CUSTOM);
     }
 
     @Test

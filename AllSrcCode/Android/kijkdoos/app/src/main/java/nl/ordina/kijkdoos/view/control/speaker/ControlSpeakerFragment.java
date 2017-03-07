@@ -2,6 +2,7 @@ package nl.ordina.kijkdoos.view.control.speaker;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.view.control.AbstractControlFragment;
 
 import static java.util.Arrays.asList;
+import static nl.ordina.kijkdoos.R.string.songTitleAlarm;
+import static nl.ordina.kijkdoos.R.string.songTitleCustom;
+import static nl.ordina.kijkdoos.R.string.songTitleFatherJacob;
 
 /**
  * Created by coenhoutman on 02/03/2017.
@@ -31,12 +36,17 @@ public class ControlSpeakerFragment extends AbstractControlFragment implements A
     private SongListAdapter<Song, SongListAdapter.ViewHolder> songListAdapter;
 
     public enum Song {
-        VADER_JACOB("Vader Jacob");
+        ALARM(songTitleAlarm, "d"), VADER_JACOB(songTitleFatherJacob, "e"), CUSTOM(songTitleCustom, "f");
 
-        private final String title;
+        @StringRes
+        private final int title;
 
-        Song(String title) {
+        @Getter
+        private final String message;
+
+        Song(@StringRes int title, String message) {
             this.title = title;
+            this.message = message;
         }
     }
 

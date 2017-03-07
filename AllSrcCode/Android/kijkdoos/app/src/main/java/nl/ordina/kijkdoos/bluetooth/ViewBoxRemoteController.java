@@ -131,7 +131,7 @@ public class ViewBoxRemoteController {
     }
 
     public void playSong(ControlSpeakerFragment.Song song) {
-        sendMessage("e");
+        sendMessage(song.getMessage());
     }
 
     public Parcelable wrapInParcelable() {

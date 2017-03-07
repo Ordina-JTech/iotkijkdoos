@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -80,6 +81,9 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
     @BindView(R.id.discoBallSwitch)
     public Switch discoBallSwitch;
 
+    private Drawable switchThumb;
+    private Drawable switchTrack;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,7 +96,26 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
         colorSlider.setShowOldCenterColor(false);
         colorSlider.setOnColorChangedListener(this);
 
+        storeOriginalSwitchDrawables();
+
         return view;
+    }
+
+    protected void storeOriginalSwitchDrawables() {
+        switchThumb = discoBallSwitch.getThumbDrawable();
+        switchTrack = discoBallSwitch.getTrackDrawable();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        restoreOriginalSwitchDrawables();
+    }
+
+    protected void restoreOriginalSwitchDrawables() {
+        discoBallSwitch.setThumbDrawable(switchThumb);
+        discoBallSwitch.setTrackDrawable(switchTrack);
     }
 
     @Override
