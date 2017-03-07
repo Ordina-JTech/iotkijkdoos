@@ -13,42 +13,35 @@ protocol TableViewDelegate  {
     func userDidSelectRow(indexPath: IndexPath)
 }
 
-
 class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
     
     private var tableViewData = [String]()
     private var delegate: TableViewDelegate?
  
-    
     init(delegate: TableViewDelegate, data: [String])  {
         super.init()
         self.delegate = delegate
         self.tableViewData = data
     }
     
-
     func reloadTableViewData(data: [String])  {
         tableViewData = data
     }
     
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableViewData.count
     }
     
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = UITableViewCell()
         cell.textLabel?.text = tableViewData[indexPath.row]
         cell.backgroundColor = UIColor.white
         cell.textLabel?.font = UIFont(name: "Avenir Next", size: 21)
         cell.textLabel?.textColor = UIColor.black
         cell.accessoryType = .disclosureIndicator
-                
+        
         return cell
     }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate?.userDidSelectRow(indexPath: indexPath)

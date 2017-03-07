@@ -1,8 +1,7 @@
 #include "arduino.h"
 
-
 class Buzzer  {
-
+ 
  public:
   Buzzer(int pin);
   void begin();
@@ -21,7 +20,6 @@ class Buzzer  {
   int nSeconds[4] = {300, 300, 300, 600};
   int nCouplets = (sizeof(endCouplet)/sizeof(int));
   int milliSec = 100;
-
 };
 
 Buzzer::Buzzer(int pin) {
@@ -37,7 +35,6 @@ void Buzzer::alarm(Led led1, Led led2)  {
   bool stateLed2 = led2.getState();
   
   long startTimer = millis();
-
   while (millis() - startTimer < 3000) {    //Play alarm for 3 seconds (3000 ms)
       led1.setLed('1');
       led2.setLed('1');
@@ -80,18 +77,12 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
   setLedToPreviousState(led1, stateLed1, led2, stateLed2);
 }
 
-
-
-//CHALLENGE: CREATE YOUR CUSTOM SOUND HERE
-
+//CHALLENGE X: CREATE YOUR CUSTOM SOUND HERE
 void Buzzer::yourCustomSound()  {
    //char names[] =     { 'c', 'd', 'e', 'f', '#', 'g', 'a', 'b', 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
   //int frequencies[] = {262, 294, 330, 349, 370, 392, 440, 494, 523, 587, 659, 699, 784, 880, 989};
 }
 
-
-
-  
 void Buzzer::setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
   if (wasOnLed1) {
     led1.setLed('1');

@@ -16,66 +16,58 @@ class ServoVC: NSObject {
     private var previousValue: Int = 0
     private var angleLabel: UILabel!
     private var imageView: UIImageView!
-    private var servoLetter: String!
     
-    
-    init(frame: CGRect, headerText: String, servoLetter: String) {
+    init(frame: CGRect, headerText: String) {
         super.init()
         settingView = SettingView(frame: frame, headerText: headerText)
-        self.servoLetter = servoLetter
         addServoView()
     }
     
-    
     private func addServoView() {
-    
-        //ImageView
+        //TV Image
         let imageName = "Tv"
     
-        if let image = UIImage(named: imageName)    {
-            imageView = UIImageView(image: image)
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.contentMode = .scaleAspectFit
-            
-            settingView.addSubview(imageView)
-            
-            let heightConstant = settingView.frame.width/2.5
-            imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
-            imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
-            let yConstant = settingView.frame.height/12.5
-            imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
-            imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-        }
-        else {
-            print("No Image Found")
+        guard let image = UIImage(named: imageName) else    {
+            print("Image was not found")
             return
         }
-
-        //Slider
+        
+        imageView = UIImageView(image: image)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        settingView.addSubview(imageView)
+        
+        let heightConstant = settingView.frame.width/2.5
+        let yConstant = settingView.frame.height/12.5
+        imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        
+        //Angle Slider
         slider = UISlider()
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.value = 0
         slider.minimumValue = 0
         slider.maximumValue = 180
+        slider.thumbTintColor = UIColor.lightGray
+        slider.minimumTrackTintColor = UIColor.orange
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
-        
         settingView.addSubview(slider)
         
         let topConstant = settingView.frame.height/12.5
-        slider.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
         let leftRightConstant = settingView.frame.height/15.0
+        slider.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
         slider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         slider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
         
-
-        //Label
+        //Angle Label
         angleLabel = UILabel()
         angleLabel.translatesAutoresizingMaskIntoConstraints = false
         angleLabel.text = "0°"
         angleLabel.font = UIFont(name: "Avenir Next", size: 20.0)
         angleLabel.textColor = UIColor.black
         angleLabel.sizeToFit()
-        
         settingView.addSubview(angleLabel)
         
         angleLabel.rightAnchor.constraint(equalTo: slider.rightAnchor).isActive = true
@@ -85,16 +77,16 @@ class ServoVC: NSObject {
     
     func sliderValueChanged()   {
         guard bluetooth.isReady else {return}
-        
         let sliderValue = Int(slider.value)
         
         if (sliderValue % 5 == 0) && (sliderValue != previousValue)  {
+            previousValue = sliderValue
             rotateImage(value: slider.value)
             angleLabel.text = "\(String((sliderValue)))°"
             
-            let message = servoLetter + "\(sliderValue)\n"
+            let message = PeripheralLetter.servo + String(sliderValue) + "\n"
+            print(message)
             bluetooth.sendMessage(string: message)
-            previousValue = sliderValue
         }
     }
     

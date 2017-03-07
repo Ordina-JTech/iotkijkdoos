@@ -8,32 +8,31 @@
 
 import Foundation
 
-class SpeakerVC: NSObject, TableViewDelegate   {
+class SpeakerVC: TableViewDelegate   {
+    
+    private enum Sound  {
+        static let alarm = "Alarm"
+        static let vaderJacob = "Vader Jacob"
+        static let createOwn = "Create Your Own"
+        static let names = [alarm, vaderJacob, createOwn]
+        static let letters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.createOwn]
+    }
     
     var settingView: SettingView!
     private var tableView: UITableView!
     private var tableViewObj: TableView!
-    private let soundName = ["Alarm", "Vader Jacob", "Create Your Own"]
-    private var speakerLetter = [String]()
-    
-    init(frame: CGRect, headerText: String, speakerLetter: [String])  {
-        super.init()
-        
+
+    init(frame: CGRect, headerText: String)  {
         settingView = SettingView(frame: frame, headerText: headerText)
-        self.speakerLetter = speakerLetter
-        tableViewObj = TableView(delegate: self, data: soundName)
+        tableViewObj = TableView(delegate: self, data: Sound.names)
         addServoView()
     }
     
-    
     private func addServoView() {
-     
-        //TableView
         tableView = UITableView()
         tableView.dataSource = tableViewObj
         tableView.delegate = tableViewObj
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
         settingView.addSubview(tableView)
         
         tableView.heightAnchor.constraint(equalToConstant: settingView.frame.height/1.8).isActive = true
@@ -42,13 +41,12 @@ class SpeakerVC: NSObject, TableViewDelegate   {
         tableView.bottomAnchor.constraint(equalTo: settingView.bottomAnchor).isActive = true
     }
     
-
     func userDidSelectRow(indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if bluetooth.isReady    {
             let index = indexPath as NSIndexPath
-            bluetooth.sendMessage(string: speakerLetter[index.row])
+            bluetooth.sendMessage(string: Sound.letters[index.row])
         }
     }
 }

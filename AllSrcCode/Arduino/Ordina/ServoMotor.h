@@ -1,8 +1,13 @@
 #include "arduino.h"
 #include <Servo.h>
 
-class ServoMotor  {
+/*
+ * Servo angle: 0-179 (180 degrees).
+ * Servo will be attached and detached in the setAngle() method, otherwise the servo is moving while changing RGB light.
+ */
 
+class ServoMotor  {
+  
   public:
     ServoMotor(int pin);
     void setAngle(int angle, int milliSec);
@@ -11,7 +16,6 @@ class ServoMotor  {
   private:
     int _pin;
     Servo servo;
-  
 };
 
 ServoMotor::ServoMotor(int pin) {
@@ -19,17 +23,9 @@ ServoMotor::ServoMotor(int pin) {
 }
 
 void ServoMotor::setAngle(int angle, int milliSec)  {
-  
-  //Attach and detach servo here, otherwise the servo is moving while changing RGB light
-  servo.attach(_pin);
-
-  //Write the angle to the servo
+  servo.attach(_pin); 
   servo.write(angle);
-  
-  //Give servo time to get at the given angle
   delay(milliSec);
-
-  //Detach the servo for unwanted movement
   servo.detach();
 }
 

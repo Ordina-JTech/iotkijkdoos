@@ -43,7 +43,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         }
     }
     
-    
     func scanTimeOut()  {
         bluetooth.stopScanning()
         refreshControl.endRefreshing()
@@ -54,7 +53,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         }
     }
     
-    
     func refreshDevices()  {
         scannedDevices = []
         tableViewObj.reloadTableViewData(data: [])
@@ -64,13 +62,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ScanVC.scanTimeOut), userInfo: nil, repeats: false)
     }
     
-    
     private func startRefreshControl()  {
         tableView.setContentOffset(CGPoint(x: 0, y: -25), animated: true)
         refreshControl.beginRefreshing()
     }
     
-
     func setPortraitOrientation()   {
         let value = UIInterfaceOrientation.portrait.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
@@ -78,7 +74,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     
     
-//CB CENTRALMANAGER METHODE
+//CB CENTRALMANAGER METHODS
     
     func blueDidChangeState(_ poweredOn: Bool) {
         if poweredOn    {
@@ -114,17 +110,14 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         tableView.reloadData()
     }
     
-    
     func blueDidConnect(_ peripheral: CBPeripheral) {
-        bluetooth.sendMessage(string: PeripheralMsg.Reset.rawValue)
+        bluetooth.sendMessage(string: PeripheralLetter.reset)
     }
-    
     
     func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
         ProgressMessage.FailedToConnect.show(view: self.view)
     }
-    
     
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
@@ -132,16 +125,15 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
-    
     func blueDidReceiveString(_ message: String) {
         let newLineChars = NSCharacterSet.newlines
-        let messageArray = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
+        let messages = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
-        if messageArray[0] == PeripheralMsg.Response.rawValue && isFirstChar    {
+        if messages[0] == PeripheralLetter.response && isFirstChar    {
             performSegue(withIdentifier: "scanToMain", sender: self)
             isFirstChar = false
         }
-        else if messageArray[0] == PeripheralMsg.Response.rawValue   {
+        else if messages[0] == PeripheralLetter.response  {
             bluetooth.manager.cancelPeripheralConnection(bluetooth.connectedPeripheral!)
         }
     }

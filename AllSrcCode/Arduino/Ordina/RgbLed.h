@@ -27,10 +27,9 @@ void RgbLed::begin() {
   pinMode(_bluePin, OUTPUT);
 }
 
-void RgbLed::getAndSetColor(char input)  {  
-
-  switch (input)  {
-    
+void RgbLed::getAndSetColor(char input)  { 
+  switch (input)  { 
+  
   //Off
   case '0':
     setColor(0,0,0);

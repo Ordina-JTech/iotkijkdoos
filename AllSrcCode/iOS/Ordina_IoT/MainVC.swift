@@ -18,7 +18,6 @@ class MainVC: UIViewController{
     @IBOutlet weak var rgbImage: UIImageView!
     @IBOutlet weak var speakerImage: UIImageView!
     private var transparantView: UIView!
-
     private var rgbVC: RgbVC!
     private var leftLedVC: LedVC!
     private var rightLedVC: LedVC!
@@ -45,35 +44,28 @@ class MainVC: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
-        
         NotificationCenter.default.addObserver(self, selector: #selector(blueDidDisconnect), name: Notification.Name("disconnected"), object: nil)
         addImageTapGestures()
     }
     
-    
     override func viewDidAppear(_ animated: Bool) {
-        createAndAddSettingViews()
         addTransparantView()
+        createAndAddSettingViews()
     }
     
-//Gestures
-    
     private func createAndAddSettingViews()   {
-        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: PeripheralMsg.Led1.rawValue)
-        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: PeripheralMsg.Led2.rawValue)
-        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light", rgbLetter: PeripheralMsg.Rgb.rawValue)
-        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television", servoLetter: PeripheralMsg.Servo.rawValue)
-        let speakerLetter: [String] = [PeripheralMsg.Alarm.rawValue, PeripheralMsg.VaderJacob.rawValue, PeripheralMsg.CreateOwn.rawValue]
-        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker", speakerLetter: speakerLetter)
+        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: PeripheralLetter.led1)
+        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: PeripheralLetter.led2)
+        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light")
+        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television")
+        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker")
         
         settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView]
         
         for index in 0..<settingViewArray.count {
             self.view.addSubview(settingViewArray[index])
-            
             let gesture = UISwipeGestureRecognizer(target: self, action: #selector(userSwipedSettingView(tapGestureRecognizer:)))
             gesture.direction = .left
             
@@ -84,11 +76,10 @@ class MainVC: UIViewController{
     }
     
     private func addTransparantView()   {
-        let viewPoint = CGPoint(x: self.view.center.x, y: 0)
-        let viewSize = CGSize(width: self.view.frame.width/2, height: self.view.frame.height)
+        let viewPoint = CGPoint(x: 0, y: 0)
+        let viewSize = CGSize(width: self.view.frame.width, height: self.view.frame.height)
         let viewRect = CGRect(origin: viewPoint, size: viewSize)
         transparantView = UIView(frame: viewRect)
-        
         transparantView.backgroundColor = UIColor.black
         transparantView.alpha = 0.0
         
@@ -151,10 +142,10 @@ class MainVC: UIViewController{
     }
     
     
-//Buttons
+//Button
     
     @IBAction func disconnectWasPressed(_ sender: Any) {
-        bluetooth.sendMessage(string: PeripheralMsg.Reset.rawValue)
+        bluetooth.sendMessage(string: PeripheralLetter.reset)
     }
     
 

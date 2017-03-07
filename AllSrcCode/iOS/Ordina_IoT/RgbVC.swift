@@ -11,108 +11,155 @@ import Foundation
 
 class RgbVC: NSObject    {
     
-    enum Color {
-        static let White = UIColor.white
-        static let Red = UIColor.red.withAlphaComponent(0.75)
-        static let Yellow = UIColor.yellow.withAlphaComponent(0.75)
-        static let Green = UIColor.green.withAlphaComponent(0.75)
-        static var Aqua = UIColor(red: 153/255, green: 241/255, blue: 250/255, alpha: 1.0)
-        static let Blue = UIColor.blue.withAlphaComponent(0.75)
-        static let Purple = UIColor.purple.withAlphaComponent(0.75)
+    private enum ColorMessage{
+        static let rgbLetter = PeripheralLetter.rgb
+        static let off =    rgbLetter + "0"
+        static let red =    rgbLetter + "1"
+        static let yellow = rgbLetter + "2"
+        static let green =  rgbLetter + "3"
+        static let aqua =   rgbLetter + "4"
+        static let blue =   rgbLetter + "5"
+        static let purple = rgbLetter + "6"
         
-        static let allColors = [White, Red, Yellow, Green, Aqua, Blue, Purple]
+        static let colors = [red, yellow, green, aqua, blue, purple]
     }
     
-    enum Slider {
-        static let Val0 = 0
-        static let Val1 = 50
-        static let Val2 = 100
-        static let Val3 = 150
-        static let Val4 = 200
-        static let Val5 = 250
-        static let Val6 = 300
+    private enum Slider {
+        static let beginValue: Float = 0
+        static let endValue: Float = 300
+        static let redVal = 70
+        static let yellowVal = 100
+        static let greenVal = 170
+        static let aquaVal = 210
+        static let blueVal = 285
+        static let purpleVal = 300
         
-        static let allValues = [Val0, Val1, Val2, Val3, Val4, Val5, Val6]
+        static let values = [redVal, yellowVal, greenVal, aquaVal, blueVal, purpleVal]
+    }
+    
+    private enum StateBtnText{
+        static let on = "Turn Light On"
+        static let off = "Turn Light Off"
     }
     
     var settingView: SettingView!
     private var rgbLabel: UILabel!
     private var rgbSlider: UISlider!
-    private var rgbLetter: String!
+    private var imageView: UIImageView!
+    private var stateButton: UIButton!
+    private var colorMessage = [String]()
+    private var isRgbOn = false
     private var previousIndex = 0
 
-
-    init(frame: CGRect, headerText: String, rgbLetter: String) {
+    init(frame: CGRect, headerText: String) {
         super.init()
-        
         settingView = SettingView(frame: frame, headerText: headerText)
-        self.rgbLetter = rgbLetter
         addRgbView()
     }
     
-    
     private func addRgbView()    {
+        //DiscoBall ImageView
+        var imageName = "discoBall_transparant"
+        guard let discoImage = UIImage(named: imageName) else   {
+            print("Image was not found")
+            return
+        }
         
-        //Label
-        rgbLabel = UILabel()
-        rgbLabel.translatesAutoresizingMaskIntoConstraints = false
-        rgbLabel.layer.masksToBounds = true
-        rgbLabel.layer.borderWidth = 2
-        rgbLabel.layer.borderColor = UIColor.lightGray.cgColor
-        rgbLabel.backgroundColor = UIColor.white
+        let discoImageView = UIImageView(image: discoImage)
+        discoImageView.translatesAutoresizingMaskIntoConstraints = false
+        discoImageView.contentMode = .scaleAspectFit
+        settingView.addSubview(discoImageView)
         
-        settingView.addSubview(rgbLabel)
-        
-        let heightConstant = settingView.frame.width/4
-        rgbLabel.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        rgbLabel.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
-        rgbLabel.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        var heightConstant = settingView.frame.width/3.5
         let yConstant = settingView.frame.height/12.5
-        rgbLabel.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+        discoImageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        discoImageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        discoImageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
+        discoImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
-        rgbLabel.layer.cornerRadius = heightConstant/2
+        //RGB Led ImageView
+        imageName = "rgbBalk"
+        guard let rgbImage = UIImage(named: imageName) else  {
+            print("Image was not found")
+            return
+        }
+        
+        let rgbImageView = UIImageView(image: rgbImage)
+        rgbImageView.translatesAutoresizingMaskIntoConstraints = false
+        rgbImageView.clipsToBounds = true
+        rgbImageView.layer.cornerRadius = 5
+        settingView.addSubview(rgbImageView)
+    
+        heightConstant = settingView.frame.height/12.5
+        let topConstant = settingView.frame.height/18
+        let leftRightConstant: CGFloat = settingView.frame.height/15
+        rgbImageView.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
+        rgbImageView.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
+        rgbImageView.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
+        rgbImageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
         
         //Slider
         rgbSlider = UISlider()
         rgbSlider.translatesAutoresizingMaskIntoConstraints = false
         rgbSlider.value = 0
-        rgbSlider.minimumValue = 0
-        rgbSlider.maximumValue = 300
+        rgbSlider.minimumValue = Slider.beginValue
+        rgbSlider.maximumValue = Slider.endValue
+        rgbSlider.minimumTrackTintColor = UIColor.clear
+        rgbSlider.maximumTrackTintColor = UIColor.clear
+        rgbSlider.thumbTintColor = UIColor.black.withAlphaComponent(0.7)
         rgbSlider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
-        
         settingView.addSubview(rgbSlider)
         
-        let topConstant = settingView.frame.height/12.5
-        rgbSlider.topAnchor.constraint(equalTo: rgbLabel.bottomAnchor, constant: topConstant).isActive = true
-        let leftRightConstant = settingView.frame.height/15.0
+        rgbSlider.topAnchor.constraint(equalTo: rgbImageView.topAnchor).isActive = true
         rgbSlider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbSlider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
-    }
-
-    
-    func sliderValueChanged(sender: UISlider) {
-
-        let sliderValue = Int(sender.value)
         
-        for index in 0..<Slider.allValues.count   {
+        //On-Off Button
+        stateButton = UIButton()
+        stateButton.translatesAutoresizingMaskIntoConstraints = false
+        stateButton.setTitle(StateBtnText.on, for: .normal)
+        stateButton.setTitleColor(UIColor.black, for: .normal)
+        stateButton.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)!
+        stateButton.sizeToFit()
+        stateButton.addTarget(self, action: #selector(stateButtonWasPressed(sender:)), for: .touchUpInside)
+        settingView.addSubview(stateButton)
+        
+        stateButton.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
+        stateButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
 
-            if sliderValue <= Slider.allValues[index]  {
-                
-                if previousIndex != index {
-                    previousIndex = index
-                    let message = rgbLetter + "\(index)"    //Index (0-6) -> white, red, yellow, green, aqua, blue, pruple
-                    bluetooth.sendMessage(string: message)
-                    setComponentsColor(color: Color.allColors[index])
-                }
-                
-                break
-            }
+    }
+    
+    func stateButtonWasPressed(sender: UIButton)    {
+        if !isRgbOn {
+            isRgbOn = true
+            getColorAndSendMessage(isButtonCall: true)
+            stateButton.setTitle(StateBtnText.off, for: .normal)
+        }
+        else    {
+            bluetooth.sendMessage(string: ColorMessage.off)
+            isRgbOn = false
+            stateButton.setTitle(StateBtnText.on, for: .normal)
         }
     }
     
-
-    private func setComponentsColor(color: UIColor) {
-        rgbLabel.backgroundColor = color
-        rgbSlider.minimumTrackTintColor = color
+    func sliderValueChanged(sender: UISlider) {
+        getColorAndSendMessage()
+    }
+    
+    private func getColorAndSendMessage(isButtonCall: Bool = false)   {
+        if isRgbOn  {
+            let sliderValue = Int(rgbSlider.value)
+            for index in 0..<Slider.values.count   {
+                if sliderValue <= Slider.values[index]  {
+                    if previousIndex != index || isButtonCall {
+                        previousIndex = index
+                        let message = ColorMessage.colors[index]
+                        print(message)
+                        bluetooth.sendMessage(string: message)
+                    }
+                    break
+                }
+            }
+        }
     }
 }

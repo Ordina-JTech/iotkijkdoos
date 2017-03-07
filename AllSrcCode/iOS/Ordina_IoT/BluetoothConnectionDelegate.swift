@@ -28,7 +28,6 @@ extension BluetoothConnectionDelegate   {
     func blueDidReceiveString(_ message: String){}
 }
 
-
 final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate   {
     
     var delegate: BluetoothConnectionDelegate?
@@ -50,7 +49,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
     
-
     init(delegate: BluetoothConnectionDelegate) {
         super.init()
         self.delegate = delegate
@@ -59,7 +57,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     
     
 //Central Manager
-    
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
@@ -70,19 +67,16 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
     
-
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         delegate?.blueDidDiscoverPeripheral(peripheral, RSSI: RSSI)
     }
     
-
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.delegate = self      //Strong reference to keep connected
         connectedPeripheral = peripheral
         peripheral.discoverServices([UUID.Service])
     }
     
-
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
         delegate?.blueDidFailToConnect(peripheral, error: error as NSError?)
@@ -100,7 +94,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         peripheral.discoverCharacteristics([UUID.Characteristic], for: peripheral.services![0])
     }
     
-    
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics!   {
             if characteristic.uuid == UUID.Characteristic    {
@@ -111,7 +104,6 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
     
-
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         let data = characteristic.value
         guard data != nil else {return}
@@ -120,21 +112,18 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         }
     }
   
-
     func startScanning()    {
         guard manager.state == .poweredOn else {return}
         let uuid = UUID.Service
         manager.scanForPeripherals(withServices: [uuid], options: nil)
     }
     
-
     func stopScanning() {
         manager.stopScan()
     }
     
-    
     func sendMessage(string: String)  {
-        if string != "" && isReady {
+        if string != "" && self.isReady {
             let data = string.data(using: String.Encoding.utf8)
             connectedPeripheral!.writeValue(data!, for: writeCharacteristic!, type: writeType)
         }
