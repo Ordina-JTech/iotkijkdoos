@@ -90,7 +90,7 @@ class RgbVC: NSObject    {
         rgbImageView.layer.cornerRadius = 5
         settingView.addSubview(rgbImageView)
     
-        heightConstant = settingView.frame.height/12.5
+        heightConstant = 30
         let topConstant = settingView.frame.height/18
         let leftRightConstant: CGFloat = settingView.frame.height/15
         rgbImageView.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
@@ -118,7 +118,8 @@ class RgbVC: NSObject    {
         stateButton = UIButton()
         stateButton.translatesAutoresizingMaskIntoConstraints = false
         stateButton.setTitle(StateBtnText.on, for: .normal)
-        stateButton.setTitleColor(UIColor.black, for: .normal)
+        stateButton.setTitleColor(UIColor.defaultButtonColor, for: .normal)
+        stateButton.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
         stateButton.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)!
         stateButton.sizeToFit()
         stateButton.addTarget(self, action: #selector(stateButtonWasPressed(sender:)), for: .touchUpInside)
@@ -126,7 +127,6 @@ class RgbVC: NSObject    {
         
         stateButton.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
         stateButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-
     }
     
     func stateButtonWasPressed(sender: UIButton)    {
@@ -154,7 +154,6 @@ class RgbVC: NSObject    {
                     if previousIndex != index || isButtonCall {
                         previousIndex = index
                         let message = ColorMessage.colors[index]
-                        print(message)
                         bluetooth.sendMessage(string: message)
                     }
                     break

@@ -44,7 +44,6 @@ class SettingView: UIView {
         titleLabel.sizeToFit()
         titleView.addSubview(titleLabel)
         
-        titleLabel.heightAnchor.constraint(equalToConstant: titleView.frame.height/3).isActive = true
         titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor).isActive = true
 
@@ -63,7 +62,7 @@ class SettingView: UIView {
 
         let widthAnchor = titleView.frame.width/2.4
         ordinaLogoView.widthAnchor.constraint(equalToConstant: widthAnchor).isActive = true
-        ordinaLogoView.rightAnchor.constraint(equalTo: titleView.rightAnchor, constant: 0.0).isActive = true
+        ordinaLogoView.rightAnchor.constraint(equalTo: titleView.rightAnchor).isActive = true
         ordinaLogoView.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: titleLabel.frame.height).isActive = true
         ordinaLogoView.heightAnchor.constraint(equalToConstant: titleLabel.frame.height*2).isActive = true
     }

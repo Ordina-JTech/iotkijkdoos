@@ -13,9 +13,9 @@ class SpeakerVC: TableViewDelegate   {
     private enum Sound  {
         static let alarm = "Alarm"
         static let vaderJacob = "Vader Jacob"
-        static let createOwn = "Create Your Own"
-        static let names = [alarm, vaderJacob, createOwn]
-        static let letters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.createOwn]
+        static let challenge2 = "Challenge II"
+        static let names = [alarm, vaderJacob, challenge2]
+        static let letters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.challenge2]
     }
     
     var settingView: SettingView!

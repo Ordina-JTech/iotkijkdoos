@@ -49,7 +49,7 @@ class ServoVC: NSObject {
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.value = 0
         slider.minimumValue = 0
-        slider.maximumValue = 180
+        slider.maximumValue = 179
         slider.thumbTintColor = UIColor.lightGray
         slider.minimumTrackTintColor = UIColor.orange
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
@@ -75,7 +75,6 @@ class ServoVC: NSObject {
     }
     
     func sliderValueChanged()   {
-        print(Int(slider.value))
         let sliderValue = Int(slider.value)
         
         if sliderValue % 5 == 0 && sliderValue != previousValue || sliderValue % 6 == 0 && sliderValue != previousValue  {
@@ -84,7 +83,6 @@ class ServoVC: NSObject {
             angleLabel.text = "\(sliderValue)°"
             
             let message = PeripheralLetter.servo + String(sliderValue) + "\n"
-            print(message)
             bluetooth.sendMessage(string: message)
         }
     }

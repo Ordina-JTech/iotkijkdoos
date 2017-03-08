@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22735B131E70493A009CC5A5 /* ChallengeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22735B121E70493A009CC5A5 /* ChallengeVC.swift */; };
+		22735B151E704FE0009CC5A5 /* DefaultButtonColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */; };
 		22B6A60C1E6048C400F9B9AC /* PeripheralLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B6A60B1E6048C400F9B9AC /* PeripheralLetter.swift */; };
 		3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */; };
 		384154311E4DD82E00F06081 /* ProgressMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154301E4DD82E00F06081 /* ProgressMessage.swift */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22735B121E70493A009CC5A5 /* ChallengeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengeVC.swift; sourceTree = "<group>"; };
+		22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultButtonColor.swift; sourceTree = "<group>"; };
 		22B6A60B1E6048C400F9B9AC /* PeripheralLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralLetter.swift; sourceTree = "<group>"; };
 		3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothConnectionDelegate.swift; sourceTree = "<group>"; };
 		384154301E4DD82E00F06081 /* ProgressMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressMessage.swift; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 				38DD23BF1E55A5EE0023F613 /* LedVC.swift */,
 				38DD23C11E55DA720023F613 /* ServoVC.swift */,
 				38DD23C41E55F7620023F613 /* SpeakerVC.swift */,
+				22735B121E70493A009CC5A5 /* ChallengeVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				38DD23BD1E54959C0023F613 /* Font.swift */,
+				22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -224,11 +230,13 @@
 				3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */,
 				38DD23BE1E54959C0023F613 /* Font.swift in Sources */,
 				3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */,
+				22735B151E704FE0009CC5A5 /* DefaultButtonColor.swift in Sources */,
 				384154571E51F7F200F06081 /* RgbVC.swift in Sources */,
 				38DD23C51E55F7620023F613 /* SpeakerVC.swift in Sources */,
 				38DD23C21E55DA720023F613 /* ServoVC.swift in Sources */,
 				38DD23C01E55A5EE0023F613 /* LedVC.swift in Sources */,
 				388699931E4DD008006BC37E /* ScanVC.swift in Sources */,
+				22735B131E70493A009CC5A5 /* ChallengeVC.swift in Sources */,
 				3841544D1E51B8C600F06081 /* TableView.swift in Sources */,
 				384154351E4DD84200F06081 /* MBProgressHUD.m in Sources */,
 				384154311E4DD82E00F06081 /* ProgressMessage.swift in Sources */,
@@ -368,6 +376,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -384,6 +393,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -11,18 +11,31 @@ import UIKit
 
 class MainVC: UIViewController{
     
+    private enum HeaderText {
+        static let led1 = "Control Left Light"
+        static let led2 = "Control Right Light"
+        static let rgb  = "Control Rgb light"
+        static let servo = "Control Television"
+        static let buzzer = "Control Buzzer"
+        static let challenge = "Control Challenge"
+    }
+    
     @IBOutlet weak var disconnectBtn: DisconnectButton!
     @IBOutlet weak var leftLedImage: UIImageView!
     @IBOutlet weak var rightLedImage: UIImageView!
     @IBOutlet weak var tvImage: UIImageView!
     @IBOutlet weak var rgbImage: UIImageView!
     @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var challengeImage: UIImageView!
+    
+   
     private var transparantView: UIView!
     private var rgbVC: RgbVC!
     private var leftLedVC: LedVC!
     private var rightLedVC: LedVC!
     private var servoVC: ServoVC!
     private var speakerVC: SpeakerVC!
+    private var challengeVC: ChallengeVC!
     private var viewIsActive = [Bool]()
     private var settingViewArray: [UIView]!
     
@@ -34,12 +47,16 @@ class MainVC: UIViewController{
         return rect
     }
     
-    override open var shouldAutorotate: Bool {
+    override var shouldAutorotate: Bool {
             return true
     }
     
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask    {
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask    {
         return .landscape
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
     override func viewDidLoad() {
@@ -56,13 +73,14 @@ class MainVC: UIViewController{
     }
     
     private func createAndAddSettingViews()   {
-        leftLedVC = LedVC(frame: settingViewFrame, headerText: "Control Left Light", ledLetter: PeripheralLetter.led1)
-        rightLedVC = LedVC(frame: settingViewFrame, headerText: "Control Right Light", ledLetter: PeripheralLetter.led2)
-        rgbVC = RgbVC(frame: settingViewFrame, headerText: "Control Rgb light")
-        servoVC = ServoVC(frame: settingViewFrame, headerText: "Control Television")
-        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: "Control Speaker")
+        leftLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led1, ledLetter: PeripheralLetter.led1)
+        rightLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led2, ledLetter: PeripheralLetter.led2)
+        rgbVC = RgbVC(frame: settingViewFrame, headerText: HeaderText.rgb)
+        servoVC = ServoVC(frame: settingViewFrame, headerText: HeaderText.servo)
+        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: HeaderText.buzzer)
+        challengeVC = ChallengeVC(frame: settingViewFrame, headerText: HeaderText.challenge)
         
-        settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView]
+        settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView, challengeVC.settingView]
         
         for index in 0..<settingViewArray.count {
             self.view.addSubview(settingViewArray[index])
@@ -89,7 +107,7 @@ class MainVC: UIViewController{
     }
     
     private func addImageTapGestures()    {
-        let imageViewArray = [leftLedImage, rightLedImage, rgbImage, tvImage, speakerImage]
+        let imageViewArray = [leftLedImage, rightLedImage, rgbImage, tvImage, speakerImage, challengeImage]
     
         for i in 0..<imageViewArray.count    {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageWasTapped(tapGestureRecognizer:)))
