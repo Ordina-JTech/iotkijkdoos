@@ -74,15 +74,14 @@ class ServoVC: NSObject {
         angleLabel.bottomAnchor.constraint(equalTo: slider.topAnchor, constant: -5.0).isActive = true
     }
     
-    
     func sliderValueChanged()   {
-        guard bluetooth.isReady else {return}
+        print(Int(slider.value))
         let sliderValue = Int(slider.value)
         
-        if (sliderValue % 5 == 0) && (sliderValue != previousValue)  {
+        if sliderValue % 5 == 0 && sliderValue != previousValue || sliderValue % 6 == 0 && sliderValue != previousValue  {
             previousValue = sliderValue
             rotateImage(value: slider.value)
-            angleLabel.text = "\(String((sliderValue)))°"
+            angleLabel.text = "\(sliderValue)°"
             
             let message = PeripheralLetter.servo + String(sliderValue) + "\n"
             print(message)
@@ -90,7 +89,6 @@ class ServoVC: NSObject {
         }
     }
     
-
     private func rotateImage(value: Float)  {
         let radianAngle = value * .pi / 180
         imageView.transform = CGAffineTransform(rotationAngle: CGFloat(radianAngle))

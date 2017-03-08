@@ -11,13 +11,13 @@ import UIKit
 
 
 enum ProgressMessage{
-    case Scanning
-    case NoDevicesDetected
-    case Connected
-    case Disconnected
-    case FailedToConnect
-    case PoweredOff
-    case NotConnected
+    case scanning
+    case noDevicesDetected
+    case connected
+    case disconnected
+    case failedToConnect
+    case poweredOff
+    case notConnected
     
     func show(view: UIView)   {
         
@@ -32,32 +32,32 @@ enum ProgressMessage{
         
         switch self   {
             
-        case .Scanning:
+        case .scanning:
             progressHud.label.text = "Scanning..."
             
-        case .NoDevicesDetected:
+        case .noDevicesDetected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "No devices detected!"
             progressHud.detailsLabel.text = "Make sure your bluetooth device is powered on."
             
-        case .Connected:
+        case .connected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Connected to: " + (bluetooth.connectedPeripheral?.name)!
             
-        case .Disconnected:
+        case .disconnected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Disconnected!"
             
-        case .FailedToConnect:
+        case .failedToConnect:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Failed to connect!"
             progressHud.detailsLabel.text = "Please try again."
             
-        case .PoweredOff:
+        case .poweredOff:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Your bluetooth is turned off!"
             
-        case .NotConnected:
+        case .notConnected:
             progressHud.mode = MBProgressHUDMode.text
             progressHud.label.text = "Not connected!"
         }

@@ -22,7 +22,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableViewObj = TableView(delegate: self, data: [])
         tableView.delegate = tableViewObj
         tableView.dataSource = tableViewObj
@@ -49,7 +48,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         refreshBtn.isEnabled = true
         
         if scannedDevices.count == 0   {
-            ProgressMessage.NoDevicesDetected.show(view: self.view)
+            ProgressMessage.noDevicesDetected.show(view: self.view)
         }
     }
     
@@ -83,7 +82,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
         else    {
-            ProgressMessage.PoweredOff.show(view: self.view)
+            ProgressMessage.poweredOff.show(view: self.view)
             refreshBtn.isEnabled = false
         }
     }
@@ -116,12 +115,12 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
-        ProgressMessage.FailedToConnect.show(view: self.view)
+        ProgressMessage.failedToConnect.show(view: self.view)
     }
     
     func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
-        ProgressMessage.Disconnected.show(view: self.view)
+        ProgressMessage.disconnected.show(view: self.view)
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
@@ -142,7 +141,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
 //TableViewDelegate
     
     func userDidSelectRow(indexPath: IndexPath) {
-        bluetooth.manager.stopScan()
+        bluetooth.stopScanning()
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedDevice = scannedDevices[(indexPath as NSIndexPath).row].peripheral
         bluetooth.manager.connect(selectedDevice, options: nil)
