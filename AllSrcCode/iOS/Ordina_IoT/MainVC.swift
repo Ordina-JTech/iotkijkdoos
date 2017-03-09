@@ -28,7 +28,6 @@ class MainVC: UIViewController{
     @IBOutlet weak var speakerImage: UIImageView!
     @IBOutlet weak var challengeImage: UIImageView!
     
-   
     private var transparantView: UIView!
     private var rgbVC: RgbVC!
     private var leftLedVC: LedVC!

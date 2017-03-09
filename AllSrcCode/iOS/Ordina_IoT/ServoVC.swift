@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class ServoVC: NSObject {
     
     var settingView: SettingView!
@@ -49,7 +48,7 @@ class ServoVC: NSObject {
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.value = 0
         slider.minimumValue = 0
-        slider.maximumValue = 179
+        slider.maximumValue = 180
         slider.thumbTintColor = UIColor.lightGray
         slider.minimumTrackTintColor = UIColor.orange
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
@@ -64,7 +63,7 @@ class ServoVC: NSObject {
         //Angle Label
         angleLabel = UILabel()
         angleLabel.translatesAutoresizingMaskIntoConstraints = false
-        angleLabel.text = "0°"
+        angleLabel.text = String(Int(slider.value)) + "°"
         angleLabel.font = UIFont(name: "Avenir Next", size: 20.0)
         angleLabel.textColor = UIColor.black
         angleLabel.sizeToFit()
@@ -75,12 +74,16 @@ class ServoVC: NSObject {
     }
     
     func sliderValueChanged()   {
-        let sliderValue = Int(slider.value)
-        
-        if sliderValue % 5 == 0 && sliderValue != previousValue || sliderValue % 6 == 0 && sliderValue != previousValue  {
+        var sliderValue = Int(slider.value)
+        print(sliderValue)
+        if sliderValue % 5 == 0 && sliderValue != previousValue || sliderValue % 8 == 0 && sliderValue != previousValue  {
             previousValue = sliderValue
             rotateImage(value: slider.value)
             angleLabel.text = "\(sliderValue)°"
+            
+            if sliderValue == 180   {
+                sliderValue -= 1
+            }
             
             let message = PeripheralLetter.servo + String(sliderValue) + "\n"
             bluetooth.sendMessage(string: message)

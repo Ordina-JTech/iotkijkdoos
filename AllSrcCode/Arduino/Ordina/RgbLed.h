@@ -2,7 +2,7 @@
 #include <SoftwareSerial.h>
 
 class RgbLed {
-
+  
   public:
     RgbLed(int redPin, int greenPin, int bluePin);
     void begin();
@@ -46,39 +46,26 @@ char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
 void RgbLed::setColor(char input)  { 
   switch (input)  { 
   
-  //Off
   case '0':
-    setColor(0,0,0);
+    setColor(0,0,0);    //Off
     break;
-  
-  //Red
   case '1':
-  setColor(255,0,0);
+  setColor(255,0,0);    //Red
   break;
- 
-  //Yellow
   case '2':
-  setColor(255,255,0);
+  setColor(255,255,0);  //Yellow
   break;
-  
-  //Green
   case '3':
-  setColor(0,255,0);
+  setColor(0,255,0);    //Green
   break;
-  
-  //Aqua
   case '4':
-  setColor(0,255,255);
+  setColor(0,255,255);  //Aqua
   break;
-  
-  //Blue
   case '5':
-  setColor(0,0,255);
+  setColor(0,0,255);    //Blue
   break;
-  
-  //Purple
   case '6':
-  setColor(255,0,255);
+  setColor(255,0,255);  //Purple
   break;
   }
 }

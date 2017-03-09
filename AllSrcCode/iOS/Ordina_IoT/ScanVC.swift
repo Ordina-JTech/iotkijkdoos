@@ -72,7 +72,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     
-    
 //CB CENTRALMANAGER METHODS
     
     func blueDidChangeState(_ poweredOn: Bool) {
@@ -86,7 +85,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             refreshBtn.isEnabled = false
         }
     }
-    
     
     func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
         for exisiting in scannedDevices {
