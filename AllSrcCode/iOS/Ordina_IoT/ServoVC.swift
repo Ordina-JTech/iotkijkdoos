@@ -64,7 +64,7 @@ class ServoVC: NSObject {
         angleLabel = UILabel()
         angleLabel.translatesAutoresizingMaskIntoConstraints = false
         angleLabel.text = String(Int(slider.value)) + "°"
-        angleLabel.font = UIFont(name: "Avenir Next", size: 20.0)
+        angleLabel.font = UIFont.avenirNext(size: 20)
         angleLabel.textColor = UIColor.black
         angleLabel.sizeToFit()
         settingView.addSubview(angleLabel)
@@ -75,7 +75,7 @@ class ServoVC: NSObject {
     
     func sliderValueChanged()   {
         var sliderValue = Int(slider.value)
-        print(sliderValue)
+        
         if sliderValue % 5 == 0 && sliderValue != previousValue || sliderValue % 8 == 0 && sliderValue != previousValue  {
             previousValue = sliderValue
             rotateImage(value: slider.value)

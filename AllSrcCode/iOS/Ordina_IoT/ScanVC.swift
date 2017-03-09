@@ -30,6 +30,8 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: Notification.Name("applicationDidBecomeActive"), object: nil)
+        
         bluetooth = BluetoothConnection(delegate: self)
     }
     
@@ -38,7 +40,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
         if !bluetooth.manager.isScanning{
-            refreshDevices()
+            refreshAndScanDevices()
         }
     }
     
@@ -52,10 +54,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         }
     }
     
-    func refreshDevices()  {
+    func refreshAndScanDevices()  {
         scannedDevices = []
         tableViewObj.reloadTableViewData(data: [])
         tableView.reloadData()
+        startRefreshControl()
         refreshBtn.isEnabled = false
         bluetooth.startScanning()
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ScanVC.scanTimeOut), userInfo: nil, repeats: false)
@@ -71,22 +74,34 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         UIDevice.current.setValue(value, forKey: "orientation")
     }
     
+    func applicationDidBecomeActive()   {
+        refreshAndScanDevices()
+    }
+    
     
 //CB CENTRALMANAGER METHODS
     
-    func blueDidChangeState(_ poweredOn: Bool) {
-        if poweredOn    {
-            bluetooth.startScanning()
-            startRefreshControl()
-            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
-        }
-        else    {
+    func bluetoothDidChangeState(_ central: CBCentralManager) {
+        switch central.state    {
+        
+        case .unknown:
+            ProgressMessage.unknown.show(view: self.view)
+        case .resetting:
+            ProgressMessage.resetting.show(view: self.view)
+        case .unsupported:
+            ProgressMessage.unsupported.show(view: self.view)
+        case .unauthorized:
+            ProgressMessage.unauthorized.show(view: self.view)
+        case .poweredOff:
             ProgressMessage.poweredOff.show(view: self.view)
             refreshBtn.isEnabled = false
+        case .poweredOn:
+            refreshAndScanDevices()
+            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
     }
     
-    func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
+    func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
         for exisiting in scannedDevices {
             if exisiting.peripheral.identifier == peripheral.identifier {
                 return
@@ -98,7 +113,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         scannedDevices.sort {$0.RSSI < $1.RSSI }
         
         var deviceNames = [String]()
-        
         for index in 0..<scannedDevices.count{
             deviceNames.append(scannedDevices[index].peripheral.name!)
         }
@@ -107,22 +121,22 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         tableView.reloadData()
     }
     
-    func blueDidConnect(_ peripheral: CBPeripheral) {
+    func bluetoothDidConnect(_ peripheral: CBPeripheral) {
         bluetooth.sendMessage(string: PeripheralLetter.reset)
     }
     
-    func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
+    func bluetoothDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
         ProgressMessage.failedToConnect.show(view: self.view)
     }
     
-    func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
+    func bluetoothDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
         refreshBtn.isEnabled = true
         ProgressMessage.disconnected.show(view: self.view)
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
-    func blueDidReceiveString(_ message: String) {
+    func bluetoothDidReceiveString(_ message: String) {
         let newLineChars = NSCharacterSet.newlines
         let messages = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
@@ -149,8 +163,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
 //BUTTONS
     
     @IBAction func refreshButtonWasPressed(_ sender: Any) {
-        startRefreshControl()
-        refreshDevices()
+        refreshAndScanDevices()
     }
 }
 

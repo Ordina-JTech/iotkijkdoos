@@ -120,7 +120,7 @@ class RgbVC: NSObject    {
         stateButton.setTitle(StateBtnText.on, for: .normal)
         stateButton.setTitleColor(UIColor.defaultButtonColor, for: .normal)
         stateButton.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
-        stateButton.titleLabel?.font = UIFont(name: "Avenir Next", size: 20)!
+        stateButton.titleLabel?.font = UIFont.avenirNext(size: 20)
         stateButton.sizeToFit()
         stateButton.addTarget(self, action: #selector(stateButtonWasPressed(sender:)), for: .touchUpInside)
         settingView.addSubview(stateButton)

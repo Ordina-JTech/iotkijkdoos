@@ -40,7 +40,7 @@ class SettingView: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = headerText
         titleLabel.textColor = UIColor.black
-        titleLabel.font = UIFont(name: "Avenir Next", size: 25.0)
+        titleLabel.font = UIFont.avenirNext(size: 25)
         titleLabel.sizeToFit()
         titleView.addSubview(titleLabel)
         

@@ -12,34 +12,34 @@ import CoreBluetooth
 var bluetooth: BluetoothConnection!
 
 protocol BluetoothConnectionDelegate    {
-    func blueDidChangeState(_ poweredOn: Bool)
-    func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?)
-    func blueDidConnect(_ peripheral: CBPeripheral)
-    func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?)
-    func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?)
-    func blueDidReceiveString(_ message: String)
+    func bluetoothDidChangeState(_ central: CBCentralManager)
+    func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?)
+    func bluetoothDidConnect(_ peripheral: CBPeripheral)
+    func bluetoothDidDisconnect(_ peripheral: CBPeripheral, error: NSError?)
+    func bluetoothDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?)
+    func bluetoothDidReceiveString(_ message: String)
 }
 
 extension BluetoothConnectionDelegate   {
-    func blueDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?){}
-    func blueDidConnect(_ peripheral: CBPeripheral){}
-    func blueDidDisconnect(_ peripheral: CBPeripheral, error: NSError?){}
-    func blueDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?){}
-    func blueDidReceiveString(_ message: String){}
+    func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?){}
+    func bluetoothDidConnect(_ peripheral: CBPeripheral){}
+    func bluetoothDidDisconnect(_ peripheral: CBPeripheral, error: NSError?){}
+    func bluetoothDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?){}
+    func bluetoothDidReceiveString(_ message: String){}
 }
 
 final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate   {
+    
+    private enum UUID   {
+        static let service = CBUUID(string: "FFE0")
+        static let characteristic = CBUUID(string: "FFE1")
+    }
     
     var delegate: BluetoothConnectionDelegate?
     var manager: CBCentralManager!
     private(set) var connectedPeripheral: CBPeripheral?
     weak var writeCharacteristic: CBCharacteristic?
     private var writeType: CBCharacteristicWriteType = .withoutResponse
-
-    private enum UUID   {
-        static let Service = CBUUID(string: "FFE0")
-        static let Characteristic = CBUUID(string: "FFE1")
-    }
     
     var isReady: Bool {
         get {
@@ -59,48 +59,43 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
 //Central Manager
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if central.state == .poweredOn {
-            delegate?.blueDidChangeState(true)
-        }
-        else if central.state == .poweredOff    {
-            delegate?.blueDidChangeState(false)
-        }
+        delegate?.bluetoothDidChangeState(central)
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        delegate?.blueDidDiscoverPeripheral(peripheral, RSSI: RSSI)
+        delegate?.bluetoothDidDiscoverPeripheral(peripheral, RSSI: RSSI)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.delegate = self      //Strong reference to keep connected
         connectedPeripheral = peripheral
-        peripheral.discoverServices([UUID.Service])
+        peripheral.discoverServices([UUID.service])
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
-        delegate?.blueDidFailToConnect(peripheral, error: error as NSError?)
+        delegate?.bluetoothDidFailToConnect(peripheral, error: error as NSError?)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
-        delegate?.blueDidDisconnect(peripheral, error: error as NSError?)
+        delegate?.bluetoothDidDisconnect(peripheral, error: error as NSError?)
     }
     
     
 //Peripheral
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        peripheral.discoverCharacteristics([UUID.Characteristic], for: peripheral.services![0])
+        peripheral.discoverCharacteristics([UUID.characteristic], for: peripheral.services![0])
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics!   {
-            if characteristic.uuid == UUID.Characteristic    {
+            if characteristic.uuid == UUID.characteristic    {
                 peripheral.setNotifyValue(true, for: characteristic)
             }
             writeCharacteristic = characteristic
-            delegate?.blueDidConnect(peripheral)
+            delegate?.bluetoothDidConnect(peripheral)
         }
     }
     
@@ -108,13 +103,13 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         let data = characteristic.value
         guard data != nil else {return}
         if let message = String(data: data!, encoding: String.Encoding.utf8) {
-            delegate?.blueDidReceiveString(message)
+            delegate?.bluetoothDidReceiveString(message)
         }
     }
   
     func startScanning()    {
         guard manager.state == .poweredOn else {return}
-        let uuid = UUID.Service
+        let uuid = UUID.service
         manager.scanForPeripherals(withServices: [uuid], options: nil)
     }
     
@@ -123,7 +118,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
     }
     
     func sendMessage(string: String)  {
-        if string != "" && self.isReady {
+        if !string.isEmpty && self.isReady {
             let data = string.data(using: String.Encoding.utf8)
             connectedPeripheral!.writeValue(data!, for: writeCharacteristic!, type: writeType)
         }

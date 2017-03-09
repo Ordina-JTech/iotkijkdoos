@@ -36,7 +36,7 @@ class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
         let cell = UITableViewCell()
         cell.textLabel?.text = tableViewData[indexPath.row]
         cell.backgroundColor = UIColor.white
-        cell.textLabel?.font = UIFont(name: "Avenir Next", size: 21)
+        cell.textLabel?.font = UIFont.avenirNext(size: 21)
         cell.textLabel?.textColor = UIColor.black
         cell.accessoryType = .disclosureIndicator
         

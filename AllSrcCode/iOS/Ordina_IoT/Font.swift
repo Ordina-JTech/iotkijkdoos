@@ -8,9 +8,8 @@
 
 import Foundation
 
-
 extension UIFont    {
-    func ordinaFont() -> UIFont {
-        return UIFont(name: "Avenir Next", size: 20.0)!
+    static func avenirNext(size: CGFloat) -> UIFont {
+        return UIFont(name: "Avenir Next", size: size)!
     }
 }

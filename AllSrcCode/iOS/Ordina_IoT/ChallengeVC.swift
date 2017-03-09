@@ -13,7 +13,6 @@ import Foundation
 class ChallengeVC: NSObject {
     
     var settingView: SettingView!
-    private let fontSize: CGFloat = 22.0
     
     enum ChallengeName  {
         static let colorGradient = "Fade Color"
@@ -70,7 +69,7 @@ class ChallengeVC: NSObject {
         button.setTitle(buttonTitle, for: .normal)
         button.setTitleColor(UIColor.defaultButtonColor, for: .normal)
         button.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
-        button.titleLabel?.font = UIFont(name: "Avenir Next", size: fontSize)!
+        button.titleLabel?.font = UIFont.avenirNext(size: 22)
         button.sizeToFit()
     }
     
