@@ -1,12 +1,14 @@
 #include "arduino.h"
+#include <SoftwareSerial.h>
 
 class RgbLed {
 
   public:
     RgbLed(int redPin, int greenPin, int bluePin);
     void begin();
-    void getAndSetColor(char input);
-    void colorGradient();
+    char getColorChar(SoftwareSerial &bluetooth);
+    void setColor(char input);
+    void fadeColor();
     void reset();
 
   private:
@@ -28,7 +30,20 @@ void RgbLed::begin() {
   pinMode(_bluePin, OUTPUT);
 }
 
-void RgbLed::getAndSetColor(char input)  { 
+char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
+  int count = 0;
+  char input = '\0';
+  
+  while (count == 0) {
+    if (bluetooth.available() > 0) {
+      input = bluetooth.read();
+      count++;
+    } 
+  }
+  return input;
+}
+
+void RgbLed::setColor(char input)  { 
   switch (input)  { 
   
   //Off
@@ -75,7 +90,7 @@ void RgbLed::setColor(int redValue, int greenValue, int blueValue)  {
 }
 
 //Challenge III
-void RgbLed::colorGradient()  {
+void RgbLed::fadeColor()  {
   //Add your code here
 }
 

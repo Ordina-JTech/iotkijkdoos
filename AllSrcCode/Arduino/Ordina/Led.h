@@ -1,10 +1,12 @@
 #include "arduino.h"
+#include <SoftwareSerial.h>
 
 class Led{
   
  public:
   Led(int pin); //constructor
   void begin();
+  char getLedChar(SoftwareSerial &bluetooth);
   void setLed(char input);
   bool getState();
   int getPinNumber();
@@ -21,6 +23,19 @@ Led::Led(int pin)  {
 
 void Led::begin() {
   pinMode(_pin, OUTPUT);
+}
+
+char Led::getLedChar(SoftwareSerial &bluetooth) {
+  int count = 0;
+  char input = '\0';
+  
+  while (count == 0) {
+    if (bluetooth.available() > 0) {
+      input = bluetooth.read();
+      count++;
+    } 
+  }
+  return input;
 }
 
 void Led::setLed(char input) {

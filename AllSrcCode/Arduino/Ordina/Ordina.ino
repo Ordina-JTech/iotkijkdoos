@@ -12,6 +12,9 @@ RgbLed rgbLed(7, 8, 9);
 Buzzer buzzer(4);
 ServoMotor servo(2);
 
+char nextChar;
+int angle;
+
 void setup()  {
   Serial.begin(9600);
   bluetooth.begin(9600);
@@ -24,20 +27,19 @@ void setup()  {
 void loop() {
   if (bluetooth.available() > 0) {
     char input = bluetooth.read(); 
-    char nextChar;
     
     switch (input)  {
     case 'a':
-      nextChar = readNextChar();
+      nextChar = led1.getLedChar(bluetooth);
       led1.setLed(nextChar);
       break;
     case 'b':
-      nextChar = readNextChar();
+      nextChar = led2.getLedChar(bluetooth);
       led2.setLed(nextChar);
       break;
     case'c':
-      nextChar = readNextChar();
-      rgbLed.getAndSetColor(nextChar);
+      nextChar = rgbLed.getColorChar(bluetooth);
+      rgbLed.setColor(nextChar);
       break;
     case 'd':
       buzzer.alarm(led1, led2);
@@ -50,11 +52,12 @@ void loop() {
       buzzer.customSound();
       break;
     case 'g':
-      getAndSetServoAngle();
+      angle = servo.getAngle(bluetooth);
+      servo.setAngle(angle, 50);
       break;
     //Challenge III
     case 'h':
-      rgbLed.colorGradient();
+      rgbLed.fadeColor();
       break;
     //Challenge IV
     case 'i':
@@ -67,36 +70,6 @@ void loop() {
       break;
     }
   }   
-}
-
-char readNextChar() {
-  int count = 0;
-  char input = '\0';
-  
-  while (count == 0) {
-    if (bluetooth.available() > 0) {
-      input = bluetooth.read();
-      count++;
-    } 
-  }
-  return input;
-}
-
-void getAndSetServoAngle() {
-  String angleStr = "";
-  char input = '\0';
-
-  while (input != '\n') {
-    if (bluetooth.available() > 0)  {
-      input = bluetooth.read();
-      
-      if (input != '\n')  {
-        angleStr += input;     
-      }
-    }   
-  }
-  int angle = 179 - angleStr.toInt(); //'179-' = counter clockwise.
-  servo.setAngle(angle, 50); 
 }
 
 void resetAllComponents()  {

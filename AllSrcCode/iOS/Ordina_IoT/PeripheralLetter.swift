@@ -17,7 +17,7 @@ enum PeripheralLetter   {
     static let vaderJacob = "e"
     static let customSound = "f"
     static let servo      = "g"
-    static let colorGradient = "h"
+    static let fadeColor  = "h"
     static let challenge4 = "i"
     static let reset      = "r"
     static let response   = "y"

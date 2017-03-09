@@ -1,4 +1,5 @@
 #include "arduino.h"
+#include <SoftwareSerial.h>
 #include <Servo.h>
 
 /*
@@ -10,6 +11,7 @@ class ServoMotor  {
   
   public:
     ServoMotor(int pin);
+    getAngle(SoftwareSerial &bluetooth);
     void setAngle(int angle, int milliSec);
     void reset();
 
@@ -20,6 +22,22 @@ class ServoMotor  {
 
 ServoMotor::ServoMotor(int pin) {
   _pin = pin;
+}
+
+int ServoMotor::getAngle(SoftwareSerial &bluetooth) {
+  String angleStr = "";
+  char input = '\0';
+
+  while (input != '\n') {
+    if (bluetooth.available() > 0)  {
+      input = bluetooth.read();
+      if (input != '\n')  {
+        angleStr += input;     
+      }
+    }   
+  }
+  int angle = 179 - angleStr.toInt(); //'179-' = counter clockwise.
+  return angle;
 }
 
 void ServoMotor::setAngle(int angle, int milliSec)  {

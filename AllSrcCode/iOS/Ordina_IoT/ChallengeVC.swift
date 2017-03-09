@@ -16,7 +16,7 @@ class ChallengeVC: NSObject {
     private let fontSize: CGFloat = 22.0
     
     enum ChallengeName  {
-        static let colorGradient = "Color Gradient"
+        static let colorGradient = "Fade Color"
         static let challenge4 = "Special Effect"
     }
     
@@ -75,7 +75,7 @@ class ChallengeVC: NSObject {
     }
     
     func challenge3ButtonWasPressed(sender: UIButton)    {
-        bluetooth.sendMessage(string: PeripheralLetter.colorGradient)
+        bluetooth.sendMessage(string: PeripheralLetter.fadeColor)
     }
     
     func challenge4ButtonWasPressed(sender: UIButton)    {
