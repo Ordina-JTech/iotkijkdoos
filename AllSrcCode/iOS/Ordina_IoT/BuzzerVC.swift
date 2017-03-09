@@ -1,5 +1,5 @@
 //
-//  SpeakerVC.swift
+//  BuzzerVC.swift
 //  Ordina_IoT
 //
 //  Created by Rik Wout on 16-02-17.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-class SpeakerVC: TableViewDelegate   {
+class BuzzerVC: TableViewDelegate   {
     
     private enum Sound  {
         static let alarm = "Alarm"
         static let vaderJacob = "Vader Jacob"
-        static let challenge2 = "Challenge II"
+        static let challenge2 = "Custom Sound"
         static let names = [alarm, vaderJacob, challenge2]
-        static let letters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.challenge2]
+        static let peripheralLetters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.customSound]
     }
     
     var settingView: SettingView!
@@ -46,7 +46,8 @@ class SpeakerVC: TableViewDelegate   {
         
         if bluetooth.isReady    {
             let index = indexPath as NSIndexPath
-            bluetooth.sendMessage(string: Sound.letters[index.row])
+            let peripheralLetter = Sound.peripheralLetters[index.row]
+            bluetooth.sendMessage(string: peripheralLetter)
         }
     }
 }

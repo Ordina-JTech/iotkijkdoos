@@ -45,7 +45,7 @@ class SettingView: UIView {
         titleView.addSubview(titleLabel)
         
         titleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor, constant: 5.0).isActive = true
 
         //ImageView
         let imageName = "roundOrdinaLogo"

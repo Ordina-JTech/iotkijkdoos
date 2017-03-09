@@ -12,12 +12,12 @@ import UIKit
 class MainVC: UIViewController{
     
     private enum HeaderText {
-        static let led1 = "Control Left Light"
-        static let led2 = "Control Right Light"
-        static let rgb  = "Control Rgb light"
-        static let servo = "Control Television"
-        static let buzzer = "Control Buzzer"
-        static let challenge = "Control Challenge"
+        static let led1 = "Left Light"
+        static let led2 = "Right Light"
+        static let rgb  = "Rgb light"
+        static let servo = "Television"
+        static let buzzer = "Buzzer"
+        static let challenge = "Challenges"
     }
     
     @IBOutlet weak var disconnectBtn: DisconnectButton!
@@ -34,7 +34,7 @@ class MainVC: UIViewController{
     private var leftLedVC: LedVC!
     private var rightLedVC: LedVC!
     private var servoVC: ServoVC!
-    private var speakerVC: SpeakerVC!
+    private var speakerVC: BuzzerVC!
     private var challengeVC: ChallengeVC!
     private var viewIsActive = [Bool]()
     private var settingViewArray: [UIView]!
@@ -77,7 +77,7 @@ class MainVC: UIViewController{
         rightLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led2, ledLetter: PeripheralLetter.led2)
         rgbVC = RgbVC(frame: settingViewFrame, headerText: HeaderText.rgb)
         servoVC = ServoVC(frame: settingViewFrame, headerText: HeaderText.servo)
-        speakerVC = SpeakerVC(frame: settingViewFrame, headerText: HeaderText.buzzer)
+        speakerVC = BuzzerVC(frame: settingViewFrame, headerText: HeaderText.buzzer)
         challengeVC = ChallengeVC(frame: settingViewFrame, headerText: HeaderText.challenge)
         
         settingViewArray = [leftLedVC.settingView, rightLedVC.settingView, rgbVC.settingView, servoVC.settingView, speakerVC.settingView, challengeVC.settingView]

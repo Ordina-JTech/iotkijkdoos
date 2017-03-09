@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22735B131E70493A009CC5A5 /* ChallengeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22735B121E70493A009CC5A5 /* ChallengeVC.swift */; };
-		22735B151E704FE0009CC5A5 /* DefaultButtonColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */; };
+		22735B151E704FE0009CC5A5 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22735B141E704FE0009CC5A5 /* UIColor.swift */; };
 		22B6A60C1E6048C400F9B9AC /* PeripheralLetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B6A60B1E6048C400F9B9AC /* PeripheralLetter.swift */; };
 		3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */; };
 		384154311E4DD82E00F06081 /* ProgressMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384154301E4DD82E00F06081 /* ProgressMessage.swift */; };
@@ -26,12 +26,12 @@
 		38DD23BE1E54959C0023F613 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23BD1E54959C0023F613 /* Font.swift */; };
 		38DD23C01E55A5EE0023F613 /* LedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23BF1E55A5EE0023F613 /* LedVC.swift */; };
 		38DD23C21E55DA720023F613 /* ServoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23C11E55DA720023F613 /* ServoVC.swift */; };
-		38DD23C51E55F7620023F613 /* SpeakerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23C41E55F7620023F613 /* SpeakerVC.swift */; };
+		38DD23C51E55F7620023F613 /* BuzzerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23C41E55F7620023F613 /* BuzzerVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		22735B121E70493A009CC5A5 /* ChallengeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengeVC.swift; sourceTree = "<group>"; };
-		22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultButtonColor.swift; sourceTree = "<group>"; };
+		22735B141E704FE0009CC5A5 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		22B6A60B1E6048C400F9B9AC /* PeripheralLetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralLetter.swift; sourceTree = "<group>"; };
 		3841542E1E4DD82300F06081 /* BluetoothConnectionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothConnectionDelegate.swift; sourceTree = "<group>"; };
 		384154301E4DD82E00F06081 /* ProgressMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressMessage.swift; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 		38DD23BD1E54959C0023F613 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		38DD23BF1E55A5EE0023F613 /* LedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LedVC.swift; sourceTree = "<group>"; };
 		38DD23C11E55DA720023F613 /* ServoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServoVC.swift; sourceTree = "<group>"; };
-		38DD23C41E55F7620023F613 /* SpeakerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerVC.swift; sourceTree = "<group>"; };
+		38DD23C41E55F7620023F613 /* BuzzerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuzzerVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +95,7 @@
 				384154561E51F7F200F06081 /* RgbVC.swift */,
 				38DD23BF1E55A5EE0023F613 /* LedVC.swift */,
 				38DD23C11E55DA720023F613 /* ServoVC.swift */,
-				38DD23C41E55F7620023F613 /* SpeakerVC.swift */,
+				38DD23C41E55F7620023F613 /* BuzzerVC.swift */,
 				22735B121E70493A009CC5A5 /* ChallengeVC.swift */,
 			);
 			name = Controller;
@@ -148,7 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				38DD23BD1E54959C0023F613 /* Font.swift */,
-				22735B141E704FE0009CC5A5 /* DefaultButtonColor.swift */,
+				22735B141E704FE0009CC5A5 /* UIColor.swift */,
 			);
 			name = Extension;
 			sourceTree = "<group>";
@@ -230,9 +230,9 @@
 				3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */,
 				38DD23BE1E54959C0023F613 /* Font.swift in Sources */,
 				3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */,
-				22735B151E704FE0009CC5A5 /* DefaultButtonColor.swift in Sources */,
+				22735B151E704FE0009CC5A5 /* UIColor.swift in Sources */,
 				384154571E51F7F200F06081 /* RgbVC.swift in Sources */,
-				38DD23C51E55F7620023F613 /* SpeakerVC.swift in Sources */,
+				38DD23C51E55F7620023F613 /* BuzzerVC.swift in Sources */,
 				38DD23C21E55DA720023F613 /* ServoVC.swift in Sources */,
 				38DD23C01E55A5EE0023F613 /* LedVC.swift in Sources */,
 				388699931E4DD008006BC37E /* ScanVC.swift in Sources */,

@@ -4,7 +4,7 @@
 #include "ServoMotor.h"
 #include <SoftwareSerial.h>
 
-//Instance variables
+//Instance variables with the pin numbers as parameters
 SoftwareSerial bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(10)
 Led led1(5);
 Led led2(6);
@@ -22,7 +22,6 @@ void setup()  {
 }
 
 void loop() {
-  
   if (bluetooth.available() > 0) {
     char input = bluetooth.read(); 
     char nextChar;
@@ -41,16 +40,25 @@ void loop() {
       rgbLed.getAndSetColor(nextChar);
       break;
     case 'd':
-      buzzer.alarm(led1, led2); //Parameters: if led is on or off
+      buzzer.alarm(led1, led2);
       break;
     case 'e':
       buzzer.vaderJacob(led1, led2);
       break;
+    //Challenge II
     case 'f':
-      buzzer.yourCustomSound();
+      buzzer.customSound();
       break;
     case 'g':
       getAndSetServoAngle();
+      break;
+    //Challenge III
+    case 'h':
+      rgbLed.colorGradient();
+      break;
+    //Challenge IV
+    case 'i':
+      //Add here the call to the method for challenge IV
       break;
     case 'r':
       resetAllComponents();
@@ -87,7 +95,7 @@ void getAndSetServoAngle() {
       }
     }   
   }
-  int angle = 179 - angleStr.toInt(); //'179-' is because we need counter clockwise.
+  int angle = 179 - angleStr.toInt(); //'179-' = counter clockwise.
   servo.setAngle(angle, 50); 
 }
 

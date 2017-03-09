@@ -7,7 +7,7 @@ class Buzzer  {
   void begin();
   void alarm(Led led1, Led led2);
   void vaderJacob(Led led1, Led led2);
-  void yourCustomSound();
+  void customSound();
 
  private:
   void setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2);
@@ -77,10 +77,9 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
   setLedToPreviousState(led1, stateLed1, led2, stateLed2);
 }
 
-//CHALLENGE X: CREATE YOUR CUSTOM SOUND HERE
-void Buzzer::yourCustomSound()  {
-   //char names[] =     { 'c', 'd', 'e', 'f', '#', 'g', 'a', 'b', 'C', 'D', 'E', 'F', 'G', 'A', 'B' };
-  //int frequencies[] = {262, 294, 330, 349, 370, 392, 440, 494, 523, 587, 659, 699, 784, 880, 989};
+//Challenge II
+void Buzzer::customSound()  {
+  //Add your code here
 }
 
 void Buzzer::setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {

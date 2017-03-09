@@ -6,6 +6,7 @@ class RgbLed {
     RgbLed(int redPin, int greenPin, int bluePin);
     void begin();
     void getAndSetColor(char input);
+    void colorGradient();
     void reset();
 
   private:
@@ -67,11 +68,15 @@ void RgbLed::getAndSetColor(char input)  {
   }
 }
 
-
 void RgbLed::setColor(int redValue, int greenValue, int blueValue)  {
   analogWrite(_redPin, redValue);
   analogWrite(_greenPin, greenValue);
   analogWrite(_bluePin, blueValue);
+}
+
+//Challenge III
+void RgbLed::colorGradient()  {
+  //Add your code here
 }
 
 void RgbLed::reset() {
