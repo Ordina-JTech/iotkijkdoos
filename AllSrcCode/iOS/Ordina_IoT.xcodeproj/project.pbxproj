@@ -23,7 +23,7 @@
 		388699961E4DD008006BC37E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 388699941E4DD008006BC37E /* Main.storyboard */; };
 		388699981E4DD008006BC37E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 388699971E4DD008006BC37E /* Assets.xcassets */; };
 		3886999B1E4DD008006BC37E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 388699991E4DD008006BC37E /* LaunchScreen.storyboard */; };
-		38DD23BE1E54959C0023F613 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23BD1E54959C0023F613 /* Font.swift */; };
+		38DD23BE1E54959C0023F613 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23BD1E54959C0023F613 /* UIFont.swift */; };
 		38DD23C01E55A5EE0023F613 /* LedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23BF1E55A5EE0023F613 /* LedVC.swift */; };
 		38DD23C21E55DA720023F613 /* ServoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23C11E55DA720023F613 /* ServoVC.swift */; };
 		38DD23C51E55F7620023F613 /* BuzzerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DD23C41E55F7620023F613 /* BuzzerVC.swift */; };
@@ -50,7 +50,7 @@
 		388699971E4DD008006BC37E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3886999A1E4DD008006BC37E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3886999C1E4DD008006BC37E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		38DD23BD1E54959C0023F613 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		38DD23BD1E54959C0023F613 /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		38DD23BF1E55A5EE0023F613 /* LedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LedVC.swift; sourceTree = "<group>"; };
 		38DD23C11E55DA720023F613 /* ServoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServoVC.swift; sourceTree = "<group>"; };
 		38DD23C41E55F7620023F613 /* BuzzerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuzzerVC.swift; sourceTree = "<group>"; };
@@ -105,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				384154331E4DD84200F06081 /* MBProgressHUD.h */,
+				384154321E4DD84100F06081 /* Ordina_IoT-Bridging-Header.h */,
 				384154341E4DD84200F06081 /* MBProgressHUD.m */,
 				384154301E4DD82E00F06081 /* ProgressMessage.swift */,
 			);
@@ -130,16 +131,15 @@
 		3886998F1E4DD008006BC37E /* Ordina_IoT */ = {
 			isa = PBXGroup;
 			children = (
-				38DD23BC1E5495860023F613 /* Extension */,
 				384154391E4DF1DA00F06081 /* Model */,
 				3841543A1E4DF1E200F06081 /* View */,
 				3841543B1E4DF1EB00F06081 /* Controller */,
+				38DD23BC1E5495860023F613 /* Extension */,
 				388699901E4DD008006BC37E /* AppDelegate.swift */,
 				388699941E4DD008006BC37E /* Main.storyboard */,
 				388699991E4DD008006BC37E /* LaunchScreen.storyboard */,
 				388699971E4DD008006BC37E /* Assets.xcassets */,
 				3886999C1E4DD008006BC37E /* Info.plist */,
-				384154321E4DD84100F06081 /* Ordina_IoT-Bridging-Header.h */,
 			);
 			path = Ordina_IoT;
 			sourceTree = "<group>";
@@ -147,7 +147,7 @@
 		38DD23BC1E5495860023F613 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				38DD23BD1E54959C0023F613 /* Font.swift */,
+				38DD23BD1E54959C0023F613 /* UIFont.swift */,
 				22735B141E704FE0009CC5A5 /* UIColor.swift */,
 			);
 			name = Extension;
@@ -228,7 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3841542F1E4DD82300F06081 /* BluetoothConnectionDelegate.swift in Sources */,
-				38DD23BE1E54959C0023F613 /* Font.swift in Sources */,
+				38DD23BE1E54959C0023F613 /* UIFont.swift in Sources */,
 				3841543E1E4DF2C500F06081 /* MainVC.swift in Sources */,
 				22735B151E704FE0009CC5A5 /* UIColor.swift in Sources */,
 				384154571E51F7F200F06081 /* RgbVC.swift in Sources */,

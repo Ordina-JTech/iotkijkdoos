@@ -8,16 +8,18 @@
 
 import Foundation
 
-
-
 class ChallengeVC: NSObject {
     
-    var settingView: SettingView!
-    
-    enum ChallengeName  {
-        static let colorGradient = "Fade Color"
+    private enum ChallengeName  {
+        static let colorFade = "Fade Color"
         static let challenge4 = "Special Effect"
     }
+    
+    private enum ImageName  {
+        static let challenge = "challenge"
+    }
+    
+    private(set) var settingView: SettingView!
     
     init(frame: CGRect, headerText: String) {
         super.init()
@@ -26,14 +28,13 @@ class ChallengeVC: NSObject {
     }
     
     private func addChallengeView() {
-        //Work in Progress ImageView
-        let imageName = "workInProgress"
-        guard let workImage = UIImage(named: imageName) else   {
+        //Challenge ImageView
+        guard let challengeImage = UIImage(named: ImageName.challenge) else   {
             print("Image was not found")
             return
         }
         
-        let challengeImageView = UIImageView(image: workImage)
+        let challengeImageView = UIImageView(image: challengeImage)
         challengeImageView.translatesAutoresizingMaskIntoConstraints = false
         challengeImageView.contentMode = .scaleAspectFit
         settingView.addSubview(challengeImageView)
@@ -46,13 +47,13 @@ class ChallengeVC: NSObject {
         challengeImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //Challenge III button
-        let colorGradientButton = UIButton()
-        addButtonProperties(button: colorGradientButton, buttonTitle: ChallengeName.colorGradient)
-        colorGradientButton.addTarget(self, action: #selector(challenge3ButtonWasPressed(sender:)), for: .touchUpInside)
-        settingView.addSubview(colorGradientButton)
+        let colorFadingButton = UIButton()
+        addButtonProperties(button: colorFadingButton, buttonTitle: ChallengeName.colorFade)
+        colorFadingButton.addTarget(self, action: #selector(colorFadingButtonWasPressed(sender:)), for: .touchUpInside)
+        settingView.addSubview(colorFadingButton)
         
-        colorGradientButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 5.0).isActive = true
-        colorGradientButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        colorFadingButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 5.0).isActive = true
+        colorFadingButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //Challenge IV button
         let challenge4Button = UIButton()
@@ -60,7 +61,7 @@ class ChallengeVC: NSObject {
         challenge4Button.addTarget(self, action: #selector(challenge4ButtonWasPressed(sender:)), for: .touchUpInside)
         settingView.addSubview(challenge4Button)
         
-        challenge4Button.topAnchor.constraint(equalTo: colorGradientButton.bottomAnchor, constant: 2).isActive = true
+        challenge4Button.topAnchor.constraint(equalTo: colorFadingButton.bottomAnchor, constant: 2).isActive = true
         challenge4Button.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
     }
     
@@ -73,7 +74,7 @@ class ChallengeVC: NSObject {
         button.sizeToFit()
     }
     
-    func challenge3ButtonWasPressed(sender: UIButton)    {
+    func colorFadingButtonWasPressed(sender: UIButton)    {
         bluetooth.sendMessage(string: PeripheralLetter.fadeColor)
     }
     

@@ -18,7 +18,7 @@ class BuzzerVC: TableViewDelegate   {
         static let peripheralLetters = [PeripheralLetter.alarm, PeripheralLetter.vaderJacob, PeripheralLetter.customSound]
     }
     
-    var settingView: SettingView!
+    private(set) var settingView: SettingView!
     private var tableView: UITableView!
     private var tableViewObj: TableView!
 

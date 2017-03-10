@@ -23,10 +23,10 @@ class SettingView: UIView {
     }
     
     override func layoutSubviews() {
-        addViewComponents()
+        addHeaderComponents()
     }
     
-    private func addViewComponents()  {
+    private func addHeaderComponents()  {
         //View
         let viewPoint = CGPoint(x: 0, y: 0)
         let viewSize = CGSize(width: self.frame.width, height: self.frame.height/3)

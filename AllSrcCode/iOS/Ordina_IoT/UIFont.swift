@@ -1,5 +1,5 @@
 //
-//  Font.swift
+//  UIFont.swift
 //  Ordina_IoT
 //
 //  Created by Rik Wout on 15-02-17.

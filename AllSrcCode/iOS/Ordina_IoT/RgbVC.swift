@@ -11,6 +11,10 @@ import Foundation
 
 class RgbVC: NSObject    {
     
+    private enum ImageName {
+        static let discobal = "discobal"
+        static let slider = "rgbBalk"
+    }
     private enum ColorMessage{
         static let rgbLetter = PeripheralLetter.rgb
         static let off =    rgbLetter + "0"
@@ -23,7 +27,6 @@ class RgbVC: NSObject    {
         
         static let colors = [red, yellow, green, aqua, blue, purple]
     }
-    
     private enum Slider {
         static let beginValue: Float = 0
         static let endValue: Float = 300
@@ -36,13 +39,12 @@ class RgbVC: NSObject    {
         
         static let values = [redVal, yellowVal, greenVal, aquaVal, blueVal, purpleVal]
     }
-    
     private enum StateBtnText{
         static let on = "Turn Light On"
         static let off = "Turn Light Off"
     }
     
-    var settingView: SettingView!
+    private(set) var settingView: SettingView!
     private var rgbLabel: UILabel!
     private var rgbSlider: UISlider!
     private var imageView: UIImageView!
@@ -58,9 +60,8 @@ class RgbVC: NSObject    {
     }
     
     private func addRgbView()    {
-        //DiscoBall ImageView
-        var imageName = "discoBall_transparant"
-        guard let discoImage = UIImage(named: imageName) else   {
+        //Discobal ImageView
+        guard let discoImage = UIImage(named: ImageName.discobal) else   {
             print("Image was not found")
             return
         }
@@ -78,8 +79,7 @@ class RgbVC: NSObject    {
         discoImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //RGB Led ImageView
-        imageName = "rgbBalk"
-        guard let rgbImage = UIImage(named: imageName) else  {
+        guard let rgbImage = UIImage(named: ImageName.slider) else  {
             print("Image was not found")
             return
         }

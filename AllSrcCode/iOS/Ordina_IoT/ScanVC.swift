@@ -19,6 +19,13 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private var refreshControl: UIRefreshControl!
     private var scannedDevices = [(peripheral: CBPeripheral, RSSI: Float)]()
     private var isFirstChar = true
+    private var isFirstScan = true
+    
+    private var executeForeGroundRefresh: Bool     {
+        return !bluetooth.isReady &&
+               !isFirstScan &&
+               bluetooth.manager.state == .poweredOn
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,21 +37,28 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: Notification.Name("applicationDidBecomeActive"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: Notification.Name("applicationWillEnterForeground"), object: nil)
         
         bluetooth = BluetoothConnection(delegate: self)
     }
     
-    
-//METHODS ScanVC
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setPortraitOrientation()
+    }
     
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
-        if !bluetooth.manager.isScanning{
+        if bluetooth.manager.state == .poweredOn && !bluetooth.manager.isScanning{
             refreshAndScanDevices()
+        }
+        else if bluetooth.manager.state == .poweredOff  {
+            refreshControl.endRefreshing()
+            ProgressMessage.poweredOff.show(view: self.view)
         }
     }
     
     func scanTimeOut()  {
+        guard bluetooth.manager.state == .poweredOn else {return}
         bluetooth.stopScanning()
         refreshControl.endRefreshing()
         refreshBtn.isEnabled = true
@@ -56,8 +70,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     func refreshAndScanDevices()  {
         scannedDevices = []
-        tableViewObj.reloadTableViewData(data: [])
-        tableView.reloadData()
+        emptyTableView()
         startRefreshControl()
         refreshBtn.isEnabled = false
         bluetooth.startScanning()
@@ -74,8 +87,21 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         UIDevice.current.setValue(value, forKey: "orientation")
     }
     
-    func applicationDidBecomeActive()   {
+    func applicationWillEnterForeground()   {
+        if bluetooth.manager.state == .poweredOff   {
+            ProgressMessage.poweredOff.show(view: self.view)
+        }
+        guard executeForeGroundRefresh else {return}
         refreshAndScanDevices()
+    }
+    
+    private func emptyTableView()   {
+        tableViewObj.reloadTableViewData(data: [])
+        tableView.reloadData()
+        
+        if refreshControl.isRefreshing  {
+            refreshControl.endRefreshing()
+        }
     }
     
     
@@ -93,10 +119,13 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         case .unauthorized:
             ProgressMessage.unauthorized.show(view: self.view)
         case .poweredOff:
+            emptyTableView()
             ProgressMessage.poweredOff.show(view: self.view)
             refreshBtn.isEnabled = false
         case .poweredOn:
+            guard !bluetooth.manager.isScanning else {return}
             refreshAndScanDevices()
+            isFirstScan = false
             Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
     }
@@ -107,7 +136,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
                 return
             }
         }
-        
         let theRSSI = RSSI?.floatValue ?? 0.0
         scannedDevices.append(peripheral: peripheral, RSSI: theRSSI)
         scannedDevices.sort {$0.RSSI < $1.RSSI }

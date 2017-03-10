@@ -10,7 +10,11 @@ import Foundation
 
 class ServoVC: NSObject {
     
-    var settingView: SettingView!
+    private enum ImageName  {
+        static let tv = "Tv"
+    }
+    
+    private(set) var settingView: SettingView!
     private var slider: UISlider!
     private var previousValue: Int = 0
     private var angleLabel: UILabel!
@@ -24,9 +28,7 @@ class ServoVC: NSObject {
     
     private func addServoView() {
         //TV Image
-        let imageName = "Tv"
-    
-        guard let image = UIImage(named: imageName) else    {
+        guard let image = UIImage(named: ImageName.tv) else    {
             print("Image was not found")
             return
         }
@@ -84,7 +86,6 @@ class ServoVC: NSObject {
             if sliderValue == 180   {
                 sliderValue -= 1
             }
-            
             let message = PeripheralLetter.servo + String(sliderValue) + "\n"
             bluetooth.sendMessage(string: message)
         }

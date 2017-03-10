@@ -11,9 +11,18 @@ import Foundation
 
 class LedVC: NSObject   {
     
-    var settingView: SettingView!
+    private enum ImageName  {
+        static let lamp = "lamp"
+    }
+    private enum ButtonState    {
+        static let on = "1"
+        static let off = "0"
+    }
+    
+    private(set) var settingView: SettingView!
     private var switchBtn: UISwitch!
     private var ledLetter: String!
+    private var buttonStateLetter = ButtonState.off
 
     init(frame: CGRect, headerText: String, ledLetter: String) {
         super.init()
@@ -24,9 +33,7 @@ class LedVC: NSObject   {
     
     private func addLedView()   {
         //ImageView
-        let imageName = "lamp_transparant"
-        
-        guard let image = UIImage(named: imageName) else    {
+        guard let image = UIImage(named: ImageName.lamp) else    {
             print("Image was not found")
             return
         }
@@ -43,7 +50,7 @@ class LedVC: NSObject   {
         imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
 
-        //Switch
+        //Switch Button
         switchBtn = UISwitch()
         switchBtn.translatesAutoresizingMaskIntoConstraints = false
         switchBtn.thumbTintColor = UIColor.lightGray
@@ -59,17 +66,15 @@ class LedVC: NSObject   {
     }
     
     func switchStateDidChange() {
-        var status = ""
-        
         if switchBtn.isOn {
-            status = "1"
+            buttonStateLetter = ButtonState.on
         }
         else {
-            status = "0"
+            buttonStateLetter = ButtonState.off
         }
         
         if bluetooth.isReady   {
-            let msg = ledLetter + status
+            let msg = ledLetter + buttonStateLetter
             bluetooth.sendMessage(string: msg)
         }
     }
