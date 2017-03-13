@@ -10,6 +10,10 @@ import UIKit
 
 class SettingView: UIView {
 
+    private enum ImageName {
+        static let ordina = "ordinaLogo"
+    }
+    
     private var headerText: String!
     
     required init?(coder aDecoder: NSCoder) {
@@ -48,9 +52,7 @@ class SettingView: UIView {
         titleLabel.leftAnchor.constraint(equalTo: titleView.leftAnchor, constant: 5.0).isActive = true
 
         //ImageView
-        let imageName = "roundOrdinaLogo"
-        
-        guard let ordinaLogo = UIImage(named: imageName)    else {
+        guard let ordinaLogo = UIImage(named: ImageName.ordina)    else {
             print("Image was not found")
             return
         }

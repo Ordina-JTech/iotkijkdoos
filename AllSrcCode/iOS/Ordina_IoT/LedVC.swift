@@ -72,10 +72,7 @@ class LedVC: NSObject   {
         else {
             buttonStateLetter = ButtonState.off
         }
-        
-        if bluetooth.isReady   {
-            let msg = ledLetter + buttonStateLetter
-            bluetooth.sendMessage(string: msg)
-        }
+        let msg = ledLetter + buttonStateLetter
+        bluetooth.sendMessage(string: msg)
     }
 }

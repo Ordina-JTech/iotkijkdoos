@@ -21,10 +21,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private var isFirstChar = true
     private var isFirstScan = true
     
-    private var executeForeGroundRefresh: Bool     {
+    private var isReadyToRefresh: Bool     {
         return !bluetooth.isReady &&
                !isFirstScan &&
-               bluetooth.manager.state == .poweredOn
+               bluetooth.manager.state == .poweredOn &&
+               !bluetooth.manager.isScanning
     }
 
     override func viewDidLoad() {
@@ -91,7 +92,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         if bluetooth.manager.state == .poweredOff   {
             ProgressMessage.poweredOff.show(view: self.view)
         }
-        guard executeForeGroundRefresh else {return}
+        guard isReadyToRefresh else {return}
         refreshAndScanDevices()
     }
     
