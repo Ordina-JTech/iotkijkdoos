@@ -190,10 +190,10 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         
         //Prevent user tapping multiple times
         tableView.isUserInteractionEnabled = false
-        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(ScanVC.enableUserInteraction), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(ScanVC.enableTableViewUserInteraction), userInfo: nil, repeats: false)
     }
     
-    func enableUserInteraction()    {
+    func enableTableViewUserInteraction()    {
         tableView.isUserInteractionEnabled = true
     }
 
