@@ -62,13 +62,20 @@ class MainVC: UIViewController{
         super.viewDidLoad()
         let value = UIInterfaceOrientation.landscapeLeft.rawValue
         UIDevice.current.setValue(value, forKey: "orientation")
-        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDidDisconnect), name: Notification.Name("disconnected"), object: nil)
         addImageTapGestures()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         addTransparantView()
         createAndAddSettingViews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDidDisconnect), name: Notification.Name("disconnected"), object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("disconnected"), object: nil)
     }
     
     private func createAndAddSettingViews()   {
@@ -163,5 +170,13 @@ class MainVC: UIViewController{
     
     @IBAction func disconnectWasPressed(_ sender: Any) {
         bluetooth.sendMessage(string: PeripheralLetter.reset)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "mainToScan" {
+            if let scanVC = segue.destination as? ScanVC    {
+               scanVC.setPortraitOrientation()
+            }
+        }
     }
 }

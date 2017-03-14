@@ -24,8 +24,8 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private var isReadyToRefresh: Bool     {
         return !bluetooth.isReady &&
                !isFirstScan &&
-               bluetooth.manager.state == .poweredOn &&
-               !bluetooth.manager.isScanning
+               !bluetooth.manager.isScanning &&
+               bluetooth.manager.state == .poweredOn
     }
 
     override func viewDidLoad() {
@@ -38,15 +38,17 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         refreshControl.addTarget(self, action: #selector(swipeToRefresh(_:)), for: UIControlEvents.valueChanged)
         tableView.addSubview(refreshControl)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: Notification.Name("applicationWillEnterForeground"), object: nil)
-        
         bluetooth = BluetoothConnection(delegate: self)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setPortraitOrientation()
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: Notification.Name("applicationWillEnterForeground"), object: nil)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("applicationWillEnterForeground"), object: nil)
+    }
+    
     
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
         if bluetooth.manager.state == .poweredOn && !bluetooth.manager.isScanning{
@@ -127,7 +129,6 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             guard !bluetooth.manager.isScanning else {return}
             refreshAndScanDevices()
             isFirstScan = false
-            Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(scanTimeOut), userInfo: nil, repeats: false)
         }
     }
     
@@ -182,11 +183,20 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
 //TableViewDelegate
     
     func userDidSelectRow(indexPath: IndexPath) {
-        bluetooth.stopScanning()
         tableView.deselectRow(at: indexPath, animated: true)
+        bluetooth.stopScanning()
         let selectedDevice = scannedDevices[(indexPath as NSIndexPath).row].peripheral
         bluetooth.manager.connect(selectedDevice, options: nil)
+        
+        //Prevent user tapping multiple times
+        tableView.isUserInteractionEnabled = false
+        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(ScanVC.enableUserInteraction), userInfo: nil, repeats: false)
     }
+    
+    func enableUserInteraction()    {
+        tableView.isUserInteractionEnabled = true
+    }
+
     
     
 //BUTTONS
