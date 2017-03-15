@@ -20,6 +20,13 @@ class MainVC: UIViewController{
         static let challenge = "Challenges"
     }
     
+    private enum Identifier {
+        static let mainToScan = "mainToScan"
+    }
+    
+    private enum NotificationName {
+        static let disconnected = "disconnected"
+    }
     @IBOutlet weak var disconnectBtn: DisconnectButton!
     @IBOutlet weak var leftLedImage: UIImageView!
     @IBOutlet weak var rightLedImage: UIImageView!
@@ -71,11 +78,11 @@ class MainVC: UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDidDisconnect), name: Notification.Name("disconnected"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(bluetoothDidDisconnect), name: Notification.Name(NotificationName.disconnected), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name("disconnected"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(NotificationName.disconnected), object: nil)
     }
     
     private func createAndAddSettingViews()   {
@@ -134,7 +141,7 @@ class MainVC: UIViewController{
     
     func userSwipedSettingView(tapGestureRecognizer: UITapGestureRecognizer)  {
         let index = tapGestureRecognizer.view!.tag
-
+        
         if viewIsActive[index]    {
             moveSettingView(view: settingViewArray[index], x: -self.view.frame.width/2, alpha: 0.0)
             viewIsActive[index] = false
@@ -161,8 +168,8 @@ class MainVC: UIViewController{
     
 //Bluetooth
     
-    func bluetoothDidDisconnect(notificaiton: Notification)    {
-        performSegue(withIdentifier: "mainToScan", sender: self)
+    func bluetoothDidDisconnect(notification: Notification)    {
+        performSegue(withIdentifier: Identifier.mainToScan, sender: self)
     }
     
     
@@ -173,7 +180,7 @@ class MainVC: UIViewController{
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "mainToScan" {
+        if segue.identifier == Identifier.mainToScan {
             if let scanVC = segue.destination as? ScanVC    {
                scanVC.setPortraitOrientation()
             }
