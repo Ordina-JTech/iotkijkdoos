@@ -9,6 +9,15 @@
 import UIKit
 import CoreBluetooth
 
+enum NotificationName {
+    static let disconnected = "disconnected"
+    static let willEnterForeground = "applicationWillEnterForeground"
+}
+enum Identifier {
+    static let scanToMain = "scanToMain"
+    static let mainToScan = "mainToScan"
+}
+
 class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -36,11 +45,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: Notification.Name("applicationWillEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground), name: Notification.Name(NotificationName.willEnterForeground), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name("applicationWillEnterForeground"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name(NotificationName.willEnterForeground), object: nil)
     }
     
     func setPortraitOrientation()   {
@@ -155,7 +164,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
             ProgressMessage.disconnected.show(view: self.view)
             checkBluetoothState()
         }
-        NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name(NotificationName.disconnected), object: nil)
     }
     
     func bluetoothDidReceiveString(_ message: String) {
@@ -163,7 +172,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         let messages = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
         if messages[0] == PeripheralLetter.response && isViewVisible    {
-            performSegue(withIdentifier: "scanToMain", sender: self)
+            performSegue(withIdentifier: Identifier.scanToMain, sender: self)
         }
         else if messages[0] == PeripheralLetter.response  {
             bluetooth.manager.cancelPeripheralConnection(bluetooth.connectedPeripheral!)

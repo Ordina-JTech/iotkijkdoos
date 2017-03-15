@@ -20,13 +20,6 @@ class MainVC: UIViewController{
         static let challenge = "Challenges"
     }
     
-    private enum Identifier {
-        static let mainToScan = "mainToScan"
-    }
-    
-    private enum NotificationName {
-        static let disconnected = "disconnected"
-    }
     @IBOutlet weak var disconnectBtn: DisconnectButton!
     @IBOutlet weak var leftLedImage: UIImageView!
     @IBOutlet weak var rightLedImage: UIImageView!
