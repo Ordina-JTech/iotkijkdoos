@@ -9,7 +9,6 @@
 import UIKit
 import CoreBluetooth
 
-
 class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
@@ -18,16 +17,11 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private var tableViewObj: TableView!
     private var refreshControl: UIRefreshControl!
     private var scannedDevices = [(peripheral: CBPeripheral, RSSI: Float)]()
-    private var isFirstChar = true
-    private var isFirstScan = true
-    
-    private var isReadyToRefresh: Bool     {
-        return !bluetooth.isReady &&
-               !isFirstScan &&
-               !bluetooth.manager.isScanning &&
-               bluetooth.manager.state == .poweredOn
+    private var isViewVisible: Bool {
+        return self.isViewLoaded &&
+               self.view.window != nil
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableViewObj = TableView(delegate: self, data: [])
@@ -49,19 +43,19 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         NotificationCenter.default.removeObserver(self, name: Notification.Name("applicationWillEnterForeground"), object: nil)
     }
     
+    func setPortraitOrientation()   {
+        let value = UIInterfaceOrientation.portrait.rawValue
+        UIDevice.current.setValue(value, forKey: "orientation")
+    }
     
     func swipeToRefresh(_ refreshControl: UIRefreshControl) {
-        if bluetooth.manager.state == .poweredOn && !bluetooth.manager.isScanning{
-            refreshAndScanDevices()
-        }
-        else if bluetooth.manager.state == .poweredOff  {
+        if bluetooth.manager.state != .poweredOn    {
             refreshControl.endRefreshing()
-            ProgressMessage.poweredOff.show(view: self.view)
         }
+        checkBluetoothState()
     }
     
     func scanTimeOut()  {
-        guard bluetooth.manager.state == .poweredOn else {return}
         bluetooth.stopScanning()
         refreshControl.endRefreshing()
         refreshBtn.isEnabled = true
@@ -71,47 +65,37 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         }
     }
     
-    func refreshAndScanDevices()  {
-        scannedDevices = []
+    private func refreshAndScanDevices()  {
         emptyTableView()
         startRefreshControl()
-        refreshBtn.isEnabled = false
         bluetooth.startScanning()
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ScanVC.scanTimeOut), userInfo: nil, repeats: false)
     }
     
     private func startRefreshControl()  {
-        tableView.setContentOffset(CGPoint(x: 0, y: -25), animated: true)
-        refreshControl.beginRefreshing()
-    }
-    
-    func setPortraitOrientation()   {
-        let value = UIInterfaceOrientation.portrait.rawValue
-        UIDevice.current.setValue(value, forKey: "orientation")
+        if !refreshControl.isRefreshing {
+            tableView.setContentOffset(CGPoint(x: 0, y: -25), animated: true)
+            refreshControl.beginRefreshing()
+        }
     }
     
     func applicationWillEnterForeground()   {
-        if bluetooth.manager.state == .poweredOff   {
-            ProgressMessage.poweredOff.show(view: self.view)
-        }
-        guard isReadyToRefresh else {return}
-        refreshAndScanDevices()
+        checkBluetoothState()
     }
     
     private func emptyTableView()   {
+        scannedDevices = []
+        refreshBtn.isEnabled = false
         tableViewObj.reloadTableViewData(data: [])
         tableView.reloadData()
         
-        if refreshControl.isRefreshing  {
+        if refreshControl.isRefreshing  {   //For state == .poweredOff
             refreshControl.endRefreshing()
         }
     }
     
-    
-//CB CENTRALMANAGER METHODS
-    
-    func bluetoothDidChangeState(_ central: CBCentralManager) {
-        switch central.state    {
+    private func checkBluetoothState()  {
+        switch bluetooth.manager.state  {
         
         case .unknown:
             ProgressMessage.unknown.show(view: self.view)
@@ -124,12 +108,18 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         case .poweredOff:
             emptyTableView()
             ProgressMessage.poweredOff.show(view: self.view)
-            refreshBtn.isEnabled = false
         case .poweredOn:
             guard !bluetooth.manager.isScanning else {return}
+            ProgressMessage.hideActiveMessage(view: self.view)
             refreshAndScanDevices()
-            isFirstScan = false
         }
+    }
+  
+    
+//CB CENTRALMANAGER METHODS
+    
+    func bluetoothDidChangeState(_ central: CBCentralManager) {
+        checkBluetoothState()
     }
     
     func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
@@ -156,13 +146,15 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     func bluetoothDidFailToConnect(_ peripheral: CBPeripheral, error: NSError?) {
-        refreshBtn.isEnabled = true
         ProgressMessage.failedToConnect.show(view: self.view)
+        checkBluetoothState()
     }
     
     func bluetoothDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        refreshBtn.isEnabled = true
-        ProgressMessage.disconnected.show(view: self.view)
+        if isViewVisible    {
+            ProgressMessage.disconnected.show(view: self.view)
+            checkBluetoothState()
+        }
         NotificationCenter.default.post(name: Notification.Name("disconnected"), object: nil)
     }
     
@@ -170,9 +162,8 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         let newLineChars = NSCharacterSet.newlines
         let messages = message.components(separatedBy: newLineChars).filter{!$0.isEmpty}
         
-        if messages[0] == PeripheralLetter.response && isFirstChar    {
+        if messages[0] == PeripheralLetter.response && isViewVisible    {
             performSegue(withIdentifier: "scanToMain", sender: self)
-            isFirstChar = false
         }
         else if messages[0] == PeripheralLetter.response  {
             bluetooth.manager.cancelPeripheralConnection(bluetooth.connectedPeripheral!)
@@ -198,11 +189,10 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
 
     
-    
 //BUTTONS
     
     @IBAction func refreshButtonWasPressed(_ sender: Any) {
-        refreshAndScanDevices()
+        checkBluetoothState()
     }
 }
 

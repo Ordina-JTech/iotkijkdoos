@@ -117,6 +117,7 @@ final class BluetoothConnection: NSObject, CBCentralManagerDelegate, CBPeriphera
         manager.stopScan()
     }
     
+    
     func sendMessage(string: String)  {
         if !string.isEmpty && self.isReady {
             let data = string.data(using: String.Encoding.utf8)

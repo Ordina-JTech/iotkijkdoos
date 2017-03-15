@@ -15,6 +15,14 @@ class SettingView: UIView {
     }
     
     private var headerText: String!
+    private var fontSize: CGFloat {
+        if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad    {
+            return 35
+        }
+        else {
+            return 25
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -44,7 +52,7 @@ class SettingView: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = headerText
         titleLabel.textColor = UIColor.black
-        titleLabel.font = UIFont.avenirNext(size: 25)
+        titleLabel.font = UIFont.avenirNext(size: fontSize)
         titleLabel.sizeToFit()
         titleView.addSubview(titleLabel)
         

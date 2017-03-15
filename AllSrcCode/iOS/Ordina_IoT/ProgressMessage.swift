@@ -21,6 +21,11 @@ enum ProgressMessage{
     case unknown
     case unauthorized
     
+    
+    static func hideActiveMessage(view: UIView) {
+        MBProgressHUD.hide(for: view, animated: true)
+    }
+
     func show(view: UIView)   {
         MBProgressHUD.hide(for: view, animated: true)
         
@@ -39,26 +44,26 @@ enum ProgressMessage{
             progressHud.label.text = "Scanning..."
         case .noDevicesDetected:
             progressHud.label.text = "No devices detected!"
-            progressHud.detailsLabel.text = "Make sure your bluetooth device is powered on."
+            progressHud.detailsLabel.text = "Make sure your bluetooth device is powered on"
         case .connected:
             progressHud.label.text = "Connected to: " + (bluetooth.connectedPeripheral?.name)!
         case .disconnected:
             progressHud.label.text = "Disconnected!"
         case .failedToConnect:
             progressHud.label.text = "Connection failed!"
-            progressHud.detailsLabel.text = "Please try again."
+            progressHud.detailsLabel.text = "Please try again"
         case .poweredOff:
-            progressHud.label.text = "Your bluetooth has turned off!"
+            progressHud.label.text = "Your bluetooth is turned off!"
         case .notConnected:
             progressHud.label.text = "Not connected!"
         case .unsupported:
-            progressHud.label.text = "Your device doesn't support Bluetooth Low Energy"
+            progressHud.label.text = "Bluetooth Low Energy is not supported"
         case .resetting:
-            progressHud.label.text = "Bluetooth is resetting. Please wait a second"
+            progressHud.label.text = "Bluetooth is resetting"
         case .unknown:
             progressHud.label.text = "An unknown error occurred"
         case .unauthorized:
-            progressHud.label.text = "This application has no permission to use Bluetooth"
+            progressHud.label.text = "No permission to use Bluetooth"
         }
     }
 }
