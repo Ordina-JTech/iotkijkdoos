@@ -134,6 +134,14 @@ public class ViewBoxRemoteController {
         sendMessage(song.getMessage());
     }
 
+    public void rotateTelevision(int degree) {
+        if (degree < 0 || degree > 179) {
+            throw new IllegalArgumentException("Accepted values are between 0 and 179");
+        }
+
+        sendMessage("g" + degree + "\n");
+    }
+
     public Parcelable wrapInParcelable() {
         return Parcels.wrap(this);
     }

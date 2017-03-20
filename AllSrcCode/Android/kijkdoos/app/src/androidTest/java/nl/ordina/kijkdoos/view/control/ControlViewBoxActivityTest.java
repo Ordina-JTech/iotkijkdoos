@@ -22,6 +22,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -30,8 +31,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
@@ -66,6 +67,14 @@ public class ControlViewBoxActivityTest {
     };
 
     @Test
+    public void disconnectTheViewBoxInOnPause() throws Exception {
+        activityRule.getActivity().finish();
+        getInstrumentation().waitForIdleSync();
+
+        verify(mockedViewBoxRemoteController).disconnect();
+    }
+
+    @Test
     public void testTheControlDrawerForAllControls() throws Exception {
         onView(withId(R.id.ivLeftLamp)).perform(click());
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
@@ -83,6 +92,11 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
 
         onView(withId(R.id.ivGuitar)).perform(click());
+        onView(withId(R.id.component_controller)).check(matches(isOpen()));
+        pressBack();
+        onView(withId(R.id.component_controller)).check(matches(isClosed()));
+
+        onView(withId(R.id.ivTelevision)).perform(click());
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
@@ -135,10 +149,11 @@ public class ControlViewBoxActivityTest {
     }
 
     @Test
-    public void disconnectTheViewBoxInOnPause() throws Exception {
-        activityRule.getActivity().finish();
-        getInstrumentation().waitForIdleSync();
+    public void testRotatingTheTelevision() throws Exception {
+        onView(withId(R.id.ivTelevision)).perform(click());
+        onView(withId(R.id.rotationSlider)).perform(swipeRight());
+        onView(withId(R.id.rotationSlider)).perform(swipeLeft());
 
-        verify(mockedViewBoxRemoteController).disconnect();
+        verify(mockedViewBoxRemoteController, atLeastOnce()).rotateTelevision(anyInt());
     }
 }

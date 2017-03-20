@@ -40,7 +40,9 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
         }),
-        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song)song));
+        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song)song)), //
+        TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
+                (controller, degree) -> controller.rotateTelevision((int)degree)) ;
 
         private final int viewReference;
         @Getter
@@ -118,7 +120,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar, R.id.ivTelevision})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 
