@@ -1,5 +1,6 @@
 package nl.ordina.kijkdoos.view.control;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,13 +32,27 @@ public class ControlTelevisionFragment extends AbstractControlFragment implement
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final int sliderValue = getControlValueStore().getInt(ControlTelevisionFragment.class.getSimpleName(), 0);
+        rotationSlider.setProgress(sliderValue);
+    }
+
+    @Override
     protected int getControlLayoutId() {
         return R.layout.control_television_component;
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        getComponentChangedListener().onComponentChanged(getComponent(), progress);
+        if (progress % 5 == 0 || progress % 8 == 0) {
+            getComponentChangedListener().onComponentChanged(getComponent(), progress);
+        }
+
+        final SharedPreferences.Editor editor = getControlValueStore().edit();
+        editor.putInt(ControlTelevisionFragment.class.getSimpleName(), progress);
+        editor.apply();
     }
 
     @Override

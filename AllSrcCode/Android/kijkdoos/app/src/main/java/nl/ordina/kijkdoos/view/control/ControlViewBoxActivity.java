@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,6 +34,8 @@ import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMP
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener {
 
+    public static final String CONTROL_VALUE_STORE = "CONTROL_VALUE_STORE";
+
     enum Component {
         LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
         LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
@@ -40,9 +43,9 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
         }),
-        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song)song)), //
+        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
         TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
-                (controller, degree) -> controller.rotateTelevision((int)degree)) ;
+                (controller, degree) -> controller.rotateTelevision((int) degree));
 
         private final int viewReference;
         @Getter
@@ -84,7 +87,8 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     @BindView(R.id.ivLeftLamp)
     public ImageView ivLeftLamp;
 
-    @Getter(AccessLevel.PACKAGE) @VisibleForTesting
+    @Getter(AccessLevel.PACKAGE)
+    @VisibleForTesting
     private ViewBoxRemoteController viewBoxRemoteController;
 
     @Override
