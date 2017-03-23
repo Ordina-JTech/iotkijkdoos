@@ -3,10 +3,16 @@ package nl.ordina.kijkdoos.view.control;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import com.triggertrap.seekarc.SeekArc;
+
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +33,7 @@ import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -151,9 +158,39 @@ public class ControlViewBoxActivityTest {
     @Test
     public void testRotatingTheTelevision() throws Exception {
         onView(withId(R.id.ivTelevision)).perform(click());
-        onView(withId(R.id.rotationSlider)).perform(swipeRight());
-        onView(withId(R.id.rotationSlider)).perform(swipeLeft());
+        onView(withId(R.id.rotationSlider)).perform(setProgress(90));
 
         verify(mockedViewBoxRemoteController, atLeastOnce()).rotateTelevision(anyInt());
+    }
+
+    private static ViewAction setProgress(int progress) {
+        return new MyCustomViewAction(progress);
+    }
+
+    private static class MyCustomViewAction implements ViewAction {
+
+        private final int progress;
+
+        public MyCustomViewAction(int progress) {
+            this.progress = progress;
+        }
+
+        @Override
+        public Matcher<View> getConstraints(){
+            return isAssignableFrom(SeekArc.class);
+        }
+
+
+        @Override
+        public String getDescription(){
+            return "whatever";
+        }
+
+        @Override
+        public void perform(UiController uiController, View view){
+            SeekArc yourCustomView = (SeekArc) view;
+            yourCustomView.setProgress(progress);
+        }
+
     }
 }

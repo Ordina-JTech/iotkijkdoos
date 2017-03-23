@@ -11,7 +11,7 @@ public class ControlLightFragment extends AbstractControlFragment {
 
     @Override
     protected int getControlLayoutId() {
-        return R.layout.control_ligt_component;
+        return R.layout.control_light_component;
     }
 
     @OnCheckedChanged(R.id.switchLight)
