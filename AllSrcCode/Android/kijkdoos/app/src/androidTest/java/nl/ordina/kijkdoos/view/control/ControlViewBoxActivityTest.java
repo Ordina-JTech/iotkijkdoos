@@ -28,7 +28,6 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -164,14 +163,14 @@ public class ControlViewBoxActivityTest {
     }
 
     private static ViewAction setProgress(int progress) {
-        return new MyCustomViewAction(progress);
+        return new SetProgressOnSeekBarAction(progress);
     }
 
-    private static class MyCustomViewAction implements ViewAction {
+    private static class SetProgressOnSeekBarAction implements ViewAction {
 
         private final int progress;
 
-        public MyCustomViewAction(int progress) {
+        public SetProgressOnSeekBarAction(int progress) {
             this.progress = progress;
         }
 
