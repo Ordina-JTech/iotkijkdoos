@@ -57,7 +57,7 @@ void loop() {
       break;
     //Challenge III
     case 'h':
-      rgbLed.fadeColor();
+      rgbLed.showGradient();
       break;
     //Challenge IV
     case 'i':

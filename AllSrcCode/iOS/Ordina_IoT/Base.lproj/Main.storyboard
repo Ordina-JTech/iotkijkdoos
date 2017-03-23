@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4DP-KR-5NR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
@@ -122,13 +122,13 @@
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speaker" translatesAutoresizingMaskIntoConstraints="NO" id="62n-x7-tqg">
-                                <rect key="frame" x="565.5" y="77.5" width="75" height="64.5"/>
+                                <rect key="frame" x="565.5" y="77.5" width="75" height="63.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="62n-x7-tqg" secondAttribute="height" multiplier="85:72" id="fMh-Wi-wQz"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="challenge" translatesAutoresizingMaskIntoConstraints="NO" id="lwa-fh-RGY">
-                                <rect key="frame" x="2.5" y="67.5" width="125" height="88.5"/>
+                                <rect key="frame" x="1.5" y="67.5" width="125" height="88.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="lwa-fh-RGY" secondAttribute="height" multiplier="138:97" id="bsB-9l-WT7"/>
                                 </constraints>

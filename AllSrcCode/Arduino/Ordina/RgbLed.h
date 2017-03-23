@@ -8,14 +8,24 @@ class RgbLed {
     void begin();
     char getColorChar(SoftwareSerial &bluetooth);
     void setColor(char input);
-    void fadeColor();
+    void showGradient();
     void reset();
 
   private:
      int _redPin;
      int _greenPin;
-     int _bluePin; 
-     void setColor(int redValue, int greenValue, int blueValue);
+     int _bluePin;
+
+     int off[3] = {0, 0, 0};
+     int red[3] = {255, 0, 0};
+     int yellow[3] = {255, 255, 0};
+     int green[3] = {0, 255, 0}; 
+     int aqua[3] = {0, 255, 255}; 
+     int blue[3] = {0, 0, 255}; 
+     int purple[3] = {255, 0, 255}; 
+     
+     int allColors[6][3] = {{red}, {yellow}, {green}, {aqua}, {blue}, {purple}};
+     void writeColor(int rgbValues[3]);
 };
 
 RgbLed::RgbLed(int redPin, int greenPin, int bluePin) {
@@ -47,42 +57,48 @@ void RgbLed::setColor(char input)  {
   switch (input)  { 
   
   case '0':
-    setColor(0,0,0);    //Off
+    writeColor(off);    
     break;
   case '1':
-  setColor(255,0,0);    //Red
-  break;
+    writeColor(red);    
+    break;
   case '2':
-  setColor(255,255,0);  //Yellow
-  break;
+    writeColor(yellow);  
+    break;
   case '3':
-  setColor(0,255,0);    //Green
-  break;
+    writeColor(green);    
+    break;
   case '4':
-  setColor(0,255,255);  //Aqua
-  break;
+    writeColor(aqua);  
+    break;
   case '5':
-  setColor(0,0,255);    //Blue
-  break;
+    writeColor(blue);    
+    break;
   case '6':
-  setColor(255,0,255);  //Purple
-  break;
+    writeColor(purple);  
+    break;    
+  }
+
+  int index = input - '0';
+
+  for (int i = 0; i < 3; i++) {
+    Serial.println(allColors[index][i]);
   }
 }
 
-void RgbLed::setColor(int redValue, int greenValue, int blueValue)  {
-  analogWrite(_redPin, redValue);
-  analogWrite(_greenPin, greenValue);
-  analogWrite(_bluePin, blueValue);
+void RgbLed::writeColor(int rgbValue[3])  {
+  analogWrite(_redPin, rgbValue[0]);
+  analogWrite(_greenPin, rgbValue[1]);
+  analogWrite(_bluePin, rgbValue[2]);
 }
 
 //Challenge III
-void RgbLed::fadeColor()  {
+void RgbLed::showGradient()  {
   //Add your code here
 }
 
 void RgbLed::reset() {
-  setColor(0, 0, 0);
+  writeColor(off);
 }
 
 
