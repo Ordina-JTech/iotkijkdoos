@@ -1,6 +1,7 @@
 package nl.ordina.kijkdoos.view.control;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -34,6 +35,9 @@ public abstract class AbstractControlFragment extends Fragment {
     @BindView(R.id.tvTitle)
     public TextView tvTitle;
 
+    @Getter
+    private SharedPreferences controlValueStore;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,6 +69,13 @@ public abstract class AbstractControlFragment extends Fragment {
 
     protected ViewStub getViewStub(View inflatedView) {
         return ButterKnife.findById(inflatedView, R.id.centeredControlStub);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        controlValueStore = getActivity().getSharedPreferences(ControlViewBoxActivity.CONTROL_VALUE_STORE, Context.MODE_PRIVATE);
     }
 
     @StringRes

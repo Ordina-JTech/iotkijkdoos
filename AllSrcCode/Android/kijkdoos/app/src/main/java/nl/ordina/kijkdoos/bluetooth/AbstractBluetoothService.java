@@ -1,16 +1,11 @@
 package nl.ordina.kijkdoos.bluetooth;
 
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
 import lombok.Getter;
-
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by coenhoutman on 15-2-2017.
