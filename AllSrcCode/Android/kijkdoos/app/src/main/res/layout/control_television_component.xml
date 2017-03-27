@@ -20,6 +20,7 @@
         seekarc:thumb="@drawable/seek_arc_control_selector"
         seekarc:max="179"
         seekarc:roundEdges="true"
+        seekarc:touchInside="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
