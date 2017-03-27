@@ -114,12 +114,17 @@ public class ViewBoxRemoteController {
         }
     }
 
-    public void toggleLeftLamp() {
-        sendMessage("a");
+    public void switchLeftLamp(boolean status) {
+        sendMessage("a" + parseBoolean(status));
     }
 
-    public void toggleRightLamp() {
-        sendMessage("b");
+
+    public void toggleRightLamp(boolean status) {
+        sendMessage("b" + parseBoolean(status));
+    }
+
+    private int parseBoolean(boolean value) {
+        return value ? 1 : 0;
     }
 
     public void setDiscoBallColor(ControlDiscoBallFragment.DiscoBallColor color) {

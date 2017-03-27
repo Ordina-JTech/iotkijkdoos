@@ -39,8 +39,8 @@ import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMP
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
 
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
-        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
+        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean)lightStatus)), //
+        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean)lightStatus)), //
         DISCO_BALL(R.id.ivDiscoBall, R.string.controlDiscoBallTitle, ControlDiscoBallFragment.class, (controller, color) -> {
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
@@ -180,7 +180,6 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         return null;
     }
-
 
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {

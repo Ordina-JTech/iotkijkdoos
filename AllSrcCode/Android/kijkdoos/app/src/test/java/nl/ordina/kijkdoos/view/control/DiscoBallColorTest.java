@@ -1,7 +1,5 @@
 package nl.ordina.kijkdoos.view.control;
 
-import android.graphics.Color;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,7 +7,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment.*;
+import static nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment.DiscoBallColor;
 import static org.junit.Assert.assertEquals;
 
 /**

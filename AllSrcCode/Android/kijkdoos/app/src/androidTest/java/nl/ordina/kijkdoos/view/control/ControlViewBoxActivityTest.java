@@ -114,7 +114,7 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
                 .perform(click()).check(matches(isChecked()));
 
-        verify(mockedViewBoxRemoteController).toggleLeftLamp();
+        verify(mockedViewBoxRemoteController).switchLeftLamp(true);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
                 .perform(click()).check(matches(isChecked()));
 
-        verify(mockedViewBoxRemoteController).toggleRightLamp();
+        verify(mockedViewBoxRemoteController).toggleRightLamp(true);
     }
 
     @Test

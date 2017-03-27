@@ -15,9 +15,9 @@ public class ControlLightFragment extends AbstractControlFragment {
     }
 
     @OnCheckedChanged(R.id.switchLight)
-    public void onSwitchChanged() {
+    public void onSwitchChanged(boolean switchStatus) {
         if (getComponentChangedListener() != null) {
-            getComponentChangedListener().onComponentChanged(getComponent(), null);
+            getComponentChangedListener().onComponentChanged(getComponent(), switchStatus);
         }
     }
 
