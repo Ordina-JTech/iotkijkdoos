@@ -6,7 +6,7 @@ class Led{
  public:
   Led(int pin); //constructor
   void begin();
-  char getLedChar(SoftwareSerial &bluetooth);
+  char getStateChar(SoftwareSerial &bluetooth);
   void setLed(char input);
   bool getState();
   int getPinNumber();
@@ -25,7 +25,7 @@ void Led::begin() {
   pinMode(_pin, OUTPUT);
 }
 
-char Led::getLedChar(SoftwareSerial &bluetooth) {
+char Led::getStateChar(SoftwareSerial &bluetooth) {
   int count = 0;
   char input = '\0';  //Empty Char
   

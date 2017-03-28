@@ -30,11 +30,11 @@ void loop() {
     
     switch (input)  {
     case 'a':
-      nextChar = led1.getLedChar(bluetooth);
+      nextChar = led1.getStateChar(bluetooth);
       led1.setLed(nextChar);
       break;
     case 'b':
-      nextChar = led2.getLedChar(bluetooth);
+      nextChar = led2.getStateChar(bluetooth);
       led2.setLed(nextChar);
       break;
     case'c':
@@ -58,7 +58,6 @@ void loop() {
     case 'h':
       rgbLed.showGradient();
       break;
-    //Challenge IV
     case 'i':
       //Add here the call to the method for challenge IV
       break;
