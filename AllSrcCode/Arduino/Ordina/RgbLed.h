@@ -96,17 +96,8 @@ void RgbLed::writeColor(int rgbValue[3])  {
 
 //Challenge III "Gradient"
 void RgbLed::showGradient()  {
-   int nColors = (sizeof(allColors)/3) / sizeof(int);
-
-   for (int i = 0; i < nColors; i++) {
-      writeColor(allColors[i]);
-      delay(500);
-   }
-   for (int i = nColors; i >= 0; i--) {
-      writeColor(allColors[i]);
-      delay(750);
-   }
-   writeColor(off);
+  int nColors = (sizeof(allColors)/3) / sizeof(int);
+  //Add your code here
 }
 
 void RgbLed::reset() {

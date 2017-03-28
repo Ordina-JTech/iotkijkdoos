@@ -57,7 +57,7 @@ enum ProgressMessage{
         case .notConnected:
             progressHud.label.text = "Not connected!"
         case .unsupported:
-            progressHud.label.text = "Bluetooth Low Energy is not supported"
+            progressHud.label.text = "Bluetooth is not supported"
         case .resetting:
             progressHud.label.text = "Bluetooth is resetting"
         case .unknown:

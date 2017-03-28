@@ -11,8 +11,8 @@ import Foundation
 class ChallengeVC: NSObject {
     
     private enum ChallengeName  {
-        static let colorFade = "Fade Color"
-        static let challenge4 = "Special Effect"
+        static let gradient = "Gradient"
+        static let specialEffect = "Special Effect"
     }
     
     private enum ImageName  {
@@ -47,22 +47,22 @@ class ChallengeVC: NSObject {
         challengeImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //Challenge III button
-        let colorFadingButton = UIButton()
-        addButtonProperties(button: colorFadingButton, buttonTitle: ChallengeName.colorFade)
-        colorFadingButton.addTarget(self, action: #selector(colorFadingButtonWasPressed(sender:)), for: .touchUpInside)
-        settingView.addSubview(colorFadingButton)
+        let gradientButton = UIButton()
+        addButtonProperties(button: gradientButton, buttonTitle: ChallengeName.gradient)
+        gradientButton.addTarget(self, action: #selector(gradientButtonWasPressed(sender:)), for: .touchUpInside)
+        settingView.addSubview(gradientButton)
         
-        colorFadingButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 5.0).isActive = true
-        colorFadingButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        gradientButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 5.0).isActive = true
+        gradientButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //Challenge IV button
-        let challenge4Button = UIButton()
-        addButtonProperties(button: challenge4Button, buttonTitle: ChallengeName.challenge4)
-        challenge4Button.addTarget(self, action: #selector(challenge4ButtonWasPressed(sender:)), for: .touchUpInside)
-        settingView.addSubview(challenge4Button)
+        let specialEffectButton = UIButton()
+        addButtonProperties(button: specialEffectButton, buttonTitle: ChallengeName.specialEffect)
+        specialEffectButton.addTarget(self, action: #selector(specialEffectButtonWasPressed(sender:)), for: .touchUpInside)
+        settingView.addSubview(specialEffectButton)
         
-        challenge4Button.topAnchor.constraint(equalTo: colorFadingButton.bottomAnchor, constant: 2).isActive = true
-        challenge4Button.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        specialEffectButton.topAnchor.constraint(equalTo: gradientButton.bottomAnchor, constant: 2).isActive = true
+        specialEffectButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
     }
     
     private func addButtonProperties(button: UIButton, buttonTitle: String)  {
@@ -74,11 +74,11 @@ class ChallengeVC: NSObject {
         button.sizeToFit()
     }
     
-    func colorFadingButtonWasPressed(sender: UIButton)    {
-        bluetooth.sendMessage(string: PeripheralLetter.fadeColor)
+    func gradientButtonWasPressed(sender: UIButton)    {
+        bluetooth.sendMessage(string: PeripheralLetter.gradient)
     }
     
-    func challenge4ButtonWasPressed(sender: UIButton)    {
-        bluetooth.sendMessage(string: PeripheralLetter.challenge4)
+    func specialEffectButtonWasPressed(sender: UIButton)    {
+        bluetooth.sendMessage(string: PeripheralLetter.specialEffect)
     }
 }
