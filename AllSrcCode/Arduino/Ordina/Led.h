@@ -27,7 +27,7 @@ void Led::begin() {
 
 char Led::getLedChar(SoftwareSerial &bluetooth) {
   int count = 0;
-  char input = '\0';
+  char input = '\0';  //Empty Char
   
   while (count == 0) {
     if (bluetooth.available() > 0) {

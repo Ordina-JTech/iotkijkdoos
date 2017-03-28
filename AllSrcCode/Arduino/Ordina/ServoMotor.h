@@ -17,6 +17,7 @@ class ServoMotor  {
 
   private:
     int _pin;
+    const int maxAngle = 179;
     Servo servo;
 };
 
@@ -36,7 +37,7 @@ int ServoMotor::getAngle(SoftwareSerial &bluetooth) {
       }
     }   
   }
-  int angle = 179 - angleStr.toInt(); //'179-' = counter clockwise.
+  int angle = maxAngle - angleStr.toInt(); //'maxAngle-angle' = counter clockwise.
   return angle;
 }
 
@@ -48,6 +49,6 @@ void ServoMotor::setAngle(int angle, int milliSec)  {
 }
 
 void ServoMotor::reset()  {
-  setAngle(179, 400);
+  setAngle(maxAngle, 400);
 }
 

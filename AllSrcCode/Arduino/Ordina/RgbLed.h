@@ -16,15 +16,15 @@ class RgbLed {
      int _greenPin;
      int _bluePin;
 
-     int off[3] = {0, 0, 0};
-     int red[3] = {255, 0, 0};
-     int yellow[3] = {255, 255, 0};
-     int green[3] = {0, 255, 0}; 
-     int aqua[3] = {0, 255, 255}; 
-     int blue[3] = {0, 0, 255}; 
-     int purple[3] = {255, 0, 255}; 
+     const int off[3] = {0, 0, 0};
+     const int red[3] = {255, 0, 0};
+     const int yellow[3] = {255, 255, 0};
+     const int green[3] = {0, 255, 0}; 
+     const int aqua[3] = {0, 255, 255}; 
+     const int blue[3] = {0, 0, 255}; 
+     const int purple[3] = {255, 0, 255}; 
+     int allColors[6][3];
      
-     int allColors[6][3] = {{red}, {yellow}, {green}, {aqua}, {blue}, {purple}};
      void writeColor(int rgbValues[3]);
 };
 
@@ -38,6 +38,15 @@ void RgbLed::begin() {
   pinMode(_redPin, OUTPUT);
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
+
+  //Create one array of all colors 
+  byte arraySize = 3 * sizeof(int);
+  memcpy(allColors[0], red, arraySize);
+  memcpy(allColors[1], yellow, arraySize);
+  memcpy(allColors[2], green, arraySize);
+  memcpy(allColors[3], aqua, arraySize);
+  memcpy(allColors[4], blue, arraySize);
+  memcpy(allColors[5], purple, arraySize);
 }
 
 char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
@@ -55,7 +64,6 @@ char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
 
 void RgbLed::setColor(char input)  { 
   switch (input)  { 
-  
   case '0':
     writeColor(off);    
     break;
@@ -78,12 +86,6 @@ void RgbLed::setColor(char input)  {
     writeColor(purple);  
     break;    
   }
-
-  int index = input - '0';
-
-  for (int i = 0; i < 3; i++) {
-    Serial.println(allColors[index][i]);
-  }
 }
 
 void RgbLed::writeColor(int rgbValue[3])  {
@@ -92,9 +94,19 @@ void RgbLed::writeColor(int rgbValue[3])  {
   analogWrite(_bluePin, rgbValue[2]);
 }
 
-//Challenge III
+//Challenge III "Gradient"
 void RgbLed::showGradient()  {
-  //Add your code here
+   int nColors = (sizeof(allColors)/3) / sizeof(int);
+
+   for (int i = 0; i < nColors; i++) {
+      writeColor(allColors[i]);
+      delay(500);
+   }
+   for (int i = nColors; i >= 0; i--) {
+      writeColor(allColors[i]);
+      delay(750);
+   }
+   writeColor(off);
 }
 
 void RgbLed::reset() {

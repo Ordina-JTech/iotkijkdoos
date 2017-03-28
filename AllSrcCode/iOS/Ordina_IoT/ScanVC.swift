@@ -132,20 +132,27 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
+
         for exisiting in scannedDevices {
             if exisiting.peripheral.identifier == peripheral.identifier {
                 return
             }
         }
+
         let theRSSI = RSSI?.floatValue ?? 0.0
         scannedDevices.append(peripheral: peripheral, RSSI: theRSSI)
         scannedDevices.sort {$0.RSSI < $1.RSSI }
         
         var deviceNames = [String]()
-        for index in 0..<scannedDevices.count{
-            deviceNames.append(scannedDevices[index].peripheral.name!)
-        }
         
+        for index in 0..<scannedDevices.count{
+            if let name = scannedDevices[index].peripheral.name {
+                deviceNames.append(name)
+            }
+            else {
+                scannedDevices.remove(at: index)
+            }
+        }
         tableViewObj.reloadTableViewData(data: deviceNames)
         tableView.reloadData()
     }

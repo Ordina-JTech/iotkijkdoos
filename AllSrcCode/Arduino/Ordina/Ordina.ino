@@ -55,7 +55,6 @@ void loop() {
       angle = servo.getAngle(bluetooth);
       servo.setAngle(angle, 50);
       break;
-    //Challenge III
     case 'h':
       rgbLed.showGradient();
       break;
