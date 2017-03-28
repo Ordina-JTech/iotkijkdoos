@@ -12,7 +12,7 @@ import Foundation
 enum PeripheralLetter   {
     static let led1             = "a"
     static let led2             = "b"
-    static let rgb              = "c"
+    static let rgbLed              = "c"
     static let alarm            = "d"
     static let vaderJacob       = "e"
     static let customSound      = "f"

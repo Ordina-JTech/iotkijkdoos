@@ -57,13 +57,13 @@ enum ProgressMessage{
         case .notConnected:
             progressHud.label.text = "Not connected!"
         case .unsupported:
-            progressHud.label.text = "Bluetooth is not supported"
+            progressHud.label.text = "Bluetooth is not supported!"
         case .resetting:
-            progressHud.label.text = "Bluetooth is resetting"
+            progressHud.label.text = "Bluetooth is resetting!"
         case .unknown:
-            progressHud.label.text = "An unknown error occurred"
+            progressHud.label.text = "An unknown error occurred!"
         case .unauthorized:
-            progressHud.label.text = "No permission to use Bluetooth"
+            progressHud.label.text = "No permission to use Bluetooth!"
         }
     }
 }

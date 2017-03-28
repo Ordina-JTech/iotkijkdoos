@@ -16,7 +16,7 @@ class RgbVC: NSObject    {
         static let slider = "rgbBalk"
     }
     private enum ColorMessage{
-        static let rgbLetter = PeripheralLetter.rgb
+        static let rgbLetter = PeripheralLetter.rgbLed
         static let off =    rgbLetter + "0"
         static let red =    rgbLetter + "1"
         static let yellow = rgbLetter + "2"
@@ -30,7 +30,7 @@ class RgbVC: NSObject    {
     private enum Slider {
         static let beginValue: Float = 0
         static let endValue: Float = 300
-        static let redVal = 70
+        static let redVal = 60
         static let yellowVal = 100
         static let greenVal = 170
         static let aquaVal = 210
