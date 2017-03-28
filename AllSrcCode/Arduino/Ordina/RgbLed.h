@@ -39,7 +39,7 @@ void RgbLed::begin() {
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
 
-  //Create one array of all colors 
+  //Create one array with all colors 
   byte arraySize = 3 * sizeof(int);
   memcpy(allColors[0], red, arraySize);
   memcpy(allColors[1], yellow, arraySize);

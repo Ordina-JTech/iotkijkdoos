@@ -19,7 +19,7 @@ class Buzzer  {
   int frequence[16] = {523, 587, 659, 523, 659, 699, 784, 784, 880, 784, 699, 659, 523, 523, 659, 523};
   int beginCouplet[4] = {0, 4, 7, 13};
   int endCouplet[4] = {4, 7, 13, 16};
-  int nSeconds[4] = {300, 300, 300, 600};
+  int secondsRest[4] = {300, 300, 300, 600};
   int nCouplets = (sizeof(endCouplet)/sizeof(int));
   int milliSec = 100;
 };
@@ -70,7 +70,7 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
             led2.setLed(on);
         }
         tone(_pin, frequence[k], milliSec);
-        delay(nSeconds[i]);
+        delay(secondsRest[i]);
       }
       delay(300);
     }

@@ -47,7 +47,6 @@ void loop() {
     case 'e':
       buzzer.vaderJacob(led1, led2);
       break;
-    //Challenge II
     case 'f':
       buzzer.customSound();
       break;
