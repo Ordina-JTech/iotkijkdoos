@@ -32,13 +32,13 @@ import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
+import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
+import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
-
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
     @Inject
     AbstractBluetoothService bluetoothService;
@@ -72,7 +72,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         if (bluetoothService.isBluetoothEnabled()) {
             bluetoothService.searchDevices(this);
         } else {
-            askUserToEnableBluetooth();
+            askUserToEnableBluetooth(this);
         }
     }
 
@@ -82,11 +82,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-    }
-
-    private void askUserToEnableBluetooth() {
-        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
     }
 
     @Override

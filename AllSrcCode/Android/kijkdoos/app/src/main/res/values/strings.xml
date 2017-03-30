@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IoT Ordina</string>
+    <string name="app_name">IoT Kijkdoos</string>
     <string name="action_settings">Settings</string>
 
     <string name="txtTBLampLeft">LAMP Left</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="BluetoothDisabledMessage">Bluetooth is uitgeschakeld</string>
-    <string name="BluetoothNeededMessage">Schakel Bluetooth in om te verbinden met de kijkdoos</string>
+    <string name="BluetoothNeededMessage">Bluetooth is nodig om de IoT Kijkdoos te kunnen bedienen</string>
+    <string name="EnableBluetooth">Bluetooth inschakelen</string>
 </resources>

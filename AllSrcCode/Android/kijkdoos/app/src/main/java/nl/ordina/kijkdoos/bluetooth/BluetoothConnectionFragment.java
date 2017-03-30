@@ -1,7 +1,6 @@
 package nl.ordina.kijkdoos.bluetooth;
 
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,8 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 
 import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
