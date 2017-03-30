@@ -3,8 +3,10 @@ package nl.ordina.kijkdoos.view.control;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,9 @@ import com.annimon.stream.function.BiConsumer;
 
 import org.parceler.Parcels;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,16 +36,18 @@ import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
-public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener {
+public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
 
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleLeftLamp()), //
-        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, value) -> controller.toggleRightLamp()), //
+        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean)lightStatus)), //
+        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean)lightStatus)), //
         DISCO_BALL(R.id.ivDiscoBall, R.string.controlDiscoBallTitle, ControlDiscoBallFragment.class, (controller, color) -> {
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
         }),
-        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song)song));
+        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
+        TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
+                (controller, degree) -> controller.rotateTelevision((int) degree));
 
         private final int viewReference;
         @Getter
@@ -82,18 +89,23 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     @BindView(R.id.ivLeftLamp)
     public ImageView ivLeftLamp;
 
-    @Getter(AccessLevel.PACKAGE) @VisibleForTesting
+    @Getter(AccessLevel.PACKAGE)
+    @VisibleForTesting
     private ViewBoxRemoteController viewBoxRemoteController;
+
+    private Map<Component, Fragment> fragmentCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_view_box);
         ButterKnife.bind(this);
         getViewBoxApplication(this).getApplicationComponent().inject(this);
 
         componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         componentController.setFocusableInTouchMode(false);
+        componentController.addDrawerListener(this);
 
         final Bundle bundledExtras = getIntent().getExtras();
         final Bundle actualExtras = bundledExtras.getBundle(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER);
@@ -101,12 +113,15 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         final Parcelable parceledViewBoxRemoteController = actualExtras.getParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER);
         viewBoxRemoteController = Parcels.unwrap(parceledViewBoxRemoteController);
         viewBoxRemoteController.connect(this);
+
+        fragmentCache = new HashMap<>(Component.values().length - 1);
     }
 
     @Override
     protected void onPause() {
-        viewBoxRemoteController.disconnect();
         super.onPause();
+
+        viewBoxRemoteController.disconnect();
     }
 
     @Override
@@ -118,32 +133,72 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar, R.id.ivTelevision})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 
-        final Bundle args = new Bundle();
-        args.putSerializable(ARGUMENT_COMPONENT, component);
+        final Fragment cachedFragment = getCachedFragment(component);
 
-        final AbstractControlFragment fragment;
-        try {
-            fragment = component.getFragment();
-        } catch (Exception e) {
-            Log.w(ControlViewBoxActivity.class.getSimpleName(), "Unable to create controller");
-            return;
+        if (cachedFragment != null) {
+            getSupportFragmentManager().beginTransaction().attach(cachedFragment).commit();
+        } else {
+            try {
+                showNewComponentController(component);
+            } catch (Exception e) {
+                Log.w(ControlViewBoxActivity.class.getSimpleName(), "Unable to create controller");
+            }
         }
-        fragment.setArguments(args);
-
-        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.left_drawer, fragment).commit();
 
         componentController.openDrawer(GravityCompat.START);
         componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         componentController.setFocusableInTouchMode(true);
     }
 
+    protected void showNewComponentController(Component component) throws Exception {
+        final Bundle args = new Bundle();
+        args.putSerializable(ARGUMENT_COMPONENT, component);
+
+        AbstractControlFragment fragment = component.getFragment();
+        fragment.setArguments(args);
+
+        fragmentCache.put(component, fragment);
+
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.left_drawer, fragment).commit();
+    }
+
     @Override
     public void onComponentChanged(Component component, Object value) {
         component.performAction(viewBoxRemoteController, value);
+    }
+
+    @Nullable
+    private Fragment getCachedFragment(Component component) {
+        if (fragmentCache.containsKey(component)) {
+            return fragmentCache.get(component);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        final Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.left_drawer);
+        getSupportFragmentManager().beginTransaction().detach(currentFragment).commit();
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 }

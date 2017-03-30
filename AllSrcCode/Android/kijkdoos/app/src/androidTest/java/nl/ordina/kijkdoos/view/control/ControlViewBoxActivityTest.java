@@ -3,10 +3,16 @@ package nl.ordina.kijkdoos.view.control;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import com.triggertrap.seekarc.SeekArc;
+
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,12 +32,13 @@ import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
@@ -66,6 +73,14 @@ public class ControlViewBoxActivityTest {
     };
 
     @Test
+    public void disconnectTheViewBoxInOnPause() throws Exception {
+        activityRule.getActivity().finish();
+        getInstrumentation().waitForIdleSync();
+
+        verify(mockedViewBoxRemoteController).disconnect();
+    }
+
+    @Test
     public void testTheControlDrawerForAllControls() throws Exception {
         onView(withId(R.id.ivLeftLamp)).perform(click());
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
@@ -86,6 +101,11 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
+
+        onView(withId(R.id.ivTelevision)).perform(click());
+        onView(withId(R.id.component_controller)).check(matches(isOpen()));
+        pressBack();
+        onView(withId(R.id.component_controller)).check(matches(isClosed()));
     }
 
     @Test
@@ -94,7 +114,7 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
                 .perform(click()).check(matches(isChecked()));
 
-        verify(mockedViewBoxRemoteController).toggleLeftLamp();
+        verify(mockedViewBoxRemoteController).switchLeftLamp(true);
     }
 
     @Test
@@ -103,7 +123,7 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.switchLight)).check(matches(isNotChecked()))
                 .perform(click()).check(matches(isChecked()));
 
-        verify(mockedViewBoxRemoteController).toggleRightLamp();
+        verify(mockedViewBoxRemoteController).toggleRightLamp(true);
     }
 
     @Test
@@ -135,10 +155,41 @@ public class ControlViewBoxActivityTest {
     }
 
     @Test
-    public void disconnectTheViewBoxInOnPause() throws Exception {
-        activityRule.getActivity().finish();
-        getInstrumentation().waitForIdleSync();
+    public void testRotatingTheTelevision() throws Exception {
+        onView(withId(R.id.ivTelevision)).perform(click());
+        onView(withId(R.id.rotationSlider)).perform(setProgress(90));
 
-        verify(mockedViewBoxRemoteController).disconnect();
+        verify(mockedViewBoxRemoteController, atLeastOnce()).rotateTelevision(anyInt());
+    }
+
+    private static ViewAction setProgress(int progress) {
+        return new SetProgressOnSeekBarAction(progress);
+    }
+
+    private static class SetProgressOnSeekBarAction implements ViewAction {
+
+        private final int progress;
+
+        public SetProgressOnSeekBarAction(int progress) {
+            this.progress = progress;
+        }
+
+        @Override
+        public Matcher<View> getConstraints(){
+            return isAssignableFrom(SeekArc.class);
+        }
+
+
+        @Override
+        public String getDescription(){
+            return "whatever";
+        }
+
+        @Override
+        public void perform(UiController uiController, View view){
+            SeekArc yourCustomView = (SeekArc) view;
+            yourCustomView.setProgress(progress);
+        }
+
     }
 }

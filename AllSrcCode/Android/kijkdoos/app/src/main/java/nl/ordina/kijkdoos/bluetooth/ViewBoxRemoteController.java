@@ -114,12 +114,17 @@ public class ViewBoxRemoteController {
         }
     }
 
-    public void toggleLeftLamp() {
-        sendMessage("a");
+    public void switchLeftLamp(boolean status) {
+        sendMessage("a" + parseBoolean(status));
     }
 
-    public void toggleRightLamp() {
-        sendMessage("b");
+
+    public void toggleRightLamp(boolean status) {
+        sendMessage("b" + parseBoolean(status));
+    }
+
+    private int parseBoolean(boolean value) {
+        return value ? 1 : 0;
     }
 
     public void setDiscoBallColor(ControlDiscoBallFragment.DiscoBallColor color) {
@@ -132,6 +137,14 @@ public class ViewBoxRemoteController {
 
     public void playSong(ControlSpeakerFragment.Song song) {
         sendMessage(song.getMessage());
+    }
+
+    public void rotateTelevision(int degree) {
+        if (degree < 0 || degree > 179) {
+            throw new IllegalArgumentException("Accepted values are between 0 and 179");
+        }
+
+        sendMessage("g" + degree + "\n");
     }
 
     public Parcelable wrapInParcelable() {

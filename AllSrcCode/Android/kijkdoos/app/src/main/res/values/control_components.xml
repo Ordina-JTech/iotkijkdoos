@@ -2,5 +2,6 @@
 <resources>
     <string name="controlLampTitle">Bedien lamp</string>
     <string name="controlDiscoBallTitle">Bedien disco bal</string>
-    <string name="controlSpeakerTitle">Bedien muziek</string>
+    <string name="controlSpeakerTitle">Muziek afspelen</string>
+    <string name="controlTelevisionTitle">Draai televisie</string>
 </resources>
