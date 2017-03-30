@@ -6,11 +6,12 @@
 
 //Instance variables with the pin numbers as parameters
 SoftwareSerial bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(10)
-Led led1(8);
-Led led2(7);
-RgbLed rgbLed(9, 6, 5);
-Buzzer buzzer(4);
+
 ServoMotor servo(3);
+Buzzer buzzer(4);
+RgbLed rgbLed(9, 6, 5);
+Led led1(8);
+Led led2(12);
 
 char nextChar;
 int angle;
