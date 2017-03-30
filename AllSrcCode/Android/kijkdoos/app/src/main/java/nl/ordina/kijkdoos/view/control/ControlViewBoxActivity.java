@@ -30,9 +30,11 @@ import butterknife.OnClick;
 import lombok.AccessLevel;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
+import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
+import static android.bluetooth.BluetoothAdapter.STATE_ON;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
@@ -115,6 +117,11 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         viewBoxRemoteController.connect(this);
 
         fragmentCache = new HashMap<>(Component.values().length - 1);
+
+        final BluetoothConnectionFragment bluetoothConnectionFragment = new BluetoothConnectionFragment();
+        getSupportFragmentManager().beginTransaction().add(bluetoothConnectionFragment, "b").commit();
+
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> finish());
     }
 
     @Override

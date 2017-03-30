@@ -3,6 +3,8 @@ package nl.ordina.kijkdoos;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import lombok.Getter;
 import nl.ordina.kijkdoos.dagger.AndroidApplicationModule;
@@ -29,5 +31,14 @@ public class ViewBoxApplication extends Application {
 
     public static ViewBoxApplication getViewBoxApplication(Activity activity) {
         return (ViewBoxApplication) activity.getApplication();
+    }
+
+    public static ViewBoxApplication getViewBoxApplication(Fragment fragment) {
+        final FragmentActivity activity = fragment.getActivity();
+        if (activity != null) {
+            return getViewBoxApplication(activity);
+        }
+
+        return null;
     }
 }
