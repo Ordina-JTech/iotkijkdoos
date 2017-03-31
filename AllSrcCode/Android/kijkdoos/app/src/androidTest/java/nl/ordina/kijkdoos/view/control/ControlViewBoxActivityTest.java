@@ -97,7 +97,7 @@ public class ControlViewBoxActivityTest {
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
 
-        onView(withId(R.id.ivGuitar)).perform(click());
+        onView(withId(R.id.ivKeyboard)).perform(click());
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
@@ -144,7 +144,7 @@ public class ControlViewBoxActivityTest {
 
     @Test
     public void testTheSpeaker() throws Exception {
-        onView(withId(R.id.ivGuitar)).perform(click());
+        onView(withId(R.id.ivKeyboard)).perform(click());
         onData(equalTo(ControlSpeakerFragment.Song.VADER_JACOB)).perform(click());
         onData(equalTo(ControlSpeakerFragment.Song.ALARM)).perform(click());
         onData(equalTo(ControlSpeakerFragment.Song.CUSTOM)).perform(click());

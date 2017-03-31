@@ -46,7 +46,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
         }),
-        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
+        GUITAR(R.id.ivKeyboard, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
         TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
                 (controller, degree) -> controller.rotateTelevision((int) degree));
 
@@ -100,7 +100,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_view_box);
+        setContentView(R.layout.activity_control_view_box);
         ButterKnife.bind(this);
 
         componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -122,6 +122,16 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        View decorView = getWindow().getDecorView();
+
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -137,7 +147,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar, R.id.ivTelevision})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivKeyboard, R.id.ivTelevision})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 
