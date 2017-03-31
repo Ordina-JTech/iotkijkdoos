@@ -87,7 +87,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TvMeubel" translatesAutoresizingMaskIntoConstraints="NO" id="JgT-0p-c7C">
-                                <rect key="frame" x="183.5" y="0.0" width="300" height="272.5"/>
+                                <rect key="frame" x="183.5" y="0.0" width="300" height="272"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="JgT-0p-c7C" secondAttribute="height" multiplier="8.8:8" id="kyD-Gl-Ey6"/>
                                 </constraints>
@@ -111,25 +111,25 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fauteuil" translatesAutoresizingMaskIntoConstraints="NO" id="HEP-dY-xof">
-                                <rect key="frame" x="0.0" y="181.5" width="310" height="173.5"/>
+                                <rect key="frame" x="0.0" y="181" width="310" height="174"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="HEP-dY-xof" secondAttribute="height" multiplier="25:14" id="l7c-4D-Gi8"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discobal" translatesAutoresizingMaskIntoConstraints="NO" id="ss8-Fh-bkR">
-                                <rect key="frame" x="288.5" y="0.0" width="90" height="60"/>
+                                <rect key="frame" x="288.5" y="0.0" width="90" height="60.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ss8-Fh-bkR" secondAttribute="height" multiplier="3:2" id="zwJ-fm-DN7"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="speaker" translatesAutoresizingMaskIntoConstraints="NO" id="62n-x7-tqg">
-                                <rect key="frame" x="565.5" y="77.5" width="75" height="63.5"/>
+                                <rect key="frame" x="565" y="77.5" width="75" height="63.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="62n-x7-tqg" secondAttribute="height" multiplier="85:72" id="fMh-Wi-wQz"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="challenge" translatesAutoresizingMaskIntoConstraints="NO" id="lwa-fh-RGY">
-                                <rect key="frame" x="1.5" y="67.5" width="125" height="88"/>
+                                <rect key="frame" x="2" y="67.5" width="125" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="lwa-fh-RGY" secondAttribute="height" multiplier="138:97" id="bsB-9l-WT7"/>
                                 </constraints>
@@ -182,7 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w3A-mv-wtD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="774.96251874062978" y="-45.600000000000001"/>
+            <point key="canvasLocation" x="761.46926536731644" y="-106.40000000000001"/>
         </scene>
     </scenes>
     <resources>
