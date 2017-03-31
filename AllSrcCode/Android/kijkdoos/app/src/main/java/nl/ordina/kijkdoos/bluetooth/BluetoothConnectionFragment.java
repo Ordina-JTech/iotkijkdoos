@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.SupportActivity;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
@@ -68,5 +70,12 @@ public class BluetoothConnectionFragment extends Fragment {
 
     public void addConnectionEventHandler(Predicate<Integer> predicate, Consumer<Integer> action) {
         connectionEventHandlers.put(predicate, action);
+    }
+
+    public static BluetoothConnectionFragment add(FragmentActivity activity) {
+        final BluetoothConnectionFragment bluetoothConnectionFragment = new BluetoothConnectionFragment();
+        activity.getSupportFragmentManager().beginTransaction().add(bluetoothConnectionFragment, null).commit();
+
+        return bluetoothConnectionFragment;
     }
 }

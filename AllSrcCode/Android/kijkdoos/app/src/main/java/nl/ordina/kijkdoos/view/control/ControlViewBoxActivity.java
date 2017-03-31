@@ -35,7 +35,6 @@ import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
-import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
@@ -117,8 +116,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         fragmentCache = new HashMap<>(Component.values().length - 1);
 
-        final BluetoothConnectionFragment bluetoothConnectionFragment = new BluetoothConnectionFragment();
-        getSupportFragmentManager().beginTransaction().add(bluetoothConnectionFragment, "b").commit();
+        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
 
         bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> finish());
     }

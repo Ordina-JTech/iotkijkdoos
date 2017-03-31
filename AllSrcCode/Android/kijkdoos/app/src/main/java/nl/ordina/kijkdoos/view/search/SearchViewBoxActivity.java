@@ -32,6 +32,8 @@ import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
+import static android.bluetooth.BluetoothAdapter.STATE_ON;
+import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
@@ -58,6 +60,10 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         viewBoxListAdapter = new ViewBoxListAdapter(this);
         viewBoxList.setAdapter(viewBoxListAdapter);
         viewBoxList.setOnItemClickListener(this);
+
+        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
+
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state == STATE_TURNING_OFF, state -> askUserToEnableBluetooth(this));
     }
 
     @Override
