@@ -124,7 +124,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
                     viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
             finish();
         };
-        viewBoxRemoteController.connect(this);
+        viewBoxRemoteController.connect(this, aVoid -> viewBoxRemoteController.reset(null));
         viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
 
         fragmentCache = new HashMap<>(Component.values().length - 1);

@@ -7,14 +7,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
-import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcel;
@@ -22,8 +20,9 @@ import org.parceler.ParcelConstructor;
 import org.parceler.Parcels;
 import org.parceler.Transient;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
@@ -81,9 +80,16 @@ public class ViewBoxRemoteController {
 
     @Transient
     @Nullable
+    private Consumer<Void> connectConsumer;
+
+    @Transient
+    @Nullable
     @Getter
     @Setter
     private Consumer<Void> disconnectConsumer;
+
+    @Transient
+    private Map<String, Consumer<Void>> messageResponseListeners;
 
     @VisibleForTesting
     protected ViewBoxRemoteController() {
@@ -96,6 +102,7 @@ public class ViewBoxRemoteController {
 
         BackgroundServiceFactory.getComponent().inject(this);
         bluetoothCallbackRegister = new BluetoothCallbackRegister();
+        messageResponseListeners = new HashMap<>();
     }
 
     public String getName() {
@@ -109,6 +116,12 @@ public class ViewBoxRemoteController {
     }
 
     public Future<Void> connect(final Context context) {
+        return connect(context, null);
+    }
+
+    public Future<Void> connect(final Context context, Consumer<Void> onConnectConsumer) {
+        connectConsumer = onConnectConsumer;
+
         return backgroundService.getExecutorService()
                 .submit(() -> {
                     device.connectGatt(context, false, bluetoothCallbackRegister);
@@ -121,7 +134,7 @@ public class ViewBoxRemoteController {
 
     public void disconnect() {
         if (bluetoothGatt != null) {
-            bluetoothGatt.disconnect();
+            reset(aVoid -> bluetoothGatt.disconnect());
         }
     }
 
@@ -158,13 +171,24 @@ public class ViewBoxRemoteController {
         sendMessage("g" + degree + "\n");
     }
 
+    public void reset(Consumer<Void> resetFinishedConsumer) {
+        sendMessage("r");
+        addMessageResponseListener("y", resetFinishedConsumer);
+    }
+
     public Parcelable wrapInParcelable() {
         return Parcels.wrap(this);
     }
 
-    private void sendMessage(String value) {
-        bluetoothGattCharacteristic.setValue(value);
+    private void sendMessage(String message) {
+        if (bluetoothGatt == null) return;
+
+        bluetoothGattCharacteristic.setValue(message);
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+    }
+
+    private void addMessageResponseListener(String expectedMessage, Consumer<Void> messageResponseConsumer) {
+        messageResponseListeners.put(expectedMessage, messageResponseConsumer);
     }
 
     @Override
@@ -213,6 +237,22 @@ public class ViewBoxRemoteController {
             bluetoothGattCharacteristic = bluetoothGattService.getCharacteristic(UUID.CHARACTERISTIC.getUuid());
 
             bluetoothGatt.setCharacteristicNotification(bluetoothGattCharacteristic, true);
+
+            if (connectConsumer != null) {
+                connectConsumer.accept(null);
+            }
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            final byte[] value = characteristic.getValue();
+            final byte[] valueWithoutLineEnding = Arrays.copyOf(value, value.length - 2);
+
+            final String valueWithoutLineEndingString = new String(valueWithoutLineEnding);
+            final Consumer<Void> consumer = messageResponseListeners.get(valueWithoutLineEndingString);
+            if (consumer != null) {
+                consumer.accept(null);
+            }
         }
     }
 }
