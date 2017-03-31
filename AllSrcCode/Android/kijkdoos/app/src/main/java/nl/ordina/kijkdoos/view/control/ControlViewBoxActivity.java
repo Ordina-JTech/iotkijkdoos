@@ -14,10 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiConsumer;
+import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcels;
 
@@ -35,6 +37,7 @@ import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
+import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
@@ -96,6 +99,10 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
     private Map<Component, Fragment> fragmentCache;
 
+    private Consumer<Void> onDeviceDisconnectAction;
+
+    private Runnable disconnectedInBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +119,13 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         final Parcelable parceledViewBoxRemoteController = actualExtras.getParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER);
         viewBoxRemoteController = Parcels.unwrap(parceledViewBoxRemoteController);
+        onDeviceDisconnectAction = aVoid -> {
+            runOnUiThread(() -> Toast.makeText(this, getString(BluetoothConnectionLost,
+                    viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
+            finish();
+        };
         viewBoxRemoteController.connect(this);
+        viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
 
         fragmentCache = new HashMap<>(Component.values().length - 1);
 
@@ -129,13 +142,19 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        if (disconnectedInBackground != null) {
+            disconnectedInBackground.run();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        viewBoxRemoteController.disconnect();
+        viewBoxRemoteController.setDisconnectConsumer(aVoid -> {
+            disconnectedInBackground = () -> onDeviceDisconnectAction.accept(null);
+        });
     }
 
     @Override
@@ -143,6 +162,8 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         if (componentController.isDrawerOpen(GravityCompat.START)) {
             componentController.closeDrawer(GravityCompat.START);
         } else {
+            viewBoxRemoteController.setDisconnectConsumer(null);
+            viewBoxRemoteController.disconnect();
             super.onBackPressed();
         }
     }

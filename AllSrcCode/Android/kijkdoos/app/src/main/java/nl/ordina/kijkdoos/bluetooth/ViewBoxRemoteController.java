@@ -10,10 +10,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.annimon.stream.Stream;
+import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
@@ -27,11 +29,14 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
 import nl.ordina.kijkdoos.threading.BackgroundService;
 import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
+import static android.bluetooth.BluetoothProfile.STATE_DISCONNECTED;
+import static android.bluetooth.BluetoothProfile.STATE_DISCONNECTING;
 import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
 
@@ -73,6 +78,12 @@ public class ViewBoxRemoteController {
 
     @Transient
     private BluetoothGattCharacteristic bluetoothGattCharacteristic;
+
+    @Transient
+    @Nullable
+    @Getter
+    @Setter
+    private Consumer<Void> disconnectConsumer;
 
     @VisibleForTesting
     protected ViewBoxRemoteController() {
@@ -175,8 +186,17 @@ public class ViewBoxRemoteController {
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (newState == STATE_DISCONNECTED || newState == STATE_DISCONNECTING) {
+                bluetoothGatt.close();
+
+                if (disconnectConsumer != null) {
+                    disconnectConsumer.accept(null);
+                }
+            }
+
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 Log.w(ViewBoxRemoteController.class.getSimpleName(), this + ": failed to connect (" + status + ")");
+
                 return;
             }
 
@@ -184,8 +204,6 @@ public class ViewBoxRemoteController {
                 bluetoothGatt = gatt;
 
                 bluetoothGatt.discoverServices();
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                bluetoothGatt.close();
             }
         }
 
