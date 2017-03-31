@@ -7,7 +7,7 @@
     <!-- The main content view -->
 
     <include android:id="@+id/content_frame"
-        layout="@layout/activity_view_box_content" />
+        layout="@layout/activity_control_view_box_content" />
     <!-- The navigation drawer -->
     <FrameLayout
         android:id="@+id/left_drawer"

@@ -25,17 +25,22 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.R;
+import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
+import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 
+import static android.bluetooth.BluetoothAdapter.STATE_ON;
+import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
+import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
+import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
     @Inject
     AbstractBluetoothService bluetoothService;
@@ -44,8 +49,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     ListView viewBoxList;
 
     private ViewBoxListAdapter viewBoxListAdapter;
-
-    private boolean waitingForBluetoothBeingEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,10 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         viewBoxListAdapter = new ViewBoxListAdapter(this);
         viewBoxList.setAdapter(viewBoxListAdapter);
         viewBoxList.setOnItemClickListener(this);
+
+        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
+
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state == STATE_TURNING_OFF, state -> askUserToEnableBluetooth(this));
     }
 
     @Override
@@ -70,8 +77,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     private void handleBluetooth() {
         if (bluetoothService.isBluetoothEnabled()) {
             bluetoothService.searchDevices(this);
-        } else if (!waitingForBluetoothBeingEnabled) {
-            askUserToEnableBluetooth();
+        } else {
+            askUserToEnableBluetooth(this);
         }
     }
 
@@ -84,19 +91,22 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            handleBluetooth();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+
+                final Intent intent = new Intent(this, BluetoothDisabledActivity.class);
+                startActivity(intent);
+
+                finish();
+            }
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_ENABLE_BLUETOOTH) {
-            waitingForBluetoothBeingEnabled = false;
-            if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(this, R.string.BluetoothNeededMessage, Toast.LENGTH_SHORT).show();
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            handleBluetooth();
         }
     }
 
@@ -106,13 +116,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
         bluetoothService.stopSearch();
         viewBoxListAdapter.clear();
-    }
-
-    private void askUserToEnableBluetooth() {
-        waitingForBluetoothBeingEnabled = true;
-
-        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
     }
 
     @Override

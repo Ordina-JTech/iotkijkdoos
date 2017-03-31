@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/lamp_foto2"
+        app:srcCompat="@drawable/lamp_left_default"
         android:id="@+id/ivTelevisionControl"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
