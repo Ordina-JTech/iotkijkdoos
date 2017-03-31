@@ -23,8 +23,6 @@ import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
-    private final BluetoothLeScanner bluetoothScanner;
-
     private ScanFilter scanFilter;
     private ScanSettings scanSettings;
     private ScanCallback scanCallback;
@@ -40,7 +38,6 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
         this.scanFilter = scanFilter;
         this.scanSettings = scanSettings;
-        bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
     }
 
     @Override
@@ -53,7 +50,8 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
                 callback.onDeviceFound(new ViewBoxRemoteController(result.getDevice()));
             }
         };
-        bluetoothScanner.startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
+
+        getBluetoothLeScanner().startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
     }
 
     @Override
@@ -62,6 +60,10 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
             return;
         }
 
-        bluetoothScanner.stopScan(scanCallback);
+        getBluetoothLeScanner().stopScan(scanCallback);
+    }
+
+    private BluetoothLeScanner getBluetoothLeScanner() {
+        return getBluetoothAdapter().getBluetoothLeScanner();
     }
 }

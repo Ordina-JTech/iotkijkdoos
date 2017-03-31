@@ -103,7 +103,6 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         setContentView(R.layout.activity_view_box);
         ButterKnife.bind(this);
-        getViewBoxApplication(this).getApplicationComponent().inject(this);
 
         componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         componentController.setFocusableInTouchMode(false);
