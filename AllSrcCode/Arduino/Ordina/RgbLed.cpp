@@ -6,9 +6,7 @@ RgbLed::RgbLed(int redPin, int greenPin, int bluePin) {
   _redPin = redPin;
   _greenPin = greenPin;
   _bluePin = bluePin;
-}
 
-void RgbLed::begin() {
   pinMode(_redPin, OUTPUT);
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
@@ -23,18 +21,7 @@ void RgbLed::begin() {
   memcpy(allColors[5], purple, arraySize);
 }
 
-char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
-  int count = 0;
-  char input = '\0';
-  
-  while (count == 0) {
-    if (bluetooth.available() > 0) {
-      input = bluetooth.read();
-      count++;
-    } 
-  }
-  return input;
-}
+
 
 void RgbLed::setColor(char input)  { 
   switch (input)  { 

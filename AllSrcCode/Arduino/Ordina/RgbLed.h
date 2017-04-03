@@ -2,7 +2,6 @@ class RgbLed {
   
   public:
     RgbLed(int redPin, int greenPin, int bluePin);
-    void begin();
     char getColorChar(SoftwareSerial &bluetooth);
     void setColor(char input);
     void showGradient();
