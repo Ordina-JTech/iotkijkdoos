@@ -13,7 +13,7 @@ class DisconnectButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        self.backgroundColor = UIColor.red.withAlphaComponent(0.75)
+        self.backgroundColor = UIColor.darkGray.withAlphaComponent(0.75)
         self.layer.cornerRadius = 10
         self.setTitle("Disconnect", for: .normal)
         self.setTitleColor(UIColor.white, for: .normal)

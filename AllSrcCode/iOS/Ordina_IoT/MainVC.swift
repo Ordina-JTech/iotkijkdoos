@@ -14,7 +14,7 @@ class MainVC: UIViewController{
     private enum HeaderText {
         static let led1 = "Left Light"
         static let led2 = "Right Light"
-        static let rgb  = "Rgb light"
+        static let rgb  = "Disco Ball"
         static let servo = "Television"
         static let buzzer = "Buzzer"
         static let challenge = "Challenges"
@@ -79,8 +79,8 @@ class MainVC: UIViewController{
     }
     
     private func createAndAddSettingViews()   {
-        leftLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led1, ledLetter: PeripheralLetter.led1)
-        rightLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led2, ledLetter: PeripheralLetter.led2)
+        leftLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led1, ledLetter: PeripheralLetter.led1, orientation: LedVC.LedOrientation.left)
+        rightLedVC = LedVC(frame: settingViewFrame, headerText: HeaderText.led2, ledLetter: PeripheralLetter.led2, orientation: LedVC.LedOrientation.right)
         rgbVC = RgbVC(frame: settingViewFrame, headerText: HeaderText.rgb)
         servoVC = ServoVC(frame: settingViewFrame, headerText: HeaderText.servo)
         speakerVC = BuzzerVC(frame: settingViewFrame, headerText: HeaderText.buzzer)

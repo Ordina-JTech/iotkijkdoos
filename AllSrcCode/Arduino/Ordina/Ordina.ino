@@ -1,17 +1,21 @@
-#include "Led.h"
-#include "RgbLed.h"
+
+#include <Arduino.h>
+#include <SoftwareSerial.h>
+#include <Servo.h>
+
+#include "LED.h"
+#include "RGB.h"
 #include "Buzzer.h"
 #include "ServoMotor.h"
-#include <SoftwareSerial.h>
 
 //Instance variables with the pin numbers as parameters
 SoftwareSerial bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(10)
 
 ServoMotor servo(3);
 Buzzer buzzer(4);
-RgbLed rgbLed(9, 6, 5);
-Led led1(8);
-Led led2(12);
+RGB rgbLed(9, 6, 5);
+LED led1(8);
+LED led2(12);
 
 char nextChar;
 int angle;
@@ -32,11 +36,11 @@ void loop() {
     switch (input)  {
     case 'a':
       nextChar = led1.getStateChar(bluetooth);
-      led1.setLed(nextChar);
+      led1.setLED(nextChar);
       break;
     case 'b':
       nextChar = led2.getStateChar(bluetooth);
-      led2.setLed(nextChar);
+      led2.setLED(nextChar);
       break;
     case'c':
       nextChar = rgbLed.getColorChar(bluetooth);
