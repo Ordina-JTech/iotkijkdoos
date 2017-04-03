@@ -24,12 +24,17 @@ public class PreLollipopBluetoothService extends AbstractBluetoothService {
         scanCallback = (device, rssi, scanRecord) -> {
             callback.onDeviceFound(new ViewBoxRemoteController(device));
         };
-        getBluetoothAdapter().startLeScan(scanCallback);
+
+        if (getBluetoothAdapter() != null) {
+            getBluetoothAdapter().startLeScan(scanCallback);
+        }
     }
 
     @Override
     public void stopSearch() {
-        getBluetoothAdapter().stopLeScan(scanCallback);
-        scanCallback = null;
+        if (getBluetoothAdapter() != null) {
+            getBluetoothAdapter().stopLeScan(scanCallback);
+            scanCallback = null;
+        }
     }
 }
