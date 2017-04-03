@@ -48,6 +48,9 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     @BindView(R.id.viewBoxList)
     ListView viewBoxList;
 
+    @BindView(R.id.activity_search_view_box)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     private ViewBoxListAdapter viewBoxListAdapter;
 
     @Override
@@ -76,10 +79,23 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     private void handleBluetooth() {
         if (bluetoothService.isBluetoothEnabled()) {
-            bluetoothService.searchDevices(this);
+            swipeRefreshLayout.setRefreshing(true);
+            searchViewBoxes();
         } else {
             askUserToEnableBluetooth(this);
         }
+    }
+
+    private void searchViewBoxes() {
+        if (searchTask == null || searchTask.isDone()) {
+            bluetoothService.searchDevices(this);
+            searchTask = backgroundService.getExecutorService().schedule(this::stopSearch, 5, TimeUnit.SECONDS);
+        }
+    }
+
+    private void stopSearch() {
+        bluetoothService.stopSearch();
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
     }
 
     private void handleAppPermissions() {
@@ -120,7 +136,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        bluetoothService.stopSearch();
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
         Bundle bundledToAvoidSamsungBug = new Bundle();
         bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
