@@ -1,14 +1,14 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "RgbLed.h"
+#include "RGB.h"
 
-RgbLed::RgbLed(int redPin, int greenPin, int bluePin) {
+RGB::RGB(int redPin, int greenPin, int bluePin) {
   _redPin = redPin;
   _greenPin = greenPin;
   _bluePin = bluePin;
 }
 
-void RgbLed::begin() {
+void RGB::begin() {
   pinMode(_redPin, OUTPUT);
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
@@ -24,7 +24,7 @@ void RgbLed::begin() {
   memcpy(allColors[6], purple, arraySize);
 }
 
-char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
+char RGB::getColorChar(SoftwareSerial &bluetooth) {
   int count = 0;
   char input = '\0';
   
@@ -37,7 +37,7 @@ char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
   return input;
 }
 
-void RgbLed::setColor(char input)  { 
+void RGB::setColor(char input)  { 
   int index = input - '0';
   int nColors = (sizeof(allColors)/3) / sizeof(int);
   
@@ -46,19 +46,19 @@ void RgbLed::setColor(char input)  {
   }
 }
 
-void RgbLed::writeColor(int rgbValue[3])  {
-  analogWrite(_redPin, rgbValue[0]);
-  analogWrite(_greenPin, rgbValue[1]);
-  analogWrite(_bluePin, rgbValue[2]);
+void RGB::writeColor(int rgbValues[3])  {
+  analogWrite(_redPin, rgbValues[0]);
+  analogWrite(_greenPin, rgbValues[1]);
+  analogWrite(_bluePin, rgbValues[2]);
 }
 
 //Challenge III "Gradient"
-void RgbLed::showGradient()  {
+void RGB::showGradient()  {
   int nColors = (sizeof(allColors)/3) / sizeof(int);
   //Add your code here
 }
 
-void RgbLed::reset() {
+void RGB::reset() {
   writeColor(off);
 }
 

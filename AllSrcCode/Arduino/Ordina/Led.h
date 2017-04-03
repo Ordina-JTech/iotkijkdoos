@@ -1,12 +1,12 @@
 
 
-class Led{
+class LED{
   
  public:
-  Led(int pin); //constructor
+  LED(int pin); //constructor
   void begin();
   char getStateChar(SoftwareSerial &bluetooth);
-  void setLed(char input);
+  void setLED(char input);
   bool getState();
   int getPinNumber();
   void reset();

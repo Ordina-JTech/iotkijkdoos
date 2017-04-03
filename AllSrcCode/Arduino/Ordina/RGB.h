@@ -1,7 +1,7 @@
-class RgbLed {
+class RGB {
   
   public:
-    RgbLed(int redPin, int greenPin, int bluePin);
+    RGB(int redPin, int greenPin, int bluePin);
     void begin();
     char getColorChar(SoftwareSerial &bluetooth);
     void setColor(char input);

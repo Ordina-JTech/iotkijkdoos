@@ -1,16 +1,16 @@
 #import <Arduino.h>
 #include <SoftwareSerial.h>
-#include "Led.h"
+#include "LED.h"
 
-Led::Led(int pin)  {
+LED::LED(int pin)  {
   _pin = pin;
 }
 
-void Led::begin() {
+void LED::begin() {
   pinMode(_pin, OUTPUT);
 }
 
-char Led::getStateChar(SoftwareSerial &bluetooth) {
+char LED::getStateChar(SoftwareSerial &bluetooth) {
   int count = 0;
   char input = '\0';  //Empty Char
   
@@ -23,7 +23,7 @@ char Led::getStateChar(SoftwareSerial &bluetooth) {
   return input;
 }
 
-void Led::setLed(char input) {
+void LED::setLED(char input) {
   if (input == '1') {
     digitalWrite(_pin, HIGH);
     isOn = true;
@@ -34,15 +34,15 @@ void Led::setLed(char input) {
   }
 }
 
-int Led::getPinNumber() {
+int LED::getPinNumber() {
   return _pin;
 }
 
-bool Led::getState() {
+bool LED::getState() {
   return isOn;
 }
 
-void Led::reset()  {
+void LED::reset()  {
   digitalWrite(_pin, LOW);
   isOn = false;
 }

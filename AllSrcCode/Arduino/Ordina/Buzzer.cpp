@@ -1,6 +1,6 @@
 #import <Arduino.h>
 #include <SoftwareSerial.h>
-#include "Led.h"
+#include "LED.h"
 #include "Buzzer.h"
 
 Buzzer::Buzzer(int pin) {
@@ -11,42 +11,42 @@ void Buzzer::begin()  {
   pinMode(_pin, OUTPUT);
 }
 
-void Buzzer::alarm(Led led1, Led led2)  {
-  bool stateLed1 = led1.getState();
-  bool stateLed2 = led2.getState();
+void Buzzer::alarm(LED led1, LED led2)  {
+  bool stateLED1 = led1.getState();
+  bool stateLED2 = led2.getState();
   
   long startTimer = millis();
   while (millis() - startTimer < 3000) {    //Play alarm for 3 seconds (3000 ms)
-      led1.setLed(on);
-      led2.setLed(on);
+      led1.setLED(on);
+      led2.setLED(on);
       tone(_pin, 1000, 500);
       delay(500);
 
-      led1.setLed(off);
-      led2.setLed(off);
+      led1.setLED(off);
+      led2.setLED(off);
       tone(_pin, 500, 500);
       delay(500);   
   }
-  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
+  setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
-void Buzzer::vaderJacob(Led led1, Led led2) {
-  bool stateLed1 = led1.getState();
-  bool stateLed2 = led2.getState();
+void Buzzer::vaderJacob(LED led1, LED led2) {
+  bool stateLED1 = led1.getState();
+  bool stateLED2 = led2.getState();
   
-  led1.setLed(off);
-  led2.setLed(off);
+  led1.setLED(off);
+  led2.setLED(off);
   
   for(int i = 0; i < nCouplets; i++)  {
     for (int j = 0; j < 2; j++)   {
       for (int k = beginCouplet[i]; k < endCouplet[i]; k++) {
         if (k%2 == 0) {
-            led1.setLed(on);
-            led2.setLed(off);
+            led1.setLED(on);
+            led2.setLED(off);
         }
         else {
-            led1.setLed(off);
-            led2.setLed(on);
+            led1.setLED(off);
+            led2.setLED(on);
         }
         tone(_pin, frequence[k], milliSec);
         delay(secondsRest[i]);
@@ -55,7 +55,7 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
     }
     delay(200);
   }
-  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
+  setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
 //Challenge II
@@ -63,19 +63,19 @@ void Buzzer::customSound()  {
   //Add your code here
 }
 
-void Buzzer::setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
-  if (wasOnLed1) {
-    led1.setLed(on);
+void Buzzer::setLEDToPreviousState(LED led1, bool wasOnLED1, LED led2, bool wasOnLED2) {
+  if (wasOnLED1) {
+    led1.setLED(on);
   }
   else {
-    led1.setLed(off);
+    led1.setLED(off);
   }
   
-  if (wasOnLed2) {
-    led2.setLed(on);
+  if (wasOnLED2) {
+    led2.setLED(on);
   }
   else {
-    led2.setLed(off);
+    led2.setLED(off);
   }
 }
 
