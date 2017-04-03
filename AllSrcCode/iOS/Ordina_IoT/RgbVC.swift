@@ -116,7 +116,7 @@ class RgbVC: NSObject    {
         //Switch Button
         switchBtn = UISwitch()
         switchBtn.translatesAutoresizingMaskIntoConstraints = false
-        //switchBtn.thumbTintColor = UIColor.lightGray
+        switchBtn.thumbTintColor = UIColor.lightGray
         switchBtn.tintColor = UIColor.lightGray
         switchBtn.onTintColor = UIColor.orange
         switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)

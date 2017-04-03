@@ -20,7 +20,7 @@ class RgbLed {
      const int aqua[3] = {0, 255, 255}; 
      const int blue[3] = {0, 0, 255}; 
      const int purple[3] = {255, 0, 255}; 
-     int allColors[6][3];
+     int allColors[7][3];
      
      void writeColor(int rgbValues[3]);
 };
