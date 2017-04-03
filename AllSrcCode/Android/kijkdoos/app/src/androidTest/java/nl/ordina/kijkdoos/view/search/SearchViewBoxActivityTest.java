@@ -7,14 +7,19 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.verification.VerificationMode;
 
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
+import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxApplication;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
@@ -24,10 +29,12 @@ import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.fail;
 import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
@@ -37,6 +44,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -102,6 +110,11 @@ public class SearchViewBoxActivityTest {
         }
     };
 
+    @After
+    public void resetMocks() throws Exception {
+        Mockito.reset(bluetoothService);
+    }
+
     @Test
     public void navigateToViewBoxActivity() throws Exception {
         Bundle expectedIntentBundle = new Bundle();
@@ -122,5 +135,12 @@ public class SearchViewBoxActivityTest {
     @Test
     public void whenTheActivityIsDisplayedThenStartTheSearchForBluetoothDevices() throws Exception {
         verify(bluetoothService).searchDevices(any(DeviceFoundListener.class));
+    }
+
+    @Test
+    public void testPullToRefreshStartsASearchForDevices() throws Exception {
+        onView(withId(R.id.viewBoxList)).perform(swipeDown());
+
+        verify(bluetoothService, times(2)).searchDevices(any(DeviceFoundListener.class));
     }
 }

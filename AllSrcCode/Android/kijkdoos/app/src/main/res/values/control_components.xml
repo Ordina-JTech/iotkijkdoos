@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="controlLampTitle">Bedien lamp</string>
-    <string name="controlDiscoBallTitle">Bedien disco bal</string>
-    <string name="controlSpeakerTitle">Muziek afspelen</string>
-    <string name="controlTelevisionTitle">Draai televisie</string>
+    <string name="controlLeftLampTitle">Left Light</string>
+    <string name="controlRightLampTitle">Right Light</string>
+    <string name="controlDiscoBallTitle">Disco Ball</string>
+    <string name="controlSpeakerTitle">Keyboard</string>
+    <string name="controlTelevisionTitle">Television</string>
+    <string name="controlChallengesTitle">Challenges</string>
 </resources>

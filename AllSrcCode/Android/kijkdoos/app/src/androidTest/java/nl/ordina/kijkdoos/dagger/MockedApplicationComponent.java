@@ -3,7 +3,7 @@ package nl.ordina.kijkdoos.dagger;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import nl.ordina.kijkdoos.view.search.BluetoothDisabledTests;
+import nl.ordina.kijkdoos.view.BluetoothDisabledTests;
 import nl.ordina.kijkdoos.view.search.SearchViewBoxActivityTest;
 
 /**

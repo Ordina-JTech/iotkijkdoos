@@ -1,6 +1,7 @@
 package nl.ordina.kijkdoos.bluetooth;
 
 import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import java.util.Collections;
@@ -22,8 +24,6 @@ import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class BluetoothDiscoveryService extends AbstractBluetoothService {
-
-    private final BluetoothLeScanner bluetoothScanner;
 
     private ScanFilter scanFilter;
     private ScanSettings scanSettings;
@@ -40,7 +40,6 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
         this.scanFilter = scanFilter;
         this.scanSettings = scanSettings;
-        bluetoothScanner = getBluetoothAdapter().getBluetoothLeScanner();
     }
 
     @Override
@@ -53,7 +52,11 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
                 callback.onDeviceFound(new ViewBoxRemoteController(result.getDevice()));
             }
         };
-        bluetoothScanner.startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
+
+        final BluetoothLeScanner bluetoothScanner = getBluetoothLeScanner();
+        if (bluetoothScanner != null) {
+            bluetoothScanner.startScan(Collections.singletonList(scanFilter), scanSettings, scanCallback);
+        }
     }
 
     @Override
@@ -62,6 +65,19 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
             return;
         }
 
-        bluetoothScanner.stopScan(scanCallback);
+        final BluetoothLeScanner bluetoothScanner = getBluetoothLeScanner();
+        if (bluetoothScanner != null) {
+            bluetoothScanner.stopScan(scanCallback);
+        }
+    }
+
+    @Nullable
+    private BluetoothLeScanner getBluetoothLeScanner() {
+
+        final BluetoothAdapter bluetoothAdapter = getBluetoothAdapter();
+        if (bluetoothAdapter != null) {
+            return bluetoothAdapter.getBluetoothLeScanner();
+        }
+        return null;
     }
 }

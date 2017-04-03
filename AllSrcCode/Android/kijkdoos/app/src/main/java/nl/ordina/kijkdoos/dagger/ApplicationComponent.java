@@ -3,6 +3,7 @@ package nl.ordina.kijkdoos.dagger;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 
@@ -16,4 +17,6 @@ import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 public interface ApplicationComponent {
     void inject(SearchViewBoxActivity activity);
     void inject(ControlViewBoxActivity activity);
+
+    void inject(BluetoothConnectionFragment fragment);
 }
