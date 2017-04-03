@@ -2,18 +2,18 @@ package nl.ordina.kijkdoos.view.search;
 
 import android.Manifest;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -64,6 +64,9 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         viewBoxList.setAdapter(viewBoxListAdapter);
         viewBoxList.setOnItemClickListener(this);
 
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setOnRefreshListener(this::searchViewBoxes);
+
         final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
 
         bluetoothConnectionFragment.addConnectionEventHandler(state -> state == STATE_TURNING_OFF, state -> askUserToEnableBluetooth(this));
@@ -87,15 +90,13 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     }
 
     private void searchViewBoxes() {
-        if (searchTask == null || searchTask.isDone()) {
-            bluetoothService.searchDevices(this);
-            searchTask = backgroundService.getExecutorService().schedule(this::stopSearch, 5, TimeUnit.SECONDS);
-        }
+        bluetoothService.searchDevices(this);
+        swipeRefreshLayout.postDelayed(this::stopSearch, 5000);
     }
 
     private void stopSearch() {
         bluetoothService.stopSearch();
-        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void handleAppPermissions() {
