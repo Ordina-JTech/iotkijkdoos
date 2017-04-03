@@ -23,7 +23,7 @@ class RgbLed {
      const int aqua[3] = {0, 255, 255}; 
      const int blue[3] = {0, 0, 255}; 
      const int purple[3] = {255, 0, 255}; 
-     int allColors[6][3];
+     int allColors[7][3];
      
      void writeColor(int rgbValues[3]);
 };
@@ -41,12 +41,13 @@ void RgbLed::begin() {
 
   //Create one array with all colors 
   byte arraySize = 3 * sizeof(int);
-  memcpy(allColors[0], red, arraySize);
-  memcpy(allColors[1], yellow, arraySize);
-  memcpy(allColors[2], green, arraySize);
-  memcpy(allColors[3], aqua, arraySize);
-  memcpy(allColors[4], blue, arraySize);
-  memcpy(allColors[5], purple, arraySize);
+  memcpy(allColors[0], off, arraySize);
+  memcpy(allColors[1], red, arraySize);
+  memcpy(allColors[2], yellow, arraySize);
+  memcpy(allColors[3], green, arraySize);
+  memcpy(allColors[4], aqua, arraySize);
+  memcpy(allColors[5], blue, arraySize);
+  memcpy(allColors[6], purple, arraySize);
 }
 
 char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
@@ -63,28 +64,11 @@ char RgbLed::getColorChar(SoftwareSerial &bluetooth) {
 }
 
 void RgbLed::setColor(char input)  { 
-  switch (input)  { 
-  case '0':
-    writeColor(off);    
-    break;
-  case '1':
-    writeColor(red);    
-    break;
-  case '2':
-    writeColor(yellow);  
-    break;
-  case '3':
-    writeColor(green);    
-    break;
-  case '4':
-    writeColor(aqua);  
-    break;
-  case '5':
-    writeColor(blue);    
-    break;
-  case '6':
-    writeColor(purple);  
-    break;    
+  int index = input - '0';
+  int nColors = (sizeof(allColors)/3) / sizeof(int);
+  
+  if (index >= 0 && index < nColors)  {
+    writeColor(allColors[index]);
   }
 }
 

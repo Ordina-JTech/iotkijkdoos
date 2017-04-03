@@ -11,7 +11,7 @@ import Foundation
 class ServoVC: NSObject {
     
     private enum ImageName  {
-        static let tv = "Tv"
+        static let tv = "televisie"
     }
     
     private(set) var settingView: SettingView!

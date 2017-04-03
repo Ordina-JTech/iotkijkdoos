@@ -12,7 +12,7 @@ import Foundation
 class RgbVC: NSObject    {
     
     private enum ImageName {
-        static let discobal = "discobal"
+        static let discobal = "discobal-1"
         static let slider = "rgbBalk"
     }
     private enum ColorMessage{
@@ -48,9 +48,8 @@ class RgbVC: NSObject    {
     private var rgbLabel: UILabel!
     private var rgbSlider: UISlider!
     private var imageView: UIImageView!
-    private var stateButton: UIButton!
+    private var switchBtn: UISwitch!
     private var colorMessage = [String]()
-    private var isRgbOn = false
     private var previousIndex = 0
 
     init(frame: CGRect, headerText: String) {
@@ -114,31 +113,25 @@ class RgbVC: NSObject    {
         rgbSlider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbSlider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
         
-        //On-Off Button
-        stateButton = UIButton()
-        stateButton.translatesAutoresizingMaskIntoConstraints = false
-        stateButton.setTitle(StateBtnText.on, for: .normal)
-        stateButton.setTitleColor(UIColor.defaultButtonColor, for: .normal)
-        stateButton.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
-        stateButton.titleLabel?.font = UIFont.avenirNext(size: 20)
-        stateButton.sizeToFit()
-        stateButton.addTarget(self, action: #selector(stateButtonWasPressed(sender:)), for: .touchUpInside)
-        settingView.addSubview(stateButton)
+        //Switch Button
+        switchBtn = UISwitch()
+        switchBtn.translatesAutoresizingMaskIntoConstraints = false
+        switchBtn.thumbTintColor = UIColor.lightGray
+        switchBtn.tintColor = UIColor.lightGray
+        switchBtn.onTintColor = UIColor.orange
+        switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
+        settingView.addSubview(switchBtn)
         
-        stateButton.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
-        stateButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        switchBtn.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
+        switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
     }
     
-    func stateButtonWasPressed(sender: UIButton)    {
-        if !isRgbOn {
-            isRgbOn = true
+    func switchStateDidChange() {
+        if switchBtn.isOn {
             getColorAndSendMessage(isButtonCall: true)
-            stateButton.setTitle(StateBtnText.off, for: .normal)
         }
-        else    {
+        else {
             bluetooth.sendMessage(string: ColorMessage.off)
-            isRgbOn = false
-            stateButton.setTitle(StateBtnText.on, for: .normal)
         }
     }
     
@@ -147,7 +140,7 @@ class RgbVC: NSObject    {
     }
     
     private func getColorAndSendMessage(isButtonCall: Bool = false)   {
-        if isRgbOn  {
+        if switchBtn.isOn  {
             let sliderValue = Int(rgbSlider.value)
             for index in 0..<Slider.values.count   {
                 if sliderValue <= Slider.values[index]  {
