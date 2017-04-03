@@ -176,6 +176,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        stopSearch();
+
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
         Bundle bundledToAvoidSamsungBug = new Bundle();
         bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
@@ -195,6 +197,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
                     });
                 } catch (InterruptedException | ExecutionException | TimeoutException e) {
                     Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
+
+                    viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
                 }
             }
         }.start();
