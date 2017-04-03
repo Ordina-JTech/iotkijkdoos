@@ -83,13 +83,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iot-kijkdoos" translatesAutoresizingMaskIntoConstraints="NO" id="HKb-UO-FEf">
-                                <rect key="frame" x="0.0" y="0.0" width="666" height="375"/>
+                                <rect key="frame" x="0.0" y="0.0" width="668" height="375"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="discobal-1" translatesAutoresizingMaskIntoConstraints="NO" id="ss8-Fh-bkR">
-                                <rect key="frame" x="260.5" y="8" width="146" height="54.5"/>
+                                <rect key="frame" x="260.5" y="8" width="146" height="55"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="televisie" translatesAutoresizingMaskIntoConstraints="NO" id="JgT-0p-c7C">
-                                <rect key="frame" x="228.5" y="110.5" width="210" height="67"/>
+                                <rect key="frame" x="229" y="110.5" width="210" height="68"/>
                             </imageView>
                             <view contentMode="scaleToFill" restorationIdentifier="dd" translatesAutoresizingMaskIntoConstraints="NO" id="gnT-Yv-ARX" userLabel="Left Light width helper">
                                 <rect key="frame" x="0.0" y="0.0" width="178" height="20"/>
@@ -107,41 +107,40 @@
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lamp-rechts" translatesAutoresizingMaskIntoConstraints="NO" id="5t8-lz-HEK">
-                                <rect key="frame" x="435" y="53" width="93" height="56.5"/>
+                                <rect key="frame" x="433.5" y="53" width="94.5" height="56.5"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vq7-lB-Ucc" customClass="DisconnectButton" customModule="Ordina_IoT" customModuleProvider="target">
-                                <rect key="frame" x="10" y="323" width="55" height="37"/>
+                                <rect key="frame" x="10" y="329" width="52" height="36"/>
                                 <color key="backgroundColor" red="0.67120709196891193" green="0.67120709196891193" blue="0.67120709196891193" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="disconnectWasPressed:" destination="4DP-KR-5NR" eventType="touchUpInside" id="g9C-c5-0Yq"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hamer-jtech" translatesAutoresizingMaskIntoConstraints="NO" id="lwa-fh-RGY">
-                                <rect key="frame" x="513.5" y="144" width="129" height="73.5"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lamp-links" translatesAutoresizingMaskIntoConstraints="NO" id="3Fv-We-7xq">
-                                <rect key="frame" x="134" y="53" width="93" height="56.5"/>
+                                <rect key="frame" x="134" y="53" width="94.5" height="56.5"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LeA-XM-cXF">
-                                <rect key="frame" x="647" y="349" width="20" height="26"/>
+                                <rect key="frame" x="647" y="348.5" width="20" height="26.5"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="keyboard" translatesAutoresizingMaskIntoConstraints="NO" id="62n-x7-tqg">
-                                <rect key="frame" x="381.5" y="249.5" width="200" height="112.5"/>
+                                <rect key="frame" x="380.5" y="249" width="201" height="112.5"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="hamer-jtech" translatesAutoresizingMaskIntoConstraints="NO" id="lwa-fh-RGY">
+                                <rect key="frame" x="199" y="271" width="100" height="54"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="JgT-0p-c7C" firstAttribute="centerX" secondItem="HKb-UO-FEf" secondAttribute="centerX" id="0Rs-Zq-JGi"/>
                             <constraint firstItem="HKb-UO-FEf" firstAttribute="top" secondItem="nfF-mV-PUh" secondAttribute="top" id="1VW-Pq-VuR"/>
-                            <constraint firstItem="lwa-fh-RGY" firstAttribute="top" secondItem="uHT-01-yDu" secondAttribute="bottom" constant="86" id="1X4-Uh-8M4"/>
                             <constraint firstItem="MwF-pi-9ji" firstAttribute="leading" secondItem="5t8-lz-HEK" secondAttribute="trailing" constant="-39" id="1bk-jy-rh3"/>
                             <constraint firstItem="JgT-0p-c7C" firstAttribute="top" secondItem="5t8-lz-HEK" secondAttribute="bottom" constant="0.5" id="6MP-jx-TuI"/>
                             <constraint firstItem="5t8-lz-HEK" firstAttribute="height" secondItem="3Fv-We-7xq" secondAttribute="height" id="6TO-Sa-FnQ"/>
                             <constraint firstAttribute="trailing" secondItem="LeA-XM-cXF" secondAttribute="trailing" id="6aM-Qt-gSX"/>
                             <constraint firstItem="LeA-XM-cXF" firstAttribute="width" secondItem="HKb-UO-FEf" secondAttribute="width" multiplier="0.03" id="7Pc-7i-ZPV"/>
-                            <constraint firstItem="sfs-iG-Z3q" firstAttribute="top" secondItem="Vq7-lB-Ucc" secondAttribute="bottom" constant="15" id="7gr-wi-2G8"/>
+                            <constraint firstItem="sfs-iG-Z3q" firstAttribute="top" secondItem="Vq7-lB-Ucc" secondAttribute="bottom" constant="10" id="7gr-wi-2G8"/>
                             <constraint firstItem="JgT-0p-c7C" firstAttribute="centerX" secondItem="ss8-Fh-bkR" secondAttribute="centerX" id="ACZ-Hi-HPq"/>
                             <constraint firstItem="JgT-0p-c7C" firstAttribute="height" secondItem="HKb-UO-FEf" secondAttribute="height" multiplier="0.18" id="CRn-PR-Sur"/>
                             <constraint firstItem="ss8-Fh-bkR" firstAttribute="top" secondItem="nfF-mV-PUh" secondAttribute="top" constant="8" id="DGw-Zf-a4z"/>
@@ -175,7 +174,6 @@
                             <constraint firstItem="uHT-01-yDu" firstAttribute="height" secondItem="HKb-UO-FEf" secondAttribute="height" multiplier="0.153" id="qdR-BR-wAy"/>
                             <constraint firstItem="3Fv-We-7xq" firstAttribute="top" secondItem="uHT-01-yDu" secondAttribute="bottom" constant="-5" id="w9U-cN-VtH"/>
                             <constraint firstItem="gnT-Yv-ARX" firstAttribute="width" secondItem="nfF-mV-PUh" secondAttribute="width" multiplier="0.267" id="wIc-Ll-rr3"/>
-                            <constraint firstItem="lwa-fh-RGY" firstAttribute="centerX" secondItem="MwF-pi-9ji" secondAttribute="centerX" id="xsT-ud-CXW"/>
                             <constraint firstItem="gnT-Yv-ARX" firstAttribute="leading" secondItem="nfF-mV-PUh" secondAttribute="leading" id="yhK-Ez-LA0"/>
                         </constraints>
                     </view>
@@ -199,7 +197,7 @@
     </scenes>
     <resources>
         <image name="discobal-1" width="74" height="74"/>
-        <image name="hamer-jtech" width="500" height="500"/>
+        <image name="hamer-jtech" width="250" height="250"/>
         <image name="iot-kijkdoos" width="960" height="540"/>
         <image name="keyboard" width="265" height="131"/>
         <image name="lamp-links" width="77" height="76"/>

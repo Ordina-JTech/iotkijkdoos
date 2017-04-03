@@ -16,7 +16,7 @@ class ChallengeVC: NSObject {
     }
     
     private enum ImageName  {
-        static let challenge = "challenge"
+        static let challenge = "hamer-jtech"
     }
     
     private(set) var settingView: SettingView!
