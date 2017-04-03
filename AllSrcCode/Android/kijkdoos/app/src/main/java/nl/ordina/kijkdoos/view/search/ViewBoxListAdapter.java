@@ -1,5 +1,6 @@
 package nl.ordina.kijkdoos.view.search;
 
+import android.support.annotation.UiThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class ViewBoxListAdapter extends BaseAdapter {
         inflater = activity.getLayoutInflater();
     }
 
+    @UiThread
     public void addViewBoxRemoteController(ViewBoxRemoteController device) {
         if (device == null) return;
 
@@ -30,6 +32,12 @@ public class ViewBoxListAdapter extends BaseAdapter {
             viewBoxRemoteControllers.add(device);
             notifyDataSetChanged();
         }
+    }
+
+    @UiThread
+    public void removeViewBoxRemoteController(ViewBoxRemoteController device) {
+        viewBoxRemoteControllers.remove(device);
+        notifyDataSetChanged();
     }
 
     public ViewBoxRemoteController getViewBoxRemoteController(int position) {

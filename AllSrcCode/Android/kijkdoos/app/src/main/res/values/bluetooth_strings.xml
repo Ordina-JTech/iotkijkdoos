@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="BluetoothDisabledMessage">Bluetooth dient ingeschakeld te zijn om de IoT Kijkdoos te kunnen bedienen</string>
-    <string name="EnableBluetooth">Bluetooth inschakelen</string>
-    <string name="BluetoothConnectionLost">Verbinding met %s verbroken</string>
+    <string name="BluetoothDisabledMessage">Bluetooth must be enabled to control the IoT Kijkdoos</string>
+    <string name="EnableBluetooth">Enable Bluetooth</string>
+    <string name="BluetoothConnectionLost">Unexpectedly disconnected with %s</string>
+    <string name="FailedToConnect">Unable to connect. Please try again</string>
 </resources>

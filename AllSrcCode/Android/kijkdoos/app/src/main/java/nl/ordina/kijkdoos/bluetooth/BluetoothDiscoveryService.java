@@ -1,6 +1,7 @@
 package nl.ordina.kijkdoos.bluetooth;
 
 import android.annotation.TargetApi;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -72,6 +73,11 @@ public class BluetoothDiscoveryService extends AbstractBluetoothService {
 
     @Nullable
     private BluetoothLeScanner getBluetoothLeScanner() {
-        return getBluetoothAdapter().getBluetoothLeScanner();
+
+        final BluetoothAdapter bluetoothAdapter = getBluetoothAdapter();
+        if (bluetoothAdapter != null) {
+            return bluetoothAdapter.getBluetoothLeScanner();
+        }
+        return null;
     }
 }
