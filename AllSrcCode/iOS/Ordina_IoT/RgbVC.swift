@@ -39,6 +39,12 @@ class RgbVC: NSObject    {
         
         static let values = [redVal, yellowVal, greenVal, aquaVal, blueVal, purpleVal]
     }
+    private enum SwitchOnTintColor {
+        static let aqua = UIColor.init(red: 0, green: 255, blue: 255, alpha: 1)
+        static let all = [UIColor.red, UIColor.yellow, UIColor.green, SwitchOnTintColor.aqua, UIColor.blue, UIColor.purple]
+    }
+    
+    
     private enum StateBtnText{
         static let on = "Turn Light On"
         static let off = "Turn Light Off"
@@ -128,7 +134,7 @@ class RgbVC: NSObject    {
     
     func switchStateDidChange() {
         if switchBtn.isOn {
-            getColorAndSendMessage(isButtonCall: true)
+            getAndSendColorMessage(isButtonCall: true)
         }
         else {
             bluetooth.sendMessage(string: ColorMessage.off)
@@ -136,16 +142,17 @@ class RgbVC: NSObject    {
     }
     
     func sliderValueChanged(sender: UISlider) {
-        getColorAndSendMessage()
+        getAndSendColorMessage()
     }
     
-    private func getColorAndSendMessage(isButtonCall: Bool = false)   {
+    private func getAndSendColorMessage(isButtonCall: Bool = false)   {
         if switchBtn.isOn  {
             let sliderValue = Int(rgbSlider.value)
             for index in 0..<Slider.values.count   {
                 if sliderValue <= Slider.values[index]  {
                     if previousIndex != index || isButtonCall {
                         previousIndex = index
+                        setSwitchOntTinColor(index: index)
                         let message = ColorMessage.colors[index]
                         bluetooth.sendMessage(string: message)
                     }
@@ -153,5 +160,10 @@ class RgbVC: NSObject    {
                 }
             }
         }
+    }
+    
+    private func setSwitchOntTinColor(index: Int) {
+        switchBtn.onTintColor = SwitchOnTintColor.all[index].withAlphaComponent(0.8)
+        
     }
 }

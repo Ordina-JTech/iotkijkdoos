@@ -16,7 +16,7 @@ class ChallengeVC: NSObject {
     }
     
     private enum ImageName  {
-        static let challenge = "hamer-jtech"
+        static let challenge = "hamer-jtech1"
     }
     
     private(set) var settingView: SettingView!
@@ -52,7 +52,7 @@ class ChallengeVC: NSObject {
         gradientButton.addTarget(self, action: #selector(gradientButtonWasPressed(sender:)), for: .touchUpInside)
         settingView.addSubview(gradientButton)
         
-        gradientButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 5.0).isActive = true
+        gradientButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 10.0).isActive = true
         gradientButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
         //Challenge IV button
@@ -61,16 +61,22 @@ class ChallengeVC: NSObject {
         specialEffectButton.addTarget(self, action: #selector(specialEffectButtonWasPressed(sender:)), for: .touchUpInside)
         settingView.addSubview(specialEffectButton)
         
-        specialEffectButton.topAnchor.constraint(equalTo: gradientButton.bottomAnchor, constant: 2).isActive = true
+        specialEffectButton.topAnchor.constraint(equalTo: gradientButton.bottomAnchor, constant: 10).isActive = true
         specialEffectButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        
+        gradientButton.widthAnchor.constraint(equalTo: specialEffectButton.widthAnchor, multiplier: 1).isActive = true
     }
     
     private func addButtonProperties(button: UIButton, buttonTitle: String)  {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(buttonTitle, for: .normal)
-        button.setTitleColor(UIColor.defaultButtonColor, for: .normal)
-        button.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
-        button.titleLabel?.font = UIFont.avenirNext(size: 22)
+        button.setTitleColor(UIColor.lightGray, for: .normal)
+        button.setTitleColor(UIColor.white.withAlphaComponent(0.25), for: .highlighted)
+        button.titleLabel?.font = UIFont.avenirNext(size: 17)
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 1
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.contentEdgeInsets = UIEdgeInsetsMake(5, 8, 5, 8)
         button.sizeToFit()
     }
     

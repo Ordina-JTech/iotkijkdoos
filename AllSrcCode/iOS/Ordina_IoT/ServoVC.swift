@@ -52,6 +52,7 @@ class ServoVC: NSObject {
         slider.minimumValue = 0
         slider.maximumValue = 180
         slider.thumbTintColor = UIColor.lightGray
+        slider.maximumTrackTintColor = UIColor.lightGray
         slider.minimumTrackTintColor = UIColor.orange
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
         settingView.addSubview(slider)

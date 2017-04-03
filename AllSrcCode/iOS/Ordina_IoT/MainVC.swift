@@ -16,7 +16,7 @@ class MainVC: UIViewController{
         static let led2 = "Right Light"
         static let rgb  = "Disco Ball"
         static let servo = "Television"
-        static let buzzer = "Buzzer"
+        static let buzzer = "Keyboard"
         static let challenge = "Challenges"
     }
     

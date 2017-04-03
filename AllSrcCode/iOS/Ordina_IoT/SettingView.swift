@@ -14,7 +14,6 @@ class SettingView: UIView {
         static let ordina = "ordinaLogo"
     }
     
-    private var headerText: String!
     private var fontSize: CGFloat {
         if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad    {
             return 35
@@ -30,15 +29,11 @@ class SettingView: UIView {
     
     init(frame: CGRect, headerText: String)  {
         super.init(frame: frame)
-        self.headerText = headerText
         self.backgroundColor = UIColor.white
+        addHeaderComponents(headerText: headerText)
     }
     
-    override func layoutSubviews() {
-        addHeaderComponents()
-    }
-    
-    private func addHeaderComponents()  {
+    private func addHeaderComponents(headerText: String)  {
         //View
         let viewPoint = CGPoint(x: 0, y: 0)
         let viewSize = CGSize(width: self.frame.width, height: self.frame.height/3)
