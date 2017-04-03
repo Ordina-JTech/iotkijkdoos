@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.annimon.stream.Optional;
 
@@ -37,6 +38,8 @@ import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
+import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
+import static nl.ordina.kijkdoos.R.string.FailedToConnect;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
@@ -191,7 +194,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
                         startActivity(intent);
                     });
                 } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    e.printStackTrace();
+                    Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
                 }
             }
         }.start();
