@@ -51,7 +51,14 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }),
         GUITAR(R.id.ivKeyboard, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
         TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
-                (controller, degree) -> controller.rotateTelevision((int) degree));
+                (controller, degree) -> controller.rotateTelevision((int) degree)), //
+        CHALLENGES(R.id.ivChallenges, R.string.controlChallengesTitle, ControlChallengesFragment.class, (controller, buttonId) -> {
+            if ((int) buttonId == R.id.btGradientChallenge) {
+                controller.showGradient();
+            } else {
+                controller.specialEffect();
+            }
+        }) ;
 
         private final int viewReference;
         @Getter
@@ -168,7 +175,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivKeyboard, R.id.ivTelevision})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivKeyboard, R.id.ivTelevision, R.id.ivChallenges})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 

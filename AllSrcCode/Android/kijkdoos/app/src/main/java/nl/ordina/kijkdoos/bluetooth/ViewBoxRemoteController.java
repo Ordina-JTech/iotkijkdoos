@@ -171,6 +171,14 @@ public class ViewBoxRemoteController {
         sendMessage("g" + degree + "\n");
     }
 
+    public void showGradient() {
+        sendMessage("h");
+    }
+
+    public void specialEffect() {
+        sendMessage("i");
+    }
+
     public void reset(Consumer<Void> resetFinishedConsumer) {
         sendMessage("r");
         addMessageResponseListener("y", resetFinishedConsumer);
