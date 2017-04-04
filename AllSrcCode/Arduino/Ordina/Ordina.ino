@@ -46,7 +46,8 @@ void loop() {
       buzzer.vaderJacob(led1, led2);
       break;
     case 'f':
-      buzzer.customSound();
+      rgbLed.showGradient();
+//      buzzer.customSound();
       break;
     case 'g':
       angle = bluetooth.getAngle();

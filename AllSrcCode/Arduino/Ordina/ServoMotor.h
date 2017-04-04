@@ -8,7 +8,6 @@ class ServoMotor  {
   
   public:
     ServoMotor(int pin);
-    getAngle(SoftwareSerial &bluetooth);
     void setAngle(int angle, int milliSec);
     void reset();
 

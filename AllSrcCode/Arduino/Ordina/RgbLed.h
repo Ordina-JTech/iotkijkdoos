@@ -1,8 +1,13 @@
+struct RGB {
+  byte r;
+  byte g;
+  byte b;
+};
+
 class RgbLed {
   
   public:
     RgbLed(int redPin, int greenPin, int bluePin);
-    char getColorChar(SoftwareSerial &bluetooth);
     void setColor(char input);
     void showGradient();
     void reset();
@@ -12,16 +17,16 @@ class RgbLed {
      int _greenPin;
      int _bluePin;
 
-     const int off[3] = {0, 0, 0};
-     const int red[3] = {255, 0, 0};
-     const int yellow[3] = {255, 255, 0};
-     const int green[3] = {0, 255, 0}; 
-     const int aqua[3] = {0, 255, 255}; 
-     const int blue[3] = {0, 0, 255}; 
-     const int purple[3] = {255, 0, 255}; 
-     int allColors[6][3];
+     const RGB off = {0, 0, 0};
+     const RGB red = {255, 0, 0};
+     const RGB yellow = {255, 255, 0};
+     const RGB green = {0, 255, 0}; 
+     const RGB aqua = {0, 255, 255}; 
+     const RGB blue = {0, 0, 255}; 
+     const RGB purple = {255, 0, 255}; 
+     const RGB *allColors[6];
      
-     void writeColor(int rgbValues[3]);
+     void writeColor(const RGB *rgbValues);
 };
 
 

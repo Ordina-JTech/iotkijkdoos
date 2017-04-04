@@ -7,8 +7,6 @@ ServoMotor::ServoMotor(int pin) {
   _pin = pin;
 }
 
-
-
 void ServoMotor::setAngle(int angle, int milliSec)  {
   servo.attach(_pin); 
   servo.write(angle);
