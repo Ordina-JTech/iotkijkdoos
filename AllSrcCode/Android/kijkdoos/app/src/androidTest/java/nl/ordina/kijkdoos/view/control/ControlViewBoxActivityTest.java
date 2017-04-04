@@ -104,6 +104,11 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.component_controller)).check(matches(isOpen()));
         pressBack();
         onView(withId(R.id.component_controller)).check(matches(isClosed()));
+
+        onView(withId(R.id.ivChallenges)).perform(click());
+        onView(withId(R.id.component_controller)).check(matches(isOpen()));
+        pressBack();
+        onView(withId(R.id.component_controller)).check(matches(isClosed()));
     }
 
     @Test
@@ -168,6 +173,17 @@ public class ControlViewBoxActivityTest {
 
         verify(mockedViewBoxRemoteController).reset(anyObject());
         verify(mockedViewBoxRemoteController).disconnect();
+    }
+
+    @Test
+    public void testTheChallenges() throws Exception {
+        onView(withId(R.id.ivChallenges)).perform(click());
+
+        onView(withId(R.id.btGradientChallenge)).perform(click());
+        onView(withId(R.id.btSpecialEffect)).perform(click());
+
+        verify(mockedViewBoxRemoteController).showGradient();
+        verify(mockedViewBoxRemoteController).specialEffect();
     }
 
     private static ViewAction setProgress(int progress) {
