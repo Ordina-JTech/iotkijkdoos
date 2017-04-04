@@ -101,13 +101,13 @@
                                 <rect key="frame" x="489" y="0.0" width="178" height="20"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uHT-01-yDu" userLabel="Light Height helper ">
-                                <rect key="frame" x="471" y="0.0" width="20" height="57.5"/>
+                                <rect key="frame" x="471" y="0.0" width="20" height="58"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="ZTF-iS-oDz"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lamp-rechts" translatesAutoresizingMaskIntoConstraints="NO" id="5t8-lz-HEK">
-                                <rect key="frame" x="434" y="52.5" width="94" height="56"/>
+                                <rect key="frame" x="434.5" y="53" width="93.5" height="55.5"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vq7-lB-Ucc" customClass="DisconnectButton" customModule="Ordina_IoT" customModuleProvider="target">
                                 <rect key="frame" x="10" y="329" width="52" height="36"/>
@@ -119,7 +119,7 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lamp-links" translatesAutoresizingMaskIntoConstraints="NO" id="3Fv-We-7xq">
-                                <rect key="frame" x="134" y="52.5" width="94" height="56"/>
+                                <rect key="frame" x="134" y="53" width="93.5" height="55.5"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LeA-XM-cXF" userLabel="Keyboard helper">
                                 <rect key="frame" x="634.5" y="345" width="32.5" height="30"/>
@@ -128,7 +128,7 @@
                                 <rect key="frame" x="534" y="159" width="87" height="56"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="keyboard" translatesAutoresizingMaskIntoConstraints="NO" id="62n-x7-tqg">
-                                <rect key="frame" x="384.5" y="251.5" width="173.5" height="93.5"/>
+                                <rect key="frame" x="385" y="251.5" width="173" height="93.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

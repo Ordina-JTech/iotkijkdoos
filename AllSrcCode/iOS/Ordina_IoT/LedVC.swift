@@ -62,6 +62,7 @@ class LedVC: NSObject   {
         let heightConstant = settingView.frame.width/3.5
         imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        
         let yConstant = settingView.frame.height/12.5
         imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
@@ -72,20 +73,21 @@ class LedVC: NSObject   {
         switchBtn.thumbTintColor = UIColor.lightGray
         switchBtn.tintColor = UIColor.lightGray
         switchBtn.onTintColor = UIColor.orange
-        switchBtn.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
         switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
         settingView.addSubview(switchBtn)
         
-        let bottomConstant = settingView.frame.height/10
+        let topConstant: CGFloat = 12.5
         switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-        switchBtn.centerYAnchor.constraint(equalTo: imageView.bottomAnchor, constant: bottomConstant).isActive = true
+        switchBtn.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
     }
     
     func switchStateDidChange() {
         if switchBtn.isOn {
+            switchBtn.thumbTintColor = UIColor.white
             buttonStateLetter = ButtonState.on
         }
         else {
+            switchBtn.thumbTintColor = UIColor.lightGray
             buttonStateLetter = ButtonState.off
         }
         let msg = ledLetter + buttonStateLetter

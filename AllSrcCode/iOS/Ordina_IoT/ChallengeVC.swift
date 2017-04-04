@@ -46,7 +46,7 @@ class ChallengeVC: NSObject {
         challengeImageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         challengeImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
-        //Challenge III button
+        //Gradient challenge button
         let gradientButton = UIButton()
         addButtonProperties(button: gradientButton, buttonTitle: ChallengeName.gradient)
         gradientButton.addTarget(self, action: #selector(gradientButtonWasPressed(sender:)), for: .touchUpInside)
@@ -55,14 +55,17 @@ class ChallengeVC: NSObject {
         gradientButton.topAnchor.constraint(equalTo: challengeImageView.bottomAnchor, constant: 10.0).isActive = true
         gradientButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
-        //Challenge IV button
+        //Special effect challenge button
         let specialEffectButton = UIButton()
         addButtonProperties(button: specialEffectButton, buttonTitle: ChallengeName.specialEffect)
         specialEffectButton.addTarget(self, action: #selector(specialEffectButtonWasPressed(sender:)), for: .touchUpInside)
         settingView.addSubview(specialEffectButton)
-        
         specialEffectButton.topAnchor.constraint(equalTo: gradientButton.bottomAnchor, constant: 10).isActive = true
         specialEffectButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+        
+        if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad {
+            specialEffectButton.widthAnchor.constraint(equalTo: challengeImageView.widthAnchor, multiplier: 1).isActive = true
+        }
         
         gradientButton.widthAnchor.constraint(equalTo: specialEffectButton.widthAnchor, multiplier: 1).isActive = true
     }
@@ -70,13 +73,13 @@ class ChallengeVC: NSObject {
     private func addButtonProperties(button: UIButton, buttonTitle: String)  {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(buttonTitle, for: .normal)
-        button.setTitleColor(UIColor.lightGray, for: .normal)
-        button.setTitleColor(UIColor.white.withAlphaComponent(0.25), for: .highlighted)
-        button.titleLabel?.font = UIFont.avenirNext(size: 17)
+        button.setTitleColor(UIColor.darkGray, for: .normal)
+        button.setTitleColor(UIColor.darkGray.withAlphaComponent(0.25), for: .highlighted)
+        button.titleLabel?.font = UIFont.avenirNext(size: 18)
         button.layer.cornerRadius = 10
         button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.contentEdgeInsets = UIEdgeInsetsMake(5, 8, 5, 8)
+        button.layer.borderColor = UIColor.darkGray.cgColor
+        button.contentEdgeInsets = UIEdgeInsetsMake(8, 8, 8, 8)
         button.sizeToFit()
     }
     

@@ -54,6 +54,14 @@ class ServoVC: NSObject {
         slider.thumbTintColor = UIColor.lightGray
         slider.maximumTrackTintColor = UIColor.lightGray
         slider.minimumTrackTintColor = UIColor.orange
+        slider.layer.shadowOpacity = 0
+        slider.layer.shadowColor = UIColor.black.cgColor
+        slider.layer.shadowOffset = CGSize.zero
+        slider.layer.shadowRadius = 5
+    
+        slider.addTarget(self, action: #selector(sliderTouchedDown), for: UIControlEvents.touchDown)
+        slider.addTarget(self, action: #selector(sliderTouchedUpInside), for: UIControlEvents.touchUpInside)
+        slider.addTarget(self, action: #selector(sliderTouchedUpOutside), for: UIControlEvents.touchUpOutside)
         slider.addTarget(self, action: #selector(sliderValueChanged), for: UIControlEvents.valueChanged)
         settingView.addSubview(slider)
         
@@ -90,6 +98,18 @@ class ServoVC: NSObject {
             let message = PeripheralLetter.servo + String(sliderValue) + "\n"
             bluetooth.sendMessage(string: message)
         }
+    }
+    
+    func sliderTouchedDown()    {
+        slider.layer.shadowOpacity = 1
+    }
+    
+    func sliderTouchedUpInside()    {
+        slider.layer.shadowOpacity = 0
+    }
+    
+    func sliderTouchedUpOutside()   {
+        slider.layer.shadowOpacity = 0
     }
     
     private func rotateImage(value: Float)  {

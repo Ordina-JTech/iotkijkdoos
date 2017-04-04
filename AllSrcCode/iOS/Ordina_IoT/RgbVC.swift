@@ -44,7 +44,6 @@ class RgbVC: NSObject    {
         static let all = [UIColor.red, UIColor.yellow, UIColor.green, SwitchOnTintColor.aqua, UIColor.blue, UIColor.purple]
     }
     
-    
     private enum StateBtnText{
         static let on = "Turn Light On"
         static let off = "Turn Light Off"
@@ -83,6 +82,20 @@ class RgbVC: NSObject    {
         discoImageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         discoImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
+        //Switch Button
+        switchBtn = UISwitch()
+        switchBtn.translatesAutoresizingMaskIntoConstraints = false
+        switchBtn.thumbTintColor = UIColor.lightGray
+        switchBtn.tintColor = UIColor.lightGray
+        switchBtn.onTintColor = UIColor.orange
+        switchBtn.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
+        settingView.addSubview(switchBtn)
+        
+        let topConstant: CGFloat = 6
+        switchBtn.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
+        switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+ 
         //RGB Led ImageView
         guard let rgbImage = UIImage(named: ImageName.slider) else  {
             print("Image was not found")
@@ -96,9 +109,8 @@ class RgbVC: NSObject    {
         settingView.addSubview(rgbImageView)
     
         heightConstant = 30
-        let topConstant = settingView.frame.height/18
         let leftRightConstant: CGFloat = settingView.frame.height/15
-        rgbImageView.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
+        rgbImageView.topAnchor.constraint(equalTo: switchBtn.bottomAnchor, constant: topConstant).isActive = true
         rgbImageView.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbImageView.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
         rgbImageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
@@ -118,18 +130,6 @@ class RgbVC: NSObject    {
         rgbSlider.topAnchor.constraint(equalTo: rgbImageView.topAnchor).isActive = true
         rgbSlider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbSlider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
-        
-        //Switch Button
-        switchBtn = UISwitch()
-        switchBtn.translatesAutoresizingMaskIntoConstraints = false
-        switchBtn.thumbTintColor = UIColor.lightGray
-        switchBtn.tintColor = UIColor.lightGray
-        switchBtn.onTintColor = UIColor.orange
-        switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
-        settingView.addSubview(switchBtn)
-        
-        switchBtn.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
-        switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
     }
     
     func switchStateDidChange() {
@@ -137,6 +137,7 @@ class RgbVC: NSObject    {
             getAndSendColorMessage(isButtonCall: true)
         }
         else {
+            switchBtn.thumbTintColor = UIColor.lightGray
             bluetooth.sendMessage(string: ColorMessage.off)
         }
     }
@@ -163,6 +164,7 @@ class RgbVC: NSObject    {
     }
     
     private func setSwitchOntTinColor(index: Int) {
+        switchBtn.thumbTintColor = UIColor.white
         switchBtn.onTintColor = SwitchOnTintColor.all[index].withAlphaComponent(0.8)
         
     }
