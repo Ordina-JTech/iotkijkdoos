@@ -2,9 +2,7 @@
 
 #include "Bluetooth.h"
 
-Bluetooth::Bluetooth(int rx, int tx) : SoftwareSerial(rx, tx) {
-  
-}
+Bluetooth::Bluetooth(int rx, int tx) : SoftwareSerial(rx, tx) {}
 
 char Bluetooth::getNextChar() {
   int count = 0;
@@ -31,6 +29,5 @@ int Bluetooth::getAngle() {
       }
     }   
   }
-  int angle = 179 - angleStr.toInt(); //'maxAngle-angle' = counter clockwise.
-  return angle;
+  return angleStr.toInt(); 
 };

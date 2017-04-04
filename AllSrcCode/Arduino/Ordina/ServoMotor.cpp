@@ -9,12 +9,12 @@ ServoMotor::ServoMotor(int pin) {
 
 void ServoMotor::setAngle(int angle, int milliSec)  {
   servo.attach(_pin); 
-  servo.write(angle);
+  servo.write(maxAngle - angle);
   delay(milliSec);
   servo.detach();
 }
 
 void ServoMotor::reset()  {
-  setAngle(179, 400);
+  setAngle(maxAngle, 400);
 }
 

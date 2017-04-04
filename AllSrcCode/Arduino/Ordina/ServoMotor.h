@@ -14,4 +14,6 @@ class ServoMotor  {
   private:
     int _pin;
     Servo servo;
+
+    const int maxAngle = 179;
 };
