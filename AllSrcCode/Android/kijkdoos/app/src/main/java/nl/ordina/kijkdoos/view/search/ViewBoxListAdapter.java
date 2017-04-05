@@ -8,11 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+
+import static java.lang.Integer.valueOf;
+import static java.util.Collections.sort;
 
 public class ViewBoxListAdapter extends BaseAdapter {
     private ArrayList<ViewBoxRemoteController> viewBoxRemoteControllers;
@@ -30,6 +35,8 @@ public class ViewBoxListAdapter extends BaseAdapter {
 
         if (!viewBoxRemoteControllers.contains(device)) {
             viewBoxRemoteControllers.add(device);
+            sort(viewBoxRemoteControllers, (o1, o2) -> valueOf(o1.getSignalStrength()).compareTo(o2.getSignalStrength()));
+
             notifyDataSetChanged();
         }
     }
