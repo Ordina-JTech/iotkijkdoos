@@ -11,8 +11,15 @@ import Foundation
 
 class LedVC: NSObject   {
     
+    enum LedOrientation {
+        case left
+        case right
+    }
+    
+    
     private enum ImageName  {
-        static let lamp = "lamp"
+        static let leftLed = "lamp-links"
+        static let rightLed = "lamp-rechts"
     }
     private enum ButtonState    {
         static let on = "1"
@@ -24,16 +31,25 @@ class LedVC: NSObject   {
     private var ledLetter: String!
     private var buttonStateLetter = ButtonState.off
 
-    init(frame: CGRect, headerText: String, ledLetter: String) {
+    init(frame: CGRect, headerText: String, ledLetter: String, orientation: LedOrientation) {
         super.init()
         settingView = SettingView(frame: frame, headerText: headerText)
         self.ledLetter = ledLetter
-        addLedView()
+        addLedView(orientation: orientation)
     }
     
-    private func addLedView()   {
+    private func addLedView(orientation: LedOrientation)   {
         //ImageView
-        guard let image = UIImage(named: ImageName.lamp) else    {
+        var imageName = ""
+        
+        switch orientation  {
+        case .left:
+            imageName = ImageName.leftLed
+        case .right:
+            imageName = ImageName.rightLed
+        }
+        
+        guard let image = UIImage(named: imageName) else    {
             print("Image was not found")
             return
         }
@@ -43,9 +59,10 @@ class LedVC: NSObject   {
         imageView.contentMode = .scaleAspectFit
         settingView.addSubview(imageView)
         
-        let heightConstant = settingView.frame.width/2.5
+        let heightConstant = settingView.frame.width/3.5
         imageView.widthAnchor.constraint(equalToConstant: heightConstant).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
+        
         let yConstant = settingView.frame.height/12.5
         imageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         imageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
@@ -56,20 +73,21 @@ class LedVC: NSObject   {
         switchBtn.thumbTintColor = UIColor.lightGray
         switchBtn.tintColor = UIColor.lightGray
         switchBtn.onTintColor = UIColor.orange
-        switchBtn.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
         switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
         settingView.addSubview(switchBtn)
         
-        let bottomConstant = settingView.frame.height/20
+        let topConstant: CGFloat = 12.5
         switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
-        switchBtn.centerYAnchor.constraint(equalTo: imageView.bottomAnchor, constant: bottomConstant).isActive = true
+        switchBtn.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: topConstant).isActive = true
     }
     
     func switchStateDidChange() {
         if switchBtn.isOn {
+            switchBtn.thumbTintColor = UIColor.white
             buttonStateLetter = ButtonState.on
         }
         else {
+            switchBtn.thumbTintColor = UIColor.lightGray
             buttonStateLetter = ButtonState.off
         }
         let msg = ledLetter + buttonStateLetter

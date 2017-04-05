@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
-#include "Led.h"
+#include "LED.h"
 #include "Buzzer.h"
 
 Buzzer::Buzzer(int pin) {
@@ -8,9 +8,9 @@ Buzzer::Buzzer(int pin) {
   pinMode(_pin, OUTPUT);
 }
 
-void Buzzer::alarm(Led led1, Led led2)  {
-  bool stateLed1 = led1.getState();
-  bool stateLed2 = led2.getState();
+void Buzzer::alarm(LED led1, LED led2)  {
+  bool stateLED1 = led1.getState();
+  bool stateLED2 = led2.getState();
   
   long startTimer = millis();
   while (millis() - startTimer < 3000) {    //Play alarm for 3 seconds (3000 ms)
@@ -24,12 +24,12 @@ void Buzzer::alarm(Led led1, Led led2)  {
       tone(_pin, 500, 500);
       delay(500);   
   }
-  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
+  setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
-void Buzzer::vaderJacob(Led led1, Led led2) {
-  bool stateLed1 = led1.getState();
-  bool stateLed2 = led2.getState();
+void Buzzer::vaderJacob(LED led1, LED led2) {
+  bool stateLED1 = led1.getState();
+  bool stateLED2 = led2.getState();
   
   led1.setLed(false);
   led2.setLed(false);
@@ -52,7 +52,7 @@ void Buzzer::vaderJacob(Led led1, Led led2) {
     }
     delay(200);
   }
-  setLedToPreviousState(led1, stateLed1, led2, stateLed2);
+  setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
 //Challenge II
@@ -60,7 +60,7 @@ void Buzzer::customSound()  {
   //Add your code here
 }
 
-void Buzzer::setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2) {
+void Buzzer::setLEDToPreviousState(LED led1, bool wasOnLed1, LED led2, bool wasOnLed2) {
     led1.setLed(wasOnLed1);
     led2.setLed(wasOnLed2);
 }

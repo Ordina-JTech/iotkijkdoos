@@ -3,8 +3,8 @@
 #include <SoftwareSerial.h>
 #include <Servo.h>
 
-#include "Led.h"
-#include "RgbLed.h"
+#include "LED.h"
+#include "RGB.h"
 #include "Buzzer.h"
 #include "ServoMotor.h"
 #include "Bluetooth.h"
@@ -14,9 +14,9 @@ Bluetooth bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(
 
 ServoMotor servo(3);
 Buzzer buzzer(4);
-RgbLed rgbLed(9, 6, 5);
-Led led1(8);
-Led led2(7);
+RGB rgbLed(9, 6, 5);
+LED led1(8);
+LED led2(12);
 
 int angle;
 

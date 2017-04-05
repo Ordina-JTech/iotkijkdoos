@@ -30,13 +30,13 @@
         android:paddingRight="30dp"/>
 
     <ImageView
-        android:layout_width="223dp"
-        android:layout_height="195dp"
-        seekarc:srcCompat="@drawable/tv_meubel_illus4_bewerkt_licht_minder_nerf"
+        android:layout_width="150dp"
+        android:layout_height="128dp"
         android:id="@+id/imageView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/rotationSlider"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/television_default" />
 
 </android.support.constraint.ConstraintLayout>

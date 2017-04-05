@@ -7,31 +7,35 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
-import com.annimon.stream.Stream;
+import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 import org.parceler.Parcels;
 import org.parceler.Transient;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
 import nl.ordina.kijkdoos.threading.BackgroundService;
 import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
+import static android.bluetooth.BluetoothProfile.STATE_DISCONNECTED;
+import static android.bluetooth.BluetoothProfile.STATE_DISCONNECTING;
 import static android.text.TextUtils.isEmpty;
 import static junit.framework.Assert.assertNotNull;
 
@@ -74,6 +78,19 @@ public class ViewBoxRemoteController {
     @Transient
     private BluetoothGattCharacteristic bluetoothGattCharacteristic;
 
+    @Transient
+    @Nullable
+    private Consumer<Void> connectConsumer;
+
+    @Transient
+    @Nullable
+    @Getter
+    @Setter
+    private Consumer<Void> disconnectConsumer;
+
+    @Transient
+    private Map<String, Consumer<Void>> messageResponseListeners;
+
     @VisibleForTesting
     protected ViewBoxRemoteController() {
     }
@@ -85,6 +102,7 @@ public class ViewBoxRemoteController {
 
         BackgroundServiceFactory.getComponent().inject(this);
         bluetoothCallbackRegister = new BluetoothCallbackRegister();
+        messageResponseListeners = new HashMap<>();
     }
 
     public String getName() {
@@ -98,6 +116,12 @@ public class ViewBoxRemoteController {
     }
 
     public Future<Void> connect(final Context context) {
+        return connect(context, null);
+    }
+
+    public Future<Void> connect(final Context context, Consumer<Void> onConnectConsumer) {
+        connectConsumer = onConnectConsumer;
+
         return backgroundService.getExecutorService()
                 .submit(() -> {
                     device.connectGatt(context, false, bluetoothCallbackRegister);
@@ -110,7 +134,7 @@ public class ViewBoxRemoteController {
 
     public void disconnect() {
         if (bluetoothGatt != null) {
-            bluetoothGatt.disconnect();
+            reset(aVoid -> bluetoothGatt.disconnect());
         }
     }
 
@@ -147,13 +171,32 @@ public class ViewBoxRemoteController {
         sendMessage("g" + degree + "\n");
     }
 
+    public void showGradient() {
+        sendMessage("h");
+    }
+
+    public void specialEffect() {
+        sendMessage("i");
+    }
+
+    public void reset(Consumer<Void> resetFinishedConsumer) {
+        sendMessage("r");
+        addMessageResponseListener("y", resetFinishedConsumer);
+    }
+
     public Parcelable wrapInParcelable() {
         return Parcels.wrap(this);
     }
 
-    private void sendMessage(String value) {
-        bluetoothGattCharacteristic.setValue(value);
+    private void sendMessage(String message) {
+        if (bluetoothGatt == null) return;
+
+        bluetoothGattCharacteristic.setValue(message);
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
+    }
+
+    private void addMessageResponseListener(String expectedMessage, Consumer<Void> messageResponseConsumer) {
+        messageResponseListeners.put(expectedMessage, messageResponseConsumer);
     }
 
     @Override
@@ -175,8 +218,17 @@ public class ViewBoxRemoteController {
 
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if (newState == STATE_DISCONNECTED || newState == STATE_DISCONNECTING) {
+                bluetoothGatt.close();
+
+                if (disconnectConsumer != null) {
+                    disconnectConsumer.accept(null);
+                }
+            }
+
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 Log.w(ViewBoxRemoteController.class.getSimpleName(), this + ": failed to connect (" + status + ")");
+
                 return;
             }
 
@@ -184,8 +236,6 @@ public class ViewBoxRemoteController {
                 bluetoothGatt = gatt;
 
                 bluetoothGatt.discoverServices();
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                bluetoothGatt.close();
             }
         }
 
@@ -195,6 +245,22 @@ public class ViewBoxRemoteController {
             bluetoothGattCharacteristic = bluetoothGattService.getCharacteristic(UUID.CHARACTERISTIC.getUuid());
 
             bluetoothGatt.setCharacteristicNotification(bluetoothGattCharacteristic, true);
+
+            if (connectConsumer != null) {
+                connectConsumer.accept(null);
+            }
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            final byte[] value = characteristic.getValue();
+            final byte[] valueWithoutLineEnding = Arrays.copyOf(value, value.length - 2);
+
+            final String valueWithoutLineEndingString = new String(valueWithoutLineEnding);
+            final Consumer<Void> consumer = messageResponseListeners.get(valueWithoutLineEndingString);
+            if (consumer != null) {
+                consumer.accept(null);
+            }
         }
     }
 }

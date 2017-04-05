@@ -14,10 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiConsumer;
+import com.annimon.stream.function.Consumer;
 
 import org.parceler.Parcels;
 
@@ -30,24 +32,33 @@ import butterknife.OnClick;
 import lombok.AccessLevel;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
+import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
-import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
+import static android.bluetooth.BluetoothAdapter.STATE_ON;
+import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
 
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean)lightStatus)), //
-        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean)lightStatus)), //
+        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLeftLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean)lightStatus)), //
+        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlRightLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean)lightStatus)), //
         DISCO_BALL(R.id.ivDiscoBall, R.string.controlDiscoBallTitle, ControlDiscoBallFragment.class, (controller, color) -> {
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
         }),
-        GUITAR(R.id.ivGuitar, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
+        GUITAR(R.id.ivKeyboard, R.string.controlSpeakerTitle, ControlSpeakerFragment.class, (controller, song) -> controller.playSong((ControlSpeakerFragment.Song) song)), //
         TELEVISION(R.id.ivTelevision, R.string.controlTelevisionTitle, ControlTelevisionFragment.class,
-                (controller, degree) -> controller.rotateTelevision((int) degree));
+                (controller, degree) -> controller.rotateTelevision((int) degree)), //
+        CHALLENGES(R.id.ivChallenges, R.string.controlChallengesTitle, ControlChallengesFragment.class, (controller, buttonId) -> {
+            if ((int) buttonId == R.id.btGradientChallenge) {
+                controller.showGradient();
+            } else {
+                controller.specialEffect();
+            }
+        }) ;
 
         private final int viewReference;
         @Getter
@@ -95,13 +106,16 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
     private Map<Component, Fragment> fragmentCache;
 
+    private Consumer<Void> onDeviceDisconnectAction;
+
+    private Runnable disconnectedInBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_view_box);
+        setContentView(R.layout.activity_control_view_box);
         ButterKnife.bind(this);
-        getViewBoxApplication(this).getApplicationComponent().inject(this);
 
         componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         componentController.setFocusableInTouchMode(false);
@@ -112,16 +126,42 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         final Parcelable parceledViewBoxRemoteController = actualExtras.getParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER);
         viewBoxRemoteController = Parcels.unwrap(parceledViewBoxRemoteController);
-        viewBoxRemoteController.connect(this);
+        onDeviceDisconnectAction = aVoid -> {
+            runOnUiThread(() -> Toast.makeText(this, getString(BluetoothConnectionLost,
+                    viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
+            finish();
+        };
+        viewBoxRemoteController.connect(this, aVoid -> viewBoxRemoteController.reset(null));
+        viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
 
         fragmentCache = new HashMap<>(Component.values().length - 1);
+
+        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
+
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> finish());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        View decorView = getWindow().getDecorView();
+
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        if (disconnectedInBackground != null) {
+            disconnectedInBackground.run();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        viewBoxRemoteController.disconnect();
+        viewBoxRemoteController.setDisconnectConsumer(aVoid -> {
+            disconnectedInBackground = () -> onDeviceDisconnectAction.accept(null);
+        });
     }
 
     @Override
@@ -129,11 +169,13 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         if (componentController.isDrawerOpen(GravityCompat.START)) {
             componentController.closeDrawer(GravityCompat.START);
         } else {
+            viewBoxRemoteController.setDisconnectConsumer(null);
+            viewBoxRemoteController.disconnect();
             super.onBackPressed();
         }
     }
 
-    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivGuitar, R.id.ivTelevision})
+    @OnClick({R.id.ivLeftLamp, R.id.ivRightLamp, R.id.ivDiscoBall, R.id.ivKeyboard, R.id.ivTelevision, R.id.ivChallenges})
     public void onComponentClicked(View clickedView) {
         final Component component = Component.get(clickedView.getId());
 

@@ -4,12 +4,12 @@ class Buzzer  {
  
  public:
   Buzzer(int pin);
-  void alarm(Led led1, Led led2);
-  void vaderJacob(Led led1, Led led2);
+  void alarm(LED led1, LED led2);
+  void vaderJacob(LED led1, LED led2);
   void customSound();
 
  private:
-  void setLedToPreviousState(Led led1, bool wasOnLed1, Led led2, bool wasOnLed2);
+  void setLEDToPreviousState(LED led1, bool wasOnLED1, LED led2, bool wasOnLED2);
   int _pin;
   
   //Vader Jacob

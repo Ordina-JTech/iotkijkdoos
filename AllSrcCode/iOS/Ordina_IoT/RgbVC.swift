@@ -12,7 +12,7 @@ import Foundation
 class RgbVC: NSObject    {
     
     private enum ImageName {
-        static let discobal = "discobal"
+        static let discobal = "discobal-1"
         static let slider = "rgbBalk"
     }
     private enum ColorMessage{
@@ -39,6 +39,11 @@ class RgbVC: NSObject    {
         
         static let values = [redVal, yellowVal, greenVal, aquaVal, blueVal, purpleVal]
     }
+    private enum SwitchOnTintColor {
+        static let aqua = UIColor.init(red: 0, green: 255, blue: 255, alpha: 1)
+        static let all = [UIColor.red, UIColor.yellow, UIColor.green, SwitchOnTintColor.aqua, UIColor.blue, UIColor.purple]
+    }
+    
     private enum StateBtnText{
         static let on = "Turn Light On"
         static let off = "Turn Light Off"
@@ -48,9 +53,8 @@ class RgbVC: NSObject    {
     private var rgbLabel: UILabel!
     private var rgbSlider: UISlider!
     private var imageView: UIImageView!
-    private var stateButton: UIButton!
+    private var switchBtn: UISwitch!
     private var colorMessage = [String]()
-    private var isRgbOn = false
     private var previousIndex = 0
 
     init(frame: CGRect, headerText: String) {
@@ -78,6 +82,20 @@ class RgbVC: NSObject    {
         discoImageView.centerYAnchor.constraint(equalTo: settingView.centerYAnchor, constant: yConstant).isActive = true
         discoImageView.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
         
+        //Switch Button
+        switchBtn = UISwitch()
+        switchBtn.translatesAutoresizingMaskIntoConstraints = false
+        switchBtn.thumbTintColor = UIColor.lightGray
+        switchBtn.tintColor = UIColor.lightGray
+        switchBtn.onTintColor = UIColor.orange
+        switchBtn.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        switchBtn.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
+        settingView.addSubview(switchBtn)
+        
+        let topConstant: CGFloat = 6
+        switchBtn.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
+        switchBtn.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
+ 
         //RGB Led ImageView
         guard let rgbImage = UIImage(named: ImageName.slider) else  {
             print("Image was not found")
@@ -91,9 +109,8 @@ class RgbVC: NSObject    {
         settingView.addSubview(rgbImageView)
     
         heightConstant = 30
-        let topConstant = settingView.frame.height/18
         let leftRightConstant: CGFloat = settingView.frame.height/15
-        rgbImageView.topAnchor.constraint(equalTo: discoImageView.bottomAnchor, constant: topConstant).isActive = true
+        rgbImageView.topAnchor.constraint(equalTo: switchBtn.bottomAnchor, constant: topConstant).isActive = true
         rgbImageView.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbImageView.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
         rgbImageView.heightAnchor.constraint(equalToConstant: heightConstant).isActive = true
@@ -113,46 +130,30 @@ class RgbVC: NSObject    {
         rgbSlider.topAnchor.constraint(equalTo: rgbImageView.topAnchor).isActive = true
         rgbSlider.leftAnchor.constraint(equalTo: settingView.leftAnchor, constant: leftRightConstant).isActive = true
         rgbSlider.rightAnchor.constraint(equalTo: settingView.rightAnchor, constant: -leftRightConstant).isActive = true
-        
-        //On-Off Button
-        stateButton = UIButton()
-        stateButton.translatesAutoresizingMaskIntoConstraints = false
-        stateButton.setTitle(StateBtnText.on, for: .normal)
-        stateButton.setTitleColor(UIColor.defaultButtonColor, for: .normal)
-        stateButton.setTitleColor(UIColor.defaultButtonColor.withAlphaComponent(0.25), for: .highlighted)
-        stateButton.titleLabel?.font = UIFont.avenirNext(size: 20)
-        stateButton.sizeToFit()
-        stateButton.addTarget(self, action: #selector(stateButtonWasPressed(sender:)), for: .touchUpInside)
-        settingView.addSubview(stateButton)
-        
-        stateButton.topAnchor.constraint(equalTo: rgbImageView.bottomAnchor, constant: 12.5).isActive = true
-        stateButton.centerXAnchor.constraint(equalTo: settingView.centerXAnchor).isActive = true
     }
     
-    func stateButtonWasPressed(sender: UIButton)    {
-        if !isRgbOn {
-            isRgbOn = true
-            getColorAndSendMessage(isButtonCall: true)
-            stateButton.setTitle(StateBtnText.off, for: .normal)
+    func switchStateDidChange() {
+        if switchBtn.isOn {
+            getAndSendColorMessage(isButtonCall: true)
         }
-        else    {
+        else {
+            switchBtn.thumbTintColor = UIColor.lightGray
             bluetooth.sendMessage(string: ColorMessage.off)
-            isRgbOn = false
-            stateButton.setTitle(StateBtnText.on, for: .normal)
         }
     }
     
     func sliderValueChanged(sender: UISlider) {
-        getColorAndSendMessage()
+        getAndSendColorMessage()
     }
     
-    private func getColorAndSendMessage(isButtonCall: Bool = false)   {
-        if isRgbOn  {
+    private func getAndSendColorMessage(isButtonCall: Bool = false)   {
+        if switchBtn.isOn  {
             let sliderValue = Int(rgbSlider.value)
             for index in 0..<Slider.values.count   {
                 if sliderValue <= Slider.values[index]  {
                     if previousIndex != index || isButtonCall {
                         previousIndex = index
+                        setSwitchOntTinColor(index: index)
                         let message = ColorMessage.colors[index]
                         bluetooth.sendMessage(string: message)
                     }
@@ -160,5 +161,11 @@ class RgbVC: NSObject    {
                 }
             }
         }
+    }
+    
+    private func setSwitchOntTinColor(index: Int) {
+        switchBtn.thumbTintColor = UIColor.white
+        switchBtn.onTintColor = SwitchOnTintColor.all[index].withAlphaComponent(0.8)
+        
     }
 }
