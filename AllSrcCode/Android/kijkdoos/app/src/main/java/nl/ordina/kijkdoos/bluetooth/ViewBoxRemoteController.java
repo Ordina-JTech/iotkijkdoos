@@ -193,7 +193,7 @@ public class ViewBoxRemoteController {
     }
 
     private void sendMessage(String message) {
-        if (bluetoothGatt == null) return;
+        if (bluetoothGatt == null || bluetoothGattCharacteristic == null) return;
 
         bluetoothGattCharacteristic.setValue(message);
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
