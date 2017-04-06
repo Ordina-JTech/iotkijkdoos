@@ -46,7 +46,7 @@ void Buzzer::playVaderJacob(LED led1, LED led2) {
             led1.powerLED(false);
             led2.powerLED(true);
         }
-        tone(_pin, frequences[k], milliSec);
+        tone(_pin, frequencies[k], milliSec);
         delay(secondsRest[i]);
       }
       delay(300);
