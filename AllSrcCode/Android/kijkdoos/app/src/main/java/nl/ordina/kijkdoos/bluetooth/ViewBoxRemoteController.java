@@ -62,6 +62,10 @@ public class ViewBoxRemoteController {
     @Getter
     private BluetoothDevice device;
 
+    @Getter
+    @Transient
+    private int signalStrength;
+
     @Transient
     private BluetoothGatt bluetoothGatt;
 
@@ -189,7 +193,7 @@ public class ViewBoxRemoteController {
     }
 
     private void sendMessage(String message) {
-        if (bluetoothGatt == null) return;
+        if (bluetoothGatt == null || bluetoothGattCharacteristic == null) return;
 
         bluetoothGattCharacteristic.setValue(message);
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
@@ -261,6 +265,11 @@ public class ViewBoxRemoteController {
             if (consumer != null) {
                 consumer.accept(null);
             }
+        }
+
+        @Override
+        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+            signalStrength = rssi;
         }
     }
 }

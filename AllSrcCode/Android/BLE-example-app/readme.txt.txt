@@ -1,1 +1,0 @@
-Android BLE example source code

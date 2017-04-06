@@ -3,6 +3,7 @@ package nl.ordina.kijkdoos.view.control;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -83,9 +84,6 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
     @BindView(R.id.discoBallSwitch)
     public Switch discoBallSwitch;
 
-    private Drawable switchThumb;
-    private Drawable switchTrack;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,19 +91,11 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
 
         final int initialColor = DiscoBallColor.RED.getColor();
         colorSlider.setColor(initialColor);
-        onColorChanged(initialColor);
 
         colorSlider.setShowOldCenterColor(false);
         colorSlider.setOnColorChangedListener(this);
 
-        storeOriginalSwitchDrawables();
-
         return view;
-    }
-
-    protected void storeOriginalSwitchDrawables() {
-        switchThumb = discoBallSwitch.getThumbDrawable();
-        switchTrack = discoBallSwitch.getTrackDrawable();
     }
 
     @Override
@@ -116,8 +106,8 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
     }
 
     protected void restoreOriginalSwitchDrawables() {
-        discoBallSwitch.setThumbDrawable(switchThumb);
-        discoBallSwitch.setTrackDrawable(switchTrack);
+        discoBallSwitch.getThumbDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        discoBallSwitch.getTrackDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
@@ -141,7 +131,7 @@ public class ControlDiscoBallFragment extends AbstractControlFragment implements
             onColorChanged(colorSlider.getColor());
         } else {
             getComponentChangedListener().onComponentChanged(getComponent(), null);
-            changeSwitchColor(Color.GRAY);
+            changeSwitchColor(Color.LTGRAY);
         }
     }
 
