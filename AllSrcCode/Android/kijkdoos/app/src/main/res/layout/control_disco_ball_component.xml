@@ -27,7 +27,6 @@
         app:layout_constraintTop_toTopOf="@+id/colorSlider"
         app:layout_constraintBottom_toBottomOf="@+id/colorSlider"
         app:layout_constraintLeft_toLeftOf="@+id/colorSlider"
-        app:layout_constraintRight_toRightOf="@+id/colorSlider"
-        android:checked="true"/>
+        app:layout_constraintRight_toRightOf="@+id/colorSlider"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -7,26 +7,21 @@
 #include "RGB.h"
 #include "Buzzer.h"
 #include "ServoMotor.h"
+#include "Bluetooth.h"
 
 //Instance variables with the pin numbers as parameters
-SoftwareSerial bluetooth(10, 11);   //RX BLE to TX arduino(11), TX BLE to RX arduino(10)
-
+Bluetooth bluetooth(10, 11);   //BLE RX to TX arduino(11), BLE TX to RX arduino(10)
 ServoMotor servo(3);
 Buzzer buzzer(4);
 RGB rgbLed(9, 6, 5);
 LED led1(8);
 LED led2(12);
 
-char nextChar;
 int angle;
 
 void setup()  {
   Serial.begin(9600);
   bluetooth.begin(9600);
-  led1.begin();
-  led2.begin();
-  rgbLed.begin();
-  buzzer.begin();
 }
 
 void loop() {
@@ -35,28 +30,25 @@ void loop() {
     
     switch (input)  {
     case 'a':
-      nextChar = led1.getStateChar(bluetooth);
-      led1.setLED(nextChar);
+      led1.powerLED(bluetooth.getNextChar() == '1');
       break;
     case 'b':
-      nextChar = led2.getStateChar(bluetooth);
-      led2.setLED(nextChar);
+      led2.powerLED(bluetooth.getNextChar() == '1');
       break;
     case'c':
-      nextChar = rgbLed.getColorChar(bluetooth);
-      rgbLed.setColor(nextChar);
+      rgbLed.setColor(bluetooth.getNextChar());
       break;
     case 'd':
-      buzzer.alarm(led1, led2);
+      buzzer.playAlarm(led1, led2);
       break;
     case 'e':
-      buzzer.vaderJacob(led1, led2);
+      buzzer.playVaderJacob(led1, led2);
       break;
     case 'f':
-      buzzer.customSound();
+      buzzer.playCustomSound();
       break;
     case 'g':
-      angle = servo.getAngle(bluetooth);
+      angle = bluetooth.getServoAngle();
       servo.setAngle(angle, 50);
       break;
     case 'h':

@@ -1,48 +1,33 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+
 #include "RGB.h"
 
 RGB::RGB(int redPin, int greenPin, int bluePin) {
   _redPin = redPin;
   _greenPin = greenPin;
   _bluePin = bluePin;
-}
 
-void RGB::begin() {
   pinMode(_redPin, OUTPUT);
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
 
-  //Create one array with all colors 
-  byte arraySize = 3 * sizeof(int);
-  memcpy(allColors[0], off, arraySize);
-  memcpy(allColors[1], red, arraySize);
-  memcpy(allColors[2], yellow, arraySize);
-  memcpy(allColors[3], green, arraySize);
-  memcpy(allColors[4], aqua, arraySize);
-  memcpy(allColors[5], blue, arraySize);
-  memcpy(allColors[6], purple, arraySize);
-}
+  discoStates[0] = off;
+  discoStates[1] = red; 
+  discoStates[2] = yellow; 
+  discoStates[3] = green; 
+  discoStates[4] = aqua; 
+  discoStates[5] = blue; 
+  discoStates[6] = purple; 
 
-char RGB::getColorChar(SoftwareSerial &bluetooth) {
-  int count = 0;
-  char input = '\0';
-  
-  while (count == 0) {
-    if (bluetooth.available() > 0) {
-      input = bluetooth.read();
-      count++;
-    } 
-  }
-  return input;
+  nStates = sizeof(discoStates) / sizeof(int);
 }
 
 void RGB::setColor(char input)  { 
   int index = input - '0';
-  int nColors = (sizeof(allColors)/3) / sizeof(int);
-  
-  if (index >= 0 && index < nColors)  {
-    writeColor(allColors[index]);
+
+  if (index >= 0 && index < nStates)  {
+    writeColor(discoStates[index]);
   }
 }
 
@@ -54,7 +39,6 @@ void RGB::writeColor(int rgbValues[3])  {
 
 //Challenge III "Gradient"
 void RGB::showGradient()  {
-  int nColors = (sizeof(allColors)/3) / sizeof(int);
   //Add your code here
 }
 

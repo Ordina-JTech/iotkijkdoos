@@ -141,6 +141,7 @@ public class ControlViewBoxActivityTest {
     public void testSwitchingOffTheDiscoBall() throws Exception {
         onView(withId(R.id.ivDiscoBall)).perform(click());
         onView(withId(R.id.discoBallSwitch)).perform(click());
+        onView(withId(R.id.discoBallSwitch)).perform(click());
 
         verify(mockedViewBoxRemoteController).switchOffDiscoBall();
     }

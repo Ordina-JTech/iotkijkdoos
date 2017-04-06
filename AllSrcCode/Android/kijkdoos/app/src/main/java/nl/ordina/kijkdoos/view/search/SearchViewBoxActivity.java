@@ -112,6 +112,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     }
 
     private void searchViewBoxes() {
+        viewBoxListAdapter.clear();
         refreshMenuItem.executeIfPresent(menuItem -> menuItem.setEnabled(false));
 
         bluetoothService.searchDevices(this);
@@ -187,7 +188,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
             @Override
             public void run() {
                 try {
-                    connect.get(5, TimeUnit.SECONDS);
+                    connect.get(10, TimeUnit.SECONDS);
                     viewBoxRemoteController.disconnect();
                     runOnUiThread(() -> {
                         Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
@@ -196,9 +197,10 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
                         startActivity(intent);
                     });
                 } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
-
-                    viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
+                    runOnUiThread(() -> {
+                        Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
+                        viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
+                    });
                 }
             }
         }.start();

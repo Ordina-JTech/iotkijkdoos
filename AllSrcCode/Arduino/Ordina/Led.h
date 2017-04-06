@@ -3,10 +3,8 @@
 class LED{
   
  public:
-  LED(int pin); //constructor
-  void begin();
-  char getStateChar(SoftwareSerial &bluetooth);
-  void setLED(char input);
+  LED(int pin); 
+  void powerLED(bool state);
   bool getState();
   int getPinNumber();
   void reset();
