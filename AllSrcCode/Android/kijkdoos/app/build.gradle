@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "nl.ordina.kijkdoos"
-        minSdkVersion 21
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
