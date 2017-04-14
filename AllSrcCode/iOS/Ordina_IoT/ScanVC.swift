@@ -30,7 +30,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
         return self.isViewLoaded &&
                self.view.window != nil
     }
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         tableViewObj = TableView(delegate: self, data: [])
@@ -95,7 +95,7 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     private func emptyTableView()   {
         scannedDevices = []
         refreshBtn.isEnabled = false
-        tableViewObj.reloadTableViewData(data: [])
+        tableViewObj.updateTableViewData(data: [])
         tableView.reloadData()
         
         if refreshControl.isRefreshing  {   //For state == .poweredOff
@@ -132,28 +132,25 @@ class ScanVC: UIViewController, BluetoothConnectionDelegate, TableViewDelegate {
     }
     
     func bluetoothDidDiscoverPeripheral(_ peripheral: CBPeripheral, RSSI: NSNumber?) {
-
-        for exisiting in scannedDevices {
-            if exisiting.peripheral.identifier == peripheral.identifier {
+        guard peripheral.name != nil else {return}
+        
+        for device in scannedDevices {
+            if device.peripheral.identifier == peripheral.identifier {
                 return
             }
         }
-
-        let theRSSI = RSSI?.floatValue ?? 0.0
-        scannedDevices.append(peripheral: peripheral, RSSI: theRSSI)
+        
+        let rssi = RSSI?.floatValue ?? 0.0
+        scannedDevices.append(peripheral: peripheral, RSSI: rssi)
         scannedDevices.sort {$0.RSSI < $1.RSSI }
         
         var deviceNames = [String]()
         
-        for index in 0..<scannedDevices.count{
-            if let name = scannedDevices[index].peripheral.name {
-                deviceNames.append(name)
-            }
-            else {
-                scannedDevices.remove(at: index)
-            }
+        for device in scannedDevices {
+            deviceNames.append(device.peripheral.name!)
         }
-        tableViewObj.reloadTableViewData(data: deviceNames)
+        
+        tableViewObj.updateTableViewData(data: deviceNames)
         tableView.reloadData()
     }
     

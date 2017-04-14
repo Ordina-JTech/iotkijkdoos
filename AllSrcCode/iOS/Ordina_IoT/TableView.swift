@@ -24,7 +24,7 @@ class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
         self.tableViewData = data
     }
     
-    func reloadTableViewData(data: [String])  {
+    func updateTableViewData(data: [String])  {
         tableViewData = data
     }
     
@@ -39,7 +39,7 @@ class TableView: NSObject, UITableViewDelegate, UITableViewDataSource     {
         cell.textLabel?.font = UIFont.avenirNext(size: 19)
         cell.textLabel?.textColor = UIColor.black
         cell.accessoryType = .disclosureIndicator
-        
+
         return cell
     }
     
