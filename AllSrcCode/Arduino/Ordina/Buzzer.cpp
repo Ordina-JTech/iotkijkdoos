@@ -56,7 +56,7 @@ void Buzzer::playVaderJacob(LED led1, LED led2) {
   setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
-//Challenge II
+//Challenge III
 void Buzzer::playCustomSound()  {
   //Add your code here
 }

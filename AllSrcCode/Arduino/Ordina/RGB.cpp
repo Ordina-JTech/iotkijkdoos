@@ -37,7 +37,7 @@ void RGB::writeColor(int rgbValues[3])  {
   analogWrite(_bluePin, rgbValues[2]);
 }
 
-//Challenge III "Gradient"
+//Challenge II "Gradient"
 void RGB::showGradient()  {
   //Add your code here
 }
