@@ -1,7 +1,7 @@
 package nl.ordina.kijkdoos.view.control;
 
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -21,8 +21,6 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.Consumer;
 
-import org.parceler.Parcels;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +32,7 @@ import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
@@ -43,8 +42,8 @@ import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMP
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
 
     enum Component {
-        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLeftLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean)lightStatus)), //
-        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlRightLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean)lightStatus)), //
+        LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLeftLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean) lightStatus)), //
+        LAMP_RIGHT(R.id.ivRightLamp, R.string.controlRightLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.toggleRightLamp((boolean) lightStatus)), //
         DISCO_BALL(R.id.ivDiscoBall, R.string.controlDiscoBallTitle, ControlDiscoBallFragment.class, (controller, color) -> {
             if (color == null) controller.switchOffDiscoBall();
             else controller.setDiscoBallColor((ControlDiscoBallFragment.DiscoBallColor) color);
@@ -58,7 +57,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
             } else {
                 controller.specialEffect();
             }
-        }) ;
+        });
 
         private final int viewReference;
         @Getter
@@ -110,6 +109,10 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
     private Runnable disconnectedInBackground;
 
+    private ViewBoxRemoteControllerService viewBoxRemoteControllerService;
+
+    private ServiceConnection serviceConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,28 +120,32 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         setContentView(R.layout.activity_control_view_box);
         ButterKnife.bind(this);
 
-        componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        componentController.setFocusableInTouchMode(false);
-        componentController.addDrawerListener(this);
+        onCreateComponentController();
 
-        final Bundle bundledExtras = getIntent().getExtras();
-        final Bundle actualExtras = bundledExtras.getBundle(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER);
+        serviceConnection = ViewBoxRemoteControllerService.bind(this, (service) -> {
+            viewBoxRemoteControllerService = ((ViewBoxRemoteControllerService.LocalBinder) service).getService();
+            viewBoxRemoteController = viewBoxRemoteControllerService.getViewBoxRemoteController();
 
-        final Parcelable parceledViewBoxRemoteController = actualExtras.getParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER);
-        viewBoxRemoteController = Parcels.unwrap(parceledViewBoxRemoteController);
-        onDeviceDisconnectAction = aVoid -> {
-            runOnUiThread(() -> Toast.makeText(this, getString(BluetoothConnectionLost,
-                    viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
-            finish();
-        };
-        viewBoxRemoteController.connect(this, aVoid -> viewBoxRemoteController.reset(null));
-        viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
+            onDeviceDisconnectAction = aVoid -> {
+                runOnUiThread(() -> Toast.makeText(this, getString(BluetoothConnectionLost,
+                        viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
+                finish();
+            };
+
+            viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
+        }, (aVoid) -> viewBoxRemoteControllerService = null);
 
         fragmentCache = new HashMap<>(Component.values().length - 1);
 
         final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
 
         bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> finish());
+    }
+
+    private void onCreateComponentController() {
+        componentController.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        componentController.setFocusableInTouchMode(false);
+        componentController.addDrawerListener(this);
     }
 
     @Override
@@ -162,6 +169,8 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         viewBoxRemoteController.setDisconnectConsumer(aVoid -> {
             disconnectedInBackground = () -> onDeviceDisconnectAction.accept(null);
         });
+
+        unbindService(serviceConnection);
     }
 
     @Override
@@ -169,8 +178,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         if (componentController.isDrawerOpen(GravityCompat.START)) {
             componentController.closeDrawer(GravityCompat.START);
         } else {
-            viewBoxRemoteController.setDisconnectConsumer(null);
-            viewBoxRemoteController.disconnect();
+            viewBoxRemoteControllerService.disconnect(viewBoxRemoteController);
             super.onBackPressed();
         }
     }

@@ -2,9 +2,12 @@ package nl.ordina.kijkdoos.view.search;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,11 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.annimon.stream.Optional;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import com.annimon.stream.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -34,17 +33,15 @@ import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
-import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
 import static nl.ordina.kijkdoos.R.string.FailedToConnect;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
-import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER;
-import static nl.ordina.kijkdoos.view.control.ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
 
@@ -59,6 +56,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     private ViewBoxListAdapter viewBoxListAdapter;
     private Optional<MenuItem> refreshMenuItem;
+    private ViewBoxRemoteControllerService viewBoxRemoteControllerService;
+    private ServiceConnection serviceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +67,43 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         getViewBoxApplication(this).getApplicationComponent().inject(this);
         refreshMenuItem = Optional.empty();
 
+        createViewBoxList();
+        createSwipeRefreshLayout();
+        createBluetoothConnectionFragment();
+        createViewBoxRemoteControllerService();
+    }
+
+    private void createViewBoxRemoteControllerService() {
+        final Intent intent = new Intent(this, ViewBoxRemoteControllerService.class);
+        startService(intent);
+
+        serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                viewBoxRemoteControllerService = ((ViewBoxRemoteControllerService.LocalBinder) service).getService();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                viewBoxRemoteControllerService = null;
+            }
+        };
+    }
+
+    private void createBluetoothConnectionFragment() {
+        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state == STATE_TURNING_OFF, state -> askUserToEnableBluetooth(this));
+    }
+
+    private void createSwipeRefreshLayout() {
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setOnRefreshListener(this::searchViewBoxes);
+    }
+
+    private void createViewBoxList() {
         viewBoxListAdapter = new ViewBoxListAdapter(this);
         viewBoxList.setAdapter(viewBoxListAdapter);
         viewBoxList.setOnItemClickListener(this);
-
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        swipeRefreshLayout.setOnRefreshListener(this::searchViewBoxes);
-
-        final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
-
-        bluetoothConnectionFragment.addConnectionEventHandler(state -> state == STATE_TURNING_OFF, state -> askUserToEnableBluetooth(this));
     }
 
     @Override
@@ -94,6 +120,9 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     protected void onResume() {
         handleAppPermissions();
         handleBluetooth();
+
+        final Intent intent = new Intent(this, ViewBoxRemoteControllerService.class);
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
 
         super.onResume();
     }
@@ -160,6 +189,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
         bluetoothService.stopSearch();
         viewBoxListAdapter.clear();
+
+        unbindService(serviceConnection);
     }
 
     @Override
@@ -181,30 +212,18 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         stopSearch();
 
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
-        Bundle bundledToAvoidSamsungBug = new Bundle();
-        bundledToAvoidSamsungBug.putParcelable(EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, viewBoxRemoteController.wrapInParcelable());
+        final Consumer<Void> onConnected = (aVoid) -> runOnUiThread(() -> {
+            Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
+            startActivity(intent);
+        });
 
-        final Future<Void> connect = viewBoxRemoteController.connect(this);
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    connect.get(10, TimeUnit.SECONDS);
-                    viewBoxRemoteController.disconnect();
-                    runOnUiThread(() -> {
-                        Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
-                        intent.putExtra(EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundledToAvoidSamsungBug);
+        final Consumer<Void> onConnectionError = (aVoid) -> runOnUiThread(() -> {
+            Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
+            viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
+            viewBoxListAdapter.enableItems();
+        });
 
-                        startActivity(intent);
-                    });
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
-                        viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
-                    });
-                }
-            }
-        }.start();
+        viewBoxRemoteControllerService.connect(viewBoxRemoteController, onConnected, onConnectionError);
     }
 
     @Override

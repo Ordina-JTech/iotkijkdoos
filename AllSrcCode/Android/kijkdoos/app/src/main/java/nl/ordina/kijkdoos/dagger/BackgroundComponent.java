@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 
 /**
  * Created by coenhoutmanon 22/02/2017.
@@ -11,5 +12,5 @@ import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 @Singleton
 @Component(modules = {BackgroundServiceModule.class})
 public interface BackgroundComponent {
-    void inject(ViewBoxRemoteController controller);
+    void inject(ViewBoxRemoteControllerService controller);
 }

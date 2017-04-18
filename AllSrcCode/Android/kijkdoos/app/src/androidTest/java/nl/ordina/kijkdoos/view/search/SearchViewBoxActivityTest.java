@@ -20,6 +20,7 @@ import java.util.concurrent.Future;
 import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.R;
+import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 import nl.ordina.kijkdoos.ViewBoxApplication;
 import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
@@ -142,5 +143,10 @@ public class SearchViewBoxActivityTest {
         onView(withId(R.id.viewBoxList)).perform(swipeDown());
 
         verify(bluetoothService, times(2)).searchDevices(any(DeviceFoundListener.class));
+    }
+
+    @Test
+    public void testViewBoxRemoteControllerServiceIntentIsStarted() throws Exception {
+        intended(hasComponent(ViewBoxRemoteControllerService.class.getName()));
     }
 }

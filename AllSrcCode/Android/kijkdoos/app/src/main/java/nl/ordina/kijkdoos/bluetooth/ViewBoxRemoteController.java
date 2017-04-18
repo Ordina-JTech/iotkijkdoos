@@ -42,7 +42,6 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Created by coenhoutman on 16-2-2017.
  */
-@Parcel
 public class ViewBoxRemoteController {
 
     public enum UUID {
@@ -63,48 +62,34 @@ public class ViewBoxRemoteController {
     private BluetoothDevice device;
 
     @Getter
-    @Transient
     private int signalStrength;
 
-    @Transient
     private BluetoothGatt bluetoothGatt;
 
-    @Inject
-    @Transient
-    BackgroundService backgroundService;
-
-    @Transient
     private BluetoothCallbackRegister bluetoothCallbackRegister;
 
-    @Transient
     private BluetoothGattService bluetoothGattService;
 
-    @Transient
     private BluetoothGattCharacteristic bluetoothGattCharacteristic;
 
-    @Transient
     @Nullable
     private Consumer<Void> connectConsumer;
 
-    @Transient
     @Nullable
     @Getter
     @Setter
     private Consumer<Void> disconnectConsumer;
 
-    @Transient
     private Map<String, Consumer<Void>> messageResponseListeners;
 
     @VisibleForTesting
     protected ViewBoxRemoteController() {
     }
 
-    @ParcelConstructor
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
         this.device = device;
 
-        BackgroundServiceFactory.getComponent().inject(this);
         bluetoothCallbackRegister = new BluetoothCallbackRegister();
         messageResponseListeners = new HashMap<>();
     }
@@ -119,26 +104,18 @@ public class ViewBoxRemoteController {
         return device.getAddress();
     }
 
-    public Future<Void> connect(final Context context) {
-        return connect(context, null);
+    public void connect(final Context context, Consumer<Void> onConnectConsumer) {
+        connectConsumer = onConnectConsumer;
+        device.connectGatt(context, false, bluetoothCallbackRegister);
     }
 
-    public Future<Void> connect(final Context context, Consumer<Void> onConnectConsumer) {
-        connectConsumer = onConnectConsumer;
-
-        return backgroundService.getExecutorService()
-                .submit(() -> {
-                    device.connectGatt(context, false, bluetoothCallbackRegister);
-                    while ((bluetoothGattService == null || bluetoothGattCharacteristic == null) && !Thread.interrupted()) {
-                    }
-
-                    return null;
-                });
+    public boolean isConnected() {
+        return bluetoothGattService != null && bluetoothGattCharacteristic != null;
     }
 
     public void disconnect() {
         if (bluetoothGatt != null) {
-            reset(aVoid -> bluetoothGatt.disconnect());
+            bluetoothGatt.disconnect();
         }
     }
 
@@ -186,10 +163,6 @@ public class ViewBoxRemoteController {
     public void reset(Consumer<Void> resetFinishedConsumer) {
         sendMessage("r");
         addMessageResponseListener("y", resetFinishedConsumer);
-    }
-
-    public Parcelable wrapInParcelable() {
-        return Parcels.wrap(this);
     }
 
     private void sendMessage(String message) {
