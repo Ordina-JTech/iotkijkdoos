@@ -185,7 +185,7 @@
 				TargetAttributes = {
 					3886998C1E4DD008006BC37E = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = U8Y4L9ZULC;
+						DevelopmentTeam = 8P8F7PMKQQ;
 						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
@@ -367,11 +367,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = U8Y4L9ZULC;
+				DEVELOPMENT_TEAM = 8P8F7PMKQQ;
 				INFOPLIST_FILE = Ordina_IoT/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nl.RW;
+				PRODUCT_BUNDLE_IDENTIFIER = iotkijkdoos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -385,11 +385,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = U8Y4L9ZULC;
+				DEVELOPMENT_TEAM = 8P8F7PMKQQ;
 				INFOPLIST_FILE = Ordina_IoT/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = nl.RW;
+				PRODUCT_BUNDLE_IDENTIFIER = iotkijkdoos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Ordina_IoT/Ordina_IoT-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;

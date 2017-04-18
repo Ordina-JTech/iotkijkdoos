@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintLocationsKey" : {
+    "F7766B1410C54727CD0AAF32A9149C6DF9E92FA6" : {
+      "DVTSourceControlBranchIdentifierKey" : "master",
+      "DVTSourceControlLocationRevisionKey" : "bcb47ea9067d8c81bb10a59c648baa8e59bc473e",
+      "DVTSourceControlBranchOptionsKey" : 4,
+      "DVTSourceControlWorkspaceBlueprintLocationTypeKey" : "DVTSourceControlBranch"
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "F7766B1410C54727CD0AAF32A9149C6DF9E92FA6",
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5817EDDF-C5AA-45AF-B44B-4BB9EEFBCA9B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "F7766B1410C54727CD0AAF32A9149C6DF9E92FA6" : "iotkijkdoos\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Ordina_IoT",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "AllSrcCode\/iOS\/Ordina_IoT.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.clockwork.nl\/jtech\/iotkijkdoos.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F7766B1410C54727CD0AAF32A9149C6DF9E92FA6"
+    }
+  ]
+}
