@@ -22,8 +22,10 @@ public class ViewBoxRemoteControllerServiceTest {
     public void testConnectViewBoxRemoteController() throws Exception {
         final Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), ViewBoxRemoteControllerService.class);
         serviceRule.startService(intent);
+
         final IBinder binder = serviceRule.bindService(intent);
         ViewBoxRemoteControllerService viewBoxRemoteControllerService = ((ViewBoxRemoteControllerService.LocalBinder) binder).getService();
+
         assertNotNull(viewBoxRemoteControllerService);
     }
 }

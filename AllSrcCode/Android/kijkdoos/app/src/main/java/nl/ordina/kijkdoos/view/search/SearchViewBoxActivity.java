@@ -177,6 +177,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        viewBoxListAdapter.disableItem(position);
         stopSearch();
 
         ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
