@@ -2,12 +2,10 @@ package nl.ordina.kijkdoos.view.search;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +36,7 @@ import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
+import static com.annimon.stream.function.Consumer.Util.andThen;
 import static nl.ordina.kijkdoos.R.string.FailedToConnect;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
@@ -76,18 +75,6 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
     private void createViewBoxRemoteControllerService() {
         final Intent intent = new Intent(this, ViewBoxRemoteControllerService.class);
         startService(intent);
-
-        serviceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                viewBoxRemoteControllerService = ((ViewBoxRemoteControllerService.LocalBinder) service).getService();
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                viewBoxRemoteControllerService = null;
-            }
-        };
     }
 
     private void createBluetoothConnectionFragment() {
@@ -121,8 +108,8 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         handleAppPermissions();
         handleBluetooth();
 
-        final Intent intent = new Intent(this, ViewBoxRemoteControllerService.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+        serviceConnection = ViewBoxRemoteControllerService.bind(this, service -> viewBoxRemoteControllerService = service,
+                aVoid -> viewBoxRemoteControllerService = null);
 
         super.onResume();
     }
@@ -220,10 +207,13 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         final Consumer<Void> onConnectionError = (aVoid) -> runOnUiThread(() -> {
             Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
             viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
-            viewBoxListAdapter.enableItems();
         });
 
-        viewBoxRemoteControllerService.connect(viewBoxRemoteController, onConnected, onConnectionError);
+        final Consumer<Void> enableAllItems = (aVoid) -> {
+            runOnUiThread(() -> viewBoxListAdapter.enableItems());
+        };
+
+        viewBoxRemoteControllerService.connect(viewBoxRemoteController, andThen(onConnected, enableAllItems), andThen(onConnectionError, enableAllItems));
     }
 
     @Override

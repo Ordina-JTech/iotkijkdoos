@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
@@ -15,22 +14,12 @@ import android.util.Log;
 
 import com.annimon.stream.function.Consumer;
 
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
-import org.parceler.Parcels;
-import org.parceler.Transient;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
-
-import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
-import nl.ordina.kijkdoos.threading.BackgroundService;
 import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
