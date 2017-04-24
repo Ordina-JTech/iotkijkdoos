@@ -34,7 +34,7 @@ public class BluetoothConnectionFragment extends Fragment {
     AbstractBluetoothService bluetoothService;
 
     private BroadcastReceiver receiver;
-    private Map<Predicate<Integer>, Consumer<Integer>> connectionEventHandlers;
+    private final Map<Predicate<Integer>, Consumer<Integer>> connectionEventHandlers;
 
     public BluetoothConnectionFragment() {
         connectionEventHandlers = new HashMap<>();
@@ -77,5 +77,11 @@ public class BluetoothConnectionFragment extends Fragment {
         activity.getSupportFragmentManager().beginTransaction().add(bluetoothConnectionFragment, null).commit();
 
         return bluetoothConnectionFragment;
+    }
+
+    public void clearConnectionEventHandlers() {
+        synchronized (connectionEventHandlers) {
+            connectionEventHandlers.clear();
+        }
     }
 }
