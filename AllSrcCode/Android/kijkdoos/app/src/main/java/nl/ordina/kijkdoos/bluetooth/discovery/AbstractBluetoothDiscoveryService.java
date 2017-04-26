@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.bluetooth;
+package nl.ordina.kijkdoos.bluetooth.discovery;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -13,7 +13,7 @@ import lombok.Getter;
 /**
  * Created by coenhoutman on 15-2-2017.
  */
-public abstract class AbstractBluetoothService {
+public abstract class AbstractBluetoothDiscoveryService {
     public static final int REQUEST_ENABLE_BLUETOOTH = 1;
 
     @Getter
@@ -23,7 +23,7 @@ public abstract class AbstractBluetoothService {
     @Nullable
     private final BluetoothAdapter bluetoothAdapter;
 
-    public AbstractBluetoothService(Context context) {
+    public AbstractBluetoothDiscoveryService(Context context) {
         bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
     }

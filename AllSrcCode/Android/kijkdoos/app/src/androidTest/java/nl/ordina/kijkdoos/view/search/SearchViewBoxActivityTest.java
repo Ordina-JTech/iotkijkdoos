@@ -16,13 +16,12 @@ import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.ViewBoxApplication;
-import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
-import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
+import nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService;
+import nl.ordina.kijkdoos.bluetooth.discovery.DeviceFoundListener;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
@@ -34,7 +33,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,7 +43,7 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class SearchViewBoxActivityTest {
     @Inject
-    AbstractBluetoothService bluetoothService;
+    AbstractBluetoothDiscoveryService bluetoothService;
 
     private ViewBoxRemoteController mockedViewBoxRemoteController;
 

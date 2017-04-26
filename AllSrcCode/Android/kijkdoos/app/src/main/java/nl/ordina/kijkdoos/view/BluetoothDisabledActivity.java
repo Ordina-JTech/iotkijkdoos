@@ -5,15 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nl.ordina.kijkdoos.R;
-import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
+import nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
-import nl.ordina.kijkdoos.view.control.AbstractControlFragment;
 import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
@@ -39,12 +36,12 @@ public class BluetoothDisabledActivity extends AppCompatActivity {
 
     @OnClick(R.id.enableBluetoothButton)
     public void enableBluetooth() {
-        AbstractBluetoothService.askUserToEnableBluetooth(this);
+        AbstractBluetoothDiscoveryService.askUserToEnableBluetooth(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+        if (requestCode == AbstractBluetoothDiscoveryService.REQUEST_ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
             bluetoothConnectionFragment.clearConnectionEventHandlers();
             startSearchViewBoxActivity();
         }

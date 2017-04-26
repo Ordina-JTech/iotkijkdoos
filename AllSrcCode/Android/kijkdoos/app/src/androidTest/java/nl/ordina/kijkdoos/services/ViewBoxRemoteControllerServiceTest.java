@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteControllerService;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;

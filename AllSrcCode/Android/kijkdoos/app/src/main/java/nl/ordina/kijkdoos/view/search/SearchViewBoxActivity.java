@@ -20,32 +20,30 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.annimon.stream.Optional;
-import com.annimon.stream.function.Consumer;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nl.ordina.kijkdoos.R;
-import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
-import nl.ordina.kijkdoos.bluetooth.DeviceFoundListener;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteControllerService;
+import nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService;
+import nl.ordina.kijkdoos.bluetooth.discovery.DeviceFoundListener;
 import nl.ordina.kijkdoos.view.BluetoothDisabledActivity;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
 import static android.bluetooth.BluetoothAdapter.STATE_TURNING_OFF;
-import static com.annimon.stream.function.Consumer.Util.andThen;
 import static nl.ordina.kijkdoos.R.string.FailedToConnect;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
-import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.REQUEST_ENABLE_BLUETOOTH;
-import static nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService.askUserToEnableBluetooth;
+import static nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService.REQUEST_ENABLE_BLUETOOTH;
+import static nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService.askUserToEnableBluetooth;
 
 public class SearchViewBoxActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, DeviceFoundListener {
 
     @Inject
-    AbstractBluetoothService bluetoothService;
+    AbstractBluetoothDiscoveryService bluetoothService;
 
     @BindView(R.id.viewBoxList)
     ListView viewBoxList;
@@ -109,7 +107,7 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         handleBluetooth();
 
         serviceConnection = ViewBoxRemoteControllerService.bind(this, service -> viewBoxRemoteControllerService = service,
-                aVoid -> viewBoxRemoteControllerService = null);
+                () -> viewBoxRemoteControllerService = null);
 
         super.onResume();
     }
@@ -198,22 +196,26 @@ public class SearchViewBoxActivity extends AppCompatActivity implements AdapterV
         viewBoxListAdapter.disableItem(position);
         stopSearch();
 
-        ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
-        final Consumer<Void> onConnected = (aVoid) -> runOnUiThread(() -> {
-            Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
-            startActivity(intent);
-        });
-
-        final Consumer<Void> onConnectionError = (aVoid) -> runOnUiThread(() -> {
-            Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
-            viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
-        });
-
-        final Consumer<Void> enableAllItems = (aVoid) -> {
+        final Runnable enableAllItems = () -> {
             runOnUiThread(() -> viewBoxListAdapter.enableItems());
         };
 
-        viewBoxRemoteControllerService.connect(viewBoxRemoteController, andThen(onConnected, enableAllItems), andThen(onConnectionError, enableAllItems));
+        ViewBoxRemoteController viewBoxRemoteController = viewBoxListAdapter.getViewBoxRemoteController(position);
+        final Runnable onConnected = () -> runOnUiThread(() -> {
+            Intent intent = new Intent(SearchViewBoxActivity.this, ControlViewBoxActivity.class);
+            startActivity(intent);
+
+            enableAllItems.run();
+        });
+
+        final Runnable onConnectionError = () -> runOnUiThread(() -> {
+            Toast.makeText(SearchViewBoxActivity.this, FailedToConnect, Toast.LENGTH_SHORT).show();
+            viewBoxListAdapter.removeViewBoxRemoteController(viewBoxRemoteController);
+
+            enableAllItems.run();
+        });
+
+        viewBoxRemoteControllerService.connect(viewBoxRemoteController, onConnected, onConnectionError);
     }
 
     @Override

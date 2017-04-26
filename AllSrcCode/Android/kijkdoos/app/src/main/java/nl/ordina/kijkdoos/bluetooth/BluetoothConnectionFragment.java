@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.SupportActivity;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Consumer;
@@ -20,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService;
 
 import static android.bluetooth.BluetoothAdapter.EXTRA_STATE;
 import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
@@ -31,7 +32,7 @@ import static nl.ordina.kijkdoos.ViewBoxApplication.getViewBoxApplication;
 public class BluetoothConnectionFragment extends Fragment {
 
     @Inject
-    AbstractBluetoothService bluetoothService;
+    AbstractBluetoothDiscoveryService bluetoothService;
 
     private BroadcastReceiver receiver;
     private final Map<Predicate<Integer>, Consumer<Integer>> connectionEventHandlers;

@@ -30,7 +30,7 @@ import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
@@ -144,7 +144,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
             } else {
                 viewBoxRemoteController.setDisconnectConsumer(this::onUnexpectedDisconnected);
             }
-        }, (aVoid) -> viewBoxRemoteControllerService = null);
+        }, () -> viewBoxRemoteControllerService = null);
     }
 
     private void onUnexpectedDisconnected() {

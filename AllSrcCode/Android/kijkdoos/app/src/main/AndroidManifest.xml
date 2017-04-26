@@ -33,7 +33,7 @@
             android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".view.BluetoothDisabledActivity" />
 
-        <service android:name=".services.ViewBoxRemoteControllerService"
+        <service android:name=".bluetooth.ViewBoxRemoteControllerService"
             android:enabled="true"
             android:exported="false"/>
 

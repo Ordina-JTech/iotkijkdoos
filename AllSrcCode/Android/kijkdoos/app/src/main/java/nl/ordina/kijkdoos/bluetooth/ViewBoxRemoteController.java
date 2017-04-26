@@ -68,7 +68,7 @@ public class ViewBoxRemoteController {
     @Setter
     private Runnable disconnectConsumer;
 
-    private Map<String, Consumer<Void>> messageResponseListeners;
+    private Map<String, Runnable> messageResponseListeners;
 
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
@@ -144,9 +144,9 @@ public class ViewBoxRemoteController {
         sendMessage("i");
     }
 
-    public void reset(Consumer<Void> resetFinishedConsumer) {
+    public void reset(Runnable resetFinishedRunnable) {
         sendMessage("r");
-        addMessageResponseListener("y", resetFinishedConsumer);
+        addMessageResponseListener("y", resetFinishedRunnable);
     }
 
     private void sendMessage(String message) {
@@ -156,7 +156,7 @@ public class ViewBoxRemoteController {
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
     }
 
-    private void addMessageResponseListener(String expectedMessage, Consumer<Void> messageResponseConsumer) {
+    private void addMessageResponseListener(String expectedMessage, Runnable messageResponseConsumer) {
         messageResponseListeners.put(expectedMessage, messageResponseConsumer);
     }
 
@@ -220,9 +220,9 @@ public class ViewBoxRemoteController {
             final byte[] valueWithoutLineEnding = Arrays.copyOf(value, value.length - 2);
 
             final String valueWithoutLineEndingString = new String(valueWithoutLineEnding);
-            final Consumer<Void> consumer = messageResponseListeners.get(valueWithoutLineEndingString);
-            if (consumer != null) {
-                consumer.accept(null);
+            final Runnable runnable = messageResponseListeners.get(valueWithoutLineEndingString);
+            if (runnable != null) {
+                runnable.run();
             }
         }
 

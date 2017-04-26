@@ -70,7 +70,7 @@ public abstract class AbstractControlFragment extends Fragment {
     @StringRes
     protected int getTitle() {
         return component.getTitleString();
-    };
+    }
 
     protected abstract int getControlLayoutId();
 

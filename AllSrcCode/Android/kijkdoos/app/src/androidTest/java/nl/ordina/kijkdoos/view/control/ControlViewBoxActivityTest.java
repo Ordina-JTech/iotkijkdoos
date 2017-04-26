@@ -14,7 +14,6 @@ import com.annimon.stream.function.Consumer;
 import com.triggertrap.seekarc.SeekArc;
 
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
-import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -41,9 +40,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

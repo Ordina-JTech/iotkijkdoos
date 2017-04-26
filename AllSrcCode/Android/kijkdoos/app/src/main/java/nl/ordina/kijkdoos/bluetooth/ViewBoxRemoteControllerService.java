@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.services;
+package nl.ordina.kijkdoos.bluetooth;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import lombok.Getter;
-import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
 public class ViewBoxRemoteControllerService extends Service {
     private final IBinder binder = new LocalBinder();
@@ -43,7 +42,7 @@ public class ViewBoxRemoteControllerService extends Service {
         return binder;
     }
 
-    public void connect(ViewBoxRemoteController viewBoxRemoteController, Consumer<Void> onConnectedConsumer, Consumer<Void> onErrorConsumer) {
+    public void connect(ViewBoxRemoteController viewBoxRemoteController, Runnable onConnectedRunnable, Runnable onErrorRunnable) {
         this.viewBoxRemoteController = viewBoxRemoteController;
 
         new Thread() {
@@ -62,12 +61,12 @@ public class ViewBoxRemoteControllerService extends Service {
 
                     connection.get(5, TimeUnit.SECONDS);
 
-                    if (onConnectedConsumer != null) {
-                        onConnectedConsumer.accept(null);
+                    if (onConnectedRunnable != null) {
+                        onConnectedRunnable.run();
                     }
                 } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    if (onErrorConsumer != null) {
-                        onErrorConsumer.accept(null);
+                    if (onErrorRunnable != null) {
+                        onErrorRunnable.run();
                     }
                 }
             }
@@ -78,14 +77,14 @@ public class ViewBoxRemoteControllerService extends Service {
         if (viewBoxRemoteController == null) return;
 
         viewBoxRemoteController.setDisconnectConsumer(null);
-        viewBoxRemoteController.reset(aVoid -> {
+        viewBoxRemoteController.reset(() -> {
             viewBoxRemoteController.disconnect();
             viewBoxRemoteController = null;
         });
     }
 
     public static ServiceConnection bind(Context context, final Consumer<ViewBoxRemoteControllerService> connectConsumer,
-                                         final Consumer<Void> disconnectConsumer) {
+                                         final Runnable disconnectRunnable) {
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -95,7 +94,7 @@ public class ViewBoxRemoteControllerService extends Service {
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                disconnectConsumer.accept(null);
+                disconnectRunnable.run();
             }
         };
         context.bindService(new Intent(context, ViewBoxRemoteControllerService.class), serviceConnection, BIND_AUTO_CREATE);

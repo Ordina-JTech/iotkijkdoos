@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.bluetooth;
+package nl.ordina.kijkdoos.bluetooth.discovery;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -16,6 +16,8 @@ import android.support.annotation.VisibleForTesting;
 
 import java.util.Collections;
 
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+
 import static junit.framework.Assert.assertNotNull;
 import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
 
@@ -23,7 +25,7 @@ import static nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController.UUID.SERVICE;
  * Created by coenhoutman on 15-2-2017.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class BluetoothDiscoveryService extends AbstractBluetoothService {
+public class BluetoothDiscoveryService extends AbstractBluetoothDiscoveryService {
 
     private ScanFilter scanFilter;
     private ScanSettings scanSettings;

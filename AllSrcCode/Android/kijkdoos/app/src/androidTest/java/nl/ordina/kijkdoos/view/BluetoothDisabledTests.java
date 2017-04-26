@@ -5,7 +5,6 @@ import android.app.Instrumentation;
 import android.content.ComponentName;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -17,7 +16,7 @@ import javax.inject.Inject;
 
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.ViewBoxApplication;
-import nl.ordina.kijkdoos.bluetooth.AbstractBluetoothService;
+import nl.ordina.kijkdoos.bluetooth.discovery.AbstractBluetoothDiscoveryService;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 
@@ -55,7 +54,7 @@ public class BluetoothDisabledTests {
             new BluetoothDisabledActivityTestRule<>(BluetoothDisabledActivity.class);
 
     @Inject
-    AbstractBluetoothService bluetoothService;
+    AbstractBluetoothDiscoveryService bluetoothService;
 
     @Test
     public void givenBluetoothIsDisabledWhenSearchingForDevicesThenDisplayActivityThatBluetoothIsDisabled() throws Throwable {
