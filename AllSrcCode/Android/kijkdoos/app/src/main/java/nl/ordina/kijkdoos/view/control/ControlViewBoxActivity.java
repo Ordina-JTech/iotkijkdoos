@@ -1,9 +1,5 @@
 package nl.ordina.kijkdoos.view.control;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -30,7 +26,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lombok.AccessLevel;
 import lombok.Getter;
 import nl.ordina.kijkdoos.R;
 import nl.ordina.kijkdoos.bluetooth.BluetoothConnectionFragment;
@@ -41,12 +36,9 @@ import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
 import static lombok.AccessLevel.PACKAGE;
 import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
-import static nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService.ACTION_VIEW_BOX_DISCONNECTED;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
-
-    private BroadcastReceiver disconnectReceiver;
 
     enum Component {
         LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLeftLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean) lightStatus)), //
@@ -146,20 +138,13 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         serviceConnection = ViewBoxRemoteControllerService.bind(this, (service) -> {
             viewBoxRemoteControllerService = service;
             viewBoxRemoteController = viewBoxRemoteControllerService.getViewBoxRemoteController();
-        }, (aVoid) -> viewBoxRemoteControllerService = null);
 
-        disconnectReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(ACTION_VIEW_BOX_DISCONNECTED)) {
-                    onUnexpectedDisconnected();
-                }
+            if (viewBoxRemoteController == null || !viewBoxRemoteController.isConnected()) {
+                onUnexpectedDisconnected();
+            } else {
+                viewBoxRemoteController.setDisconnectConsumer(this::onUnexpectedDisconnected);
             }
-        };
-
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_VIEW_BOX_DISCONNECTED);
-        registerReceiver(disconnectReceiver, intentFilter);
+        }, (aVoid) -> viewBoxRemoteControllerService = null);
     }
 
     private void onUnexpectedDisconnected() {
@@ -174,8 +159,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     protected void onPause() {
         super.onPause();
 
-        unregisterReceiver(disconnectReceiver);
-
+        viewBoxRemoteController.setDisconnectConsumer(null);
         unbindService(serviceConnection);
     }
 

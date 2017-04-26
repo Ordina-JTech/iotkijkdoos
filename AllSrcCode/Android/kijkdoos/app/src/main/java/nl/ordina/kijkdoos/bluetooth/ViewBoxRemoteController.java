@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.annimon.stream.function.Consumer;
@@ -67,7 +66,7 @@ public class ViewBoxRemoteController {
     @Nullable
     @Getter
     @Setter
-    private Consumer<Void> disconnectConsumer;
+    private Runnable disconnectConsumer;
 
     private Map<String, Consumer<Void>> messageResponseListeners;
 
@@ -182,9 +181,11 @@ public class ViewBoxRemoteController {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == STATE_DISCONNECTED || newState == STATE_DISCONNECTING) {
                 bluetoothGatt.close();
+                bluetoothGatt = null;
+                bluetoothGattCharacteristic = null;
 
                 if (disconnectConsumer != null) {
-                    disconnectConsumer.accept(null);
+                    disconnectConsumer.run();
                 }
             }
 

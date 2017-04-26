@@ -22,16 +22,12 @@ import lombok.Getter;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
 public class ViewBoxRemoteControllerService extends Service {
-    public static final String ACTION_VIEW_BOX_DISCONNECTED = "ACTION_VIEW_BOX_DISCONNECTED";
     private final IBinder binder = new LocalBinder();
 
     @Nullable
     @Getter
     private ViewBoxRemoteController viewBoxRemoteController;
 
-    private Runnable disconnectedInBackground;
-
-    private Consumer<Void> onDeviceDisconnectAction;
     private ExecutorService backgroundThread;
 
     @Override
@@ -39,31 +35,12 @@ public class ViewBoxRemoteControllerService extends Service {
         super.onCreate();
 
         backgroundThread = Executors.newSingleThreadExecutor();
-
-        onDeviceDisconnectAction = aVoid -> sendBroadcast(new Intent(ACTION_VIEW_BOX_DISCONNECTED));
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
-    }
-
-    @Override
-    public void onRebind(Intent intent) {
-        if (disconnectedInBackground != null) {
-            disconnectedInBackground.run();
-            disconnectedInBackground = null;
-        }
-    }
-
-    @Override
-    public boolean onUnbind(Intent intent) {
-        if (viewBoxRemoteController != null) {
-            viewBoxRemoteController.setDisconnectConsumer(aVoid -> disconnectedInBackground = () -> onDeviceDisconnectAction.accept(null));
-        }
-
-        return true;
     }
 
     public void connect(ViewBoxRemoteController viewBoxRemoteController, Consumer<Void> onConnectedConsumer, Consumer<Void> onErrorConsumer) {
@@ -84,8 +61,6 @@ public class ViewBoxRemoteControllerService extends Service {
                             });
 
                     connection.get(5, TimeUnit.SECONDS);
-
-                    viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
 
                     if (onConnectedConsumer != null) {
                         onConnectedConsumer.accept(null);
