@@ -1,12 +1,12 @@
 package nl.ordina.kijkdoos.view.control;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ServiceTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
@@ -18,15 +18,14 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.parceler.Parcels;
+
+import java.util.concurrent.TimeoutException;
 
 import nl.ordina.kijkdoos.R;
-import nl.ordina.kijkdoos.bluetooth.MockedViewBoxRemoteController;
 import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -43,8 +42,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,18 +57,24 @@ public class ControlViewBoxActivityTest {
     private ViewBoxRemoteController mockedViewBoxRemoteController;
 
     @Rule
-    public IntentsTestRule<ControlViewBoxActivity> activityRule = new IntentsTestRule(ControlViewBoxActivity.class) {
+    public ServiceTestRule serviceTestRule = new ServiceTestRule();
+
+    @Rule
+    public IntentsTestRule<ControlViewBoxActivity> activityRule = new IntentsTestRule<ControlViewBoxActivity>(ControlViewBoxActivity.class) {
         @Override
-        protected Intent getActivityIntent() {
+        protected void beforeActivityLaunched() {
+            final Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), ViewBoxRemoteControllerService.class);
+            try {
+                serviceTestRule.startService(intent);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            }
 
-            final MockedViewBoxRemoteController mockedViewBoxApplication = new MockedViewBoxRemoteController();
+            final ViewBoxRemoteController viewBoxRemoteController = mock(ViewBoxRemoteController.class);
+            when(viewBoxRemoteController.isConnected()).thenReturn(true);
 
-            final Intent intent = new Intent(InstrumentationRegistry.getTargetContext(), ControlViewBoxActivity.class);
-            final Bundle bundleWrap = new Bundle();
-            bundleWrap.putParcelable(ControlViewBoxActivity.EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER, Parcels.wrap(mockedViewBoxApplication));
-            intent.putExtra(ControlViewBoxActivity.EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER, bundleWrap);
-
-            return intent;
+            final Consumer<ViewBoxRemoteControllerService> connectConsumer = service -> service.connect(viewBoxRemoteController, null, null);
+            ViewBoxRemoteControllerService.bind(InstrumentationRegistry.getTargetContext(), connectConsumer, null);
         }
 
         @Override
@@ -164,16 +170,6 @@ public class ControlViewBoxActivityTest {
         onView(withId(R.id.rotationSlider)).perform(setProgress(90));
 
         verify(mockedViewBoxRemoteController, atLeastOnce()).rotateTelevision(anyInt());
-    }
-
-    @Test
-    @Ignore("Activity is destroyed on pressBack. Mocks are not being verified :(")
-    public void testViewBoxIsResetWhenDisconnecting() throws Exception {
-        doCallRealMethod().when(mockedViewBoxRemoteController).reset(anyObject());
-        pressBack();
-
-        verify(mockedViewBoxRemoteController).reset(anyObject());
-        verify(mockedViewBoxRemoteController).disconnect();
     }
 
     @Test

@@ -1,5 +1,9 @@
 package nl.ordina.kijkdoos.view.control;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -19,7 +23,6 @@ import android.widget.Toast;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiConsumer;
-import com.annimon.stream.function.Consumer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +39,14 @@ import nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
 import static android.bluetooth.BluetoothAdapter.STATE_ON;
+import static lombok.AccessLevel.PACKAGE;
 import static nl.ordina.kijkdoos.R.string.BluetoothConnectionLost;
+import static nl.ordina.kijkdoos.services.ViewBoxRemoteControllerService.ACTION_VIEW_BOX_DISCONNECTED;
 import static nl.ordina.kijkdoos.view.control.ControlLightFragment.ARGUMENT_COMPONENT;
 
 public class ControlViewBoxActivity extends AppCompatActivity implements AbstractControlFragment.OnComponentChangedListener, DrawerLayout.DrawerListener {
+
+    private BroadcastReceiver disconnectReceiver;
 
     enum Component {
         LAMP_LEFT(R.id.ivLeftLamp, R.string.controlLeftLampTitle, ControlLightFragment.class, (controller, lightStatus) -> controller.switchLeftLamp((boolean) lightStatus)), //
@@ -87,9 +94,6 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         }
     }
 
-    public static final String EXTRA_KEY_BUNDLED_VIEW_BOX_REMOTE_CONTROLLER = "BUNDLED_VIEW_BOX_REMOTE_CONTROLLER";
-    public static final String EXTRA_KEY_VIEW_BOX_REMOTE_CONTROLLER = "VIEW_BOX_REMOTE_CONTROLLER";
-
     @BindView(R.id.ivTelevision)
     public ImageView television;
 
@@ -99,15 +103,11 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
     @BindView(R.id.ivLeftLamp)
     public ImageView ivLeftLamp;
 
-    @Getter(AccessLevel.PACKAGE)
+    @Getter(PACKAGE)
     @VisibleForTesting
     private ViewBoxRemoteController viewBoxRemoteController;
 
     private Map<Component, Fragment> fragmentCache;
-
-    private Consumer<Void> onDeviceDisconnectAction;
-
-    private Runnable disconnectedInBackground;
 
     private ViewBoxRemoteControllerService viewBoxRemoteControllerService;
 
@@ -122,24 +122,10 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
         onCreateComponentController();
 
-        serviceConnection = ViewBoxRemoteControllerService.bind(this, (service) -> {
-            viewBoxRemoteControllerService = ((ViewBoxRemoteControllerService.LocalBinder) service).getService();
-            viewBoxRemoteController = viewBoxRemoteControllerService.getViewBoxRemoteController();
-
-            onDeviceDisconnectAction = aVoid -> {
-                runOnUiThread(() -> Toast.makeText(this, getString(BluetoothConnectionLost,
-                        viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show());
-                finish();
-            };
-
-            viewBoxRemoteController.setDisconnectConsumer(onDeviceDisconnectAction);
-        }, (aVoid) -> viewBoxRemoteControllerService = null);
-
         fragmentCache = new HashMap<>(Component.values().length - 1);
 
         final BluetoothConnectionFragment bluetoothConnectionFragment = BluetoothConnectionFragment.add(this);
-
-        bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> finish());
+        bluetoothConnectionFragment.addConnectionEventHandler(state -> state != STATE_ON, state -> onUnexpectedDisconnected());
     }
 
     private void onCreateComponentController() {
@@ -157,18 +143,38 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
-        if (disconnectedInBackground != null) {
-            disconnectedInBackground.run();
-        }
+        serviceConnection = ViewBoxRemoteControllerService.bind(this, (service) -> {
+            viewBoxRemoteControllerService = service;
+            viewBoxRemoteController = viewBoxRemoteControllerService.getViewBoxRemoteController();
+        }, (aVoid) -> viewBoxRemoteControllerService = null);
+
+        disconnectReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(ACTION_VIEW_BOX_DISCONNECTED)) {
+                    onUnexpectedDisconnected();
+                }
+            }
+        };
+
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_VIEW_BOX_DISCONNECTED);
+        registerReceiver(disconnectReceiver, intentFilter);
+    }
+
+    private void onUnexpectedDisconnected() {
+        runOnUiThread(() -> {
+            Toast.makeText(ControlViewBoxActivity.this, getString(BluetoothConnectionLost,
+                    viewBoxRemoteController.getName()), Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        viewBoxRemoteController.setDisconnectConsumer(aVoid -> {
-            disconnectedInBackground = () -> onDeviceDisconnectAction.accept(null);
-        });
+        unregisterReceiver(disconnectReceiver);
 
         unbindService(serviceConnection);
     }
@@ -178,7 +184,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         if (componentController.isDrawerOpen(GravityCompat.START)) {
             componentController.closeDrawer(GravityCompat.START);
         } else {
-            viewBoxRemoteControllerService.disconnect(viewBoxRemoteController);
+            viewBoxRemoteControllerService.disconnect();
             super.onBackPressed();
         }
     }
@@ -204,7 +210,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
         componentController.setFocusableInTouchMode(true);
     }
 
-    protected void showNewComponentController(Component component) throws Exception {
+    private void showNewComponentController(Component component) throws Exception {
         final Bundle args = new Bundle();
         args.putSerializable(ARGUMENT_COMPONENT, component);
 
@@ -219,7 +225,7 @@ public class ControlViewBoxActivity extends AppCompatActivity implements Abstrac
 
     @Override
     public void onComponentChanged(Component component, Object value) {
-        component.performAction(viewBoxRemoteController, value);
+        component.performAction(getViewBoxRemoteController(), value);
     }
 
     @Nullable

@@ -71,10 +71,6 @@ public class ViewBoxRemoteController {
 
     private Map<String, Consumer<Void>> messageResponseListeners;
 
-    @VisibleForTesting
-    protected ViewBoxRemoteController() {
-    }
-
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
         this.device = device;

@@ -22,6 +22,7 @@ import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 import nl.ordina.kijkdoos.view.control.ControlViewBoxActivity;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
@@ -30,6 +31,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasCom
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -112,6 +114,6 @@ public class SearchViewBoxActivityTest {
     public void testPullToRefreshStartsASearchForDevices() throws Exception {
         onView(withId(R.id.viewBoxList)).perform(swipeDown());
 
-        verify(bluetoothService, times(2)).searchDevices(any(DeviceFoundListener.class));
+        verify(bluetoothService, atLeast(2)).searchDevices(any(DeviceFoundListener.class));
     }
 }

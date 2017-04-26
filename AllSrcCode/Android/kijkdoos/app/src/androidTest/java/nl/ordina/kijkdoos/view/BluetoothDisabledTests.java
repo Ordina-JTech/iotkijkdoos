@@ -22,6 +22,7 @@ import nl.ordina.kijkdoos.dagger.MockedApplicationComponent;
 import nl.ordina.kijkdoos.view.search.SearchViewBoxActivity;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 import static android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -67,6 +68,9 @@ public class BluetoothDisabledTests {
     public void whenUserClicksOnTheButtonToEnableBluetoothThenNavigateToTheSearchActivity() throws Exception {
         bluetoothDisabledActivityRule.launchActivity(null);
 
+        intending(hasAction(ACTION_REQUEST_ENABLE)).respondWith(new Instrumentation.ActivityResult(RESULT_OK, null));
+
+        when(bluetoothService.isBluetoothEnabled()).thenReturn(true);
         onView(withId(R.id.enableBluetoothButton)).perform(click());
         intended(hasComponent(new ComponentName(InstrumentationRegistry.getTargetContext(), SearchViewBoxActivity.class)));
     }
