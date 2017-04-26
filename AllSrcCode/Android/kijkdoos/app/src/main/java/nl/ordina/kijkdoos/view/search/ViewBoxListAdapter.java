@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,11 +24,13 @@ import static java.util.Collections.sort;
 public class ViewBoxListAdapter extends BaseAdapter {
     private ArrayList<ViewBoxRemoteController> viewBoxRemoteControllers;
     private LayoutInflater inflater;
+    private Set<Integer> disabledItems;
 
     public ViewBoxListAdapter(SearchViewBoxActivity activity) {
         super();
         viewBoxRemoteControllers = new ArrayList<>();
         inflater = activity.getLayoutInflater();
+        disabledItems = new HashSet<>();
     }
 
     @UiThread
@@ -54,6 +58,19 @@ public class ViewBoxListAdapter extends BaseAdapter {
     public void clear() {
         viewBoxRemoteControllers.clear();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return !disabledItems.contains(position);
+    }
+
+    public void enableItems() {
+        disabledItems.clear();
+    }
+
+    public void disableItem(int position) {
+        disabledItems.add(position);
     }
 
     @Override

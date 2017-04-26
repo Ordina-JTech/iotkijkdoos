@@ -1,4 +1,4 @@
-package nl.ordina.kijkdoos.bluetooth;
+package nl.ordina.kijkdoos.bluetooth.discovery;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -17,6 +17,10 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.List;
 
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
+import nl.ordina.kijkdoos.bluetooth.discovery.BluetoothDiscoveryService;
+import nl.ordina.kijkdoos.bluetooth.discovery.DeviceFoundListener;
+
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -31,13 +35,12 @@ import static org.mockito.Mockito.when;
 @TargetApi(21)
 public class BluetoothDiscoveryServiceTest {
 
-    private Context mockedContext;
     private BluetoothDiscoveryService bluetoothDiscoveryService;
     private BluetoothDevice mockedBluetoothDevice;
 
     @Before
     public void setUp() throws Exception {
-        mockedContext = mock(Context.class);
+        Context mockedContext = mock(Context.class);
         BluetoothManager mockedBluetoothManager = mock(BluetoothManager.class);
         BluetoothAdapter mockedBluetoothAdapter = mock(BluetoothAdapter.class);
 
@@ -75,12 +78,5 @@ public class BluetoothDiscoveryServiceTest {
     @Test(expected = AssertionError.class)
     public void testNullCallback() throws Exception {
         bluetoothDiscoveryService.searchDevices(null);
-    }
-
-    @Test
-    public void testIsBluetoothSupportedReturnsFalse() throws Exception {
-//        when(mockedContext.has)
-//        BluetoothService bluetoothService = new BluetoothService(mockedContext);
-
     }
 }

@@ -1,4 +1,6 @@
-package nl.ordina.kijkdoos.bluetooth;
+package nl.ordina.kijkdoos.bluetooth.discovery;
+
+import nl.ordina.kijkdoos.bluetooth.ViewBoxRemoteController;
 
 /**
  * Created by coenhoutman on 15-2-2017.

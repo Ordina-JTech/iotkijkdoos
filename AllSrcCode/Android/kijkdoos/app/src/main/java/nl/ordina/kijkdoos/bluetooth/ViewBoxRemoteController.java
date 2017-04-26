@@ -7,30 +7,18 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.annimon.stream.function.Consumer;
 
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
-import org.parceler.Parcels;
-import org.parceler.Transient;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Future;
-
-import javax.inject.Inject;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.ordina.kijkdoos.dagger.BackgroundServiceFactory;
-import nl.ordina.kijkdoos.threading.BackgroundService;
 import nl.ordina.kijkdoos.view.control.ControlDiscoBallFragment;
 import nl.ordina.kijkdoos.view.control.speaker.ControlSpeakerFragment;
 
@@ -42,7 +30,6 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * Created by coenhoutman on 16-2-2017.
  */
-@Parcel
 public class ViewBoxRemoteController {
 
     public enum UUID {
@@ -63,48 +50,30 @@ public class ViewBoxRemoteController {
     private BluetoothDevice device;
 
     @Getter
-    @Transient
     private int signalStrength;
 
-    @Transient
     private BluetoothGatt bluetoothGatt;
 
-    @Inject
-    @Transient
-    BackgroundService backgroundService;
-
-    @Transient
     private BluetoothCallbackRegister bluetoothCallbackRegister;
 
-    @Transient
     private BluetoothGattService bluetoothGattService;
 
-    @Transient
     private BluetoothGattCharacteristic bluetoothGattCharacteristic;
 
-    @Transient
     @Nullable
     private Consumer<Void> connectConsumer;
 
-    @Transient
     @Nullable
     @Getter
     @Setter
-    private Consumer<Void> disconnectConsumer;
+    private Runnable disconnectConsumer;
 
-    @Transient
-    private Map<String, Consumer<Void>> messageResponseListeners;
+    private Map<String, Runnable> messageResponseListeners;
 
-    @VisibleForTesting
-    protected ViewBoxRemoteController() {
-    }
-
-    @ParcelConstructor
     public ViewBoxRemoteController(@NonNull BluetoothDevice device) {
         assertNotNull(device);
         this.device = device;
 
-        BackgroundServiceFactory.getComponent().inject(this);
         bluetoothCallbackRegister = new BluetoothCallbackRegister();
         messageResponseListeners = new HashMap<>();
     }
@@ -119,26 +88,18 @@ public class ViewBoxRemoteController {
         return device.getAddress();
     }
 
-    public Future<Void> connect(final Context context) {
-        return connect(context, null);
+    public void connect(final Context context, Consumer<Void> onConnectConsumer) {
+        connectConsumer = onConnectConsumer;
+        device.connectGatt(context, false, bluetoothCallbackRegister);
     }
 
-    public Future<Void> connect(final Context context, Consumer<Void> onConnectConsumer) {
-        connectConsumer = onConnectConsumer;
-
-        return backgroundService.getExecutorService()
-                .submit(() -> {
-                    device.connectGatt(context, false, bluetoothCallbackRegister);
-                    while ((bluetoothGattService == null || bluetoothGattCharacteristic == null) && !Thread.interrupted()) {
-                    }
-
-                    return null;
-                });
+    public boolean isConnected() {
+        return bluetoothGattService != null && bluetoothGattCharacteristic != null;
     }
 
     public void disconnect() {
         if (bluetoothGatt != null) {
-            reset(aVoid -> bluetoothGatt.disconnect());
+            bluetoothGatt.disconnect();
         }
     }
 
@@ -183,13 +144,9 @@ public class ViewBoxRemoteController {
         sendMessage("i");
     }
 
-    public void reset(Consumer<Void> resetFinishedConsumer) {
+    public void reset(Runnable resetFinishedRunnable) {
         sendMessage("r");
-        addMessageResponseListener("y", resetFinishedConsumer);
-    }
-
-    public Parcelable wrapInParcelable() {
-        return Parcels.wrap(this);
+        addMessageResponseListener("y", resetFinishedRunnable);
     }
 
     private void sendMessage(String message) {
@@ -199,7 +156,7 @@ public class ViewBoxRemoteController {
         bluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
     }
 
-    private void addMessageResponseListener(String expectedMessage, Consumer<Void> messageResponseConsumer) {
+    private void addMessageResponseListener(String expectedMessage, Runnable messageResponseConsumer) {
         messageResponseListeners.put(expectedMessage, messageResponseConsumer);
     }
 
@@ -224,9 +181,11 @@ public class ViewBoxRemoteController {
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == STATE_DISCONNECTED || newState == STATE_DISCONNECTING) {
                 bluetoothGatt.close();
+                bluetoothGatt = null;
+                bluetoothGattCharacteristic = null;
 
                 if (disconnectConsumer != null) {
-                    disconnectConsumer.accept(null);
+                    disconnectConsumer.run();
                 }
             }
 
@@ -261,9 +220,9 @@ public class ViewBoxRemoteController {
             final byte[] valueWithoutLineEnding = Arrays.copyOf(value, value.length - 2);
 
             final String valueWithoutLineEndingString = new String(valueWithoutLineEnding);
-            final Consumer<Void> consumer = messageResponseListeners.get(valueWithoutLineEndingString);
-            if (consumer != null) {
-                consumer.accept(null);
+            final Runnable runnable = messageResponseListeners.get(valueWithoutLineEndingString);
+            if (runnable != null) {
+                runnable.run();
             }
         }
 
