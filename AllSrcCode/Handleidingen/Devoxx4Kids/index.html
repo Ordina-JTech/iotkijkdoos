@@ -77,11 +77,12 @@
 				<section data-markdown>
 					<script type="text/template">
 						# Actie
-						## Plaats het PCB op de Arduino
+						#### Plaats het PCB op de Arduino
 
 						<video autoplay loop src="mov/PCB onto Arduino.mp4" type="video/mp4" height="400px" />
 					</script>
 				</section>
+
 				<section data-markdown>
 					<script type="text/template">
 						## Bluetooth
@@ -98,6 +99,59 @@
 						</figure>
 					</script>
 				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						# Actie
+						#### Plaats de Bluetooth module op het PCB
+
+						<video autoplay loop src="mov/PCB onto Arduino.mp4" type="video/mp4" height="400px" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						## Light-emitting Diode (led)
+
+						<img src="img/led.jpg" width="200px" />
+
+						Een led is een elektronisch component dat licht geeft zodra er stroom doorheen loopt. Een led is compact en verbruikt veel minder stroom dan een gloeilamp.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						# Actie
+						#### Breek indien nodig de leds los
+
+						<video autoplay loop src="mov/Break LEDs.mp4" type="video/mp4" height="400px" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						# Actie
+						#### Schuif twee draden op de led
+
+						1. sluit één draad aan op het liggende streepje '-'
+						2. sluit één draad aan op de R, G óf B
+
+						<video autoplay loop src="mov/Connect wires to LED.mp4" type="video/mp4" height="400px" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						# Actie
+						#### Sluit de led aan op het PCB
+
+						1. sluit de draad van het liggende streepje '-' aan op GND bij LED1
+						2. sluit de andere draad aan op D8 bij LED1
+
+						Herhaal deze en de vorige stap voor LED2
+
+						<video autoplay loop src="mov/Connect LED to PCB.mp4" type="video/mp4" height="400px" />
+					</script>
 			</div>
 		</div>
 
@@ -114,6 +168,7 @@
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
