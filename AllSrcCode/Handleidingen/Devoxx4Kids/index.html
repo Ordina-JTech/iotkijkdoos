@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Devoxx4Kids - IoT Kijkdoos</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/ordina.css">
@@ -79,7 +79,7 @@
 						## Actie
 						#### Plaats het PCB op de Arduino
 
-						<video autoplay loop src="mov/PCB onto Arduino.mp4" type="video/mp4" height="400px" />
+						<video height="auto" controls src="mov/PCB onto Arduino.mp4" type="video/mp4" onclick="this.paused ? this.play() : this.pause();" />
 					</script>
 				</section>
 
@@ -115,7 +115,7 @@
 
 						<img src="img/led.jpg" width="200px" />
 
-						Een led is een elektronisch component dat licht geeft zodra er stroom doorheen loopt. Een led is compact en verbruikt veel minder stroom dan een gloeilamp.
+						Een led is een elektronisch component dat licht geeft zodra er stroom doorheen loopt. Een led is klein en verbruikt veel minder stroom dan een gloeilamp.
 					</script>
 				</section>
 
@@ -124,7 +124,7 @@
 						## Actie
 						#### Breek indien nodig de leds los
 
-						<video autoplay loop src="mov/Break LEDs.mp4" type="video/mp4" height="400px" />
+						<video src="mov/Break LEDs.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
 					</script>
 				</section>
 
@@ -136,7 +136,7 @@
 						1. sluit één draad aan op het liggende streepje '-'
 						2. sluit één draad aan op de R, G óf B
 
-						<video autoplay loop src="mov/Connect wires to LED.mp4" type="video/mp4" height="400px" />
+						<video src="mov/Connect wires to LED.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
 					</script>
 				</section>
 
@@ -150,7 +150,7 @@
 
 						Herhaal deze en de vorige stap voor LED2
 
-						<video autoplay loop src="mov/Connect LED to PCB.mp4" type="video/mp4" height="400px" />
+						<video src="mov/Connect LED to PCB.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
 					</script>
 				</section>
 
@@ -217,7 +217,7 @@
 					</script>
 				</section>
 
-				<section data-markdown>
+				<section id="upload-code" data-markdown data-separator-vertical="^~~~">
 					<script type="text/template">
 						## Code uploaden
 
@@ -237,6 +237,13 @@
 							<img src="img/arduino ide select port.png" width="400px"/>
 							<figcaption style="font-size: small">Afbeelding 2</figcaption>
 						</figure>
+						~~~
+						## Arduino IDE instellen
+						<video src="mov/Arduino IDE setup.mov" type="video/mov" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
+
+						~~~
+						## Code uploaden
+						<video src="mov/Arduino IDE verify and upload.mov" type="video/mov" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
 					</script>
 				</section>
 
@@ -254,6 +261,45 @@
 							<img src="img/QR code App Store.png"/>
 							<figcaption style="font-size: small">Apple App Store</figcaption>
 						</figure>
+					</script>
+				</section>
+
+				<section data-markdown data-separator-vertical="^~~~">
+					<script type="text/template">
+						## App openen
+
+						Als je de app opent kun je jouw kijkdoos selecteren. Als de app is verbonden zie je het scherm zoals de afbeelding hieronder.
+
+						Ontdek wat je allemaal kunt bedienen!
+						~~~
+						## Klikbare onderdelen
+						<video src="mov/Android clickable items.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
+					</script>
+				</section>
+
+				<section data-markdown data-separator-vertical="^~~~">
+					<script type="text/template">
+						# Wat nu?!
+
+						Zoals je misschien hebt gezien doet een van de led lampjes het niet. Dat kan natuurlijk niet; dat moet gemaakt worden. Kijk goed naar de code in het bestand Ordina.ino. Als je code hebt gewijzigd volg dan de <a href="#/upload-code">eerder beschreven stappen</a> om de code op de Arduino te zetten.
+						~~~
+						# Hint 1
+						<blockquote>Op welke pin zit de led aangesloten?</blockquote>
+						~~~
+						# Hint 2
+						<blockquote>Komt de pin in de code overeen met de pin op de Arduino?</blockquote>
+						~~~
+						## Uitleg
+						In Ordina.ino staat
+						```
+						LED led2(12);
+						```
+						Dit betekent dat de Arduino pin 12 aanstuurt om led 2 aan en uit te zetten. Op het PCB kun je zien dat de led is aangesloten op pin D7. Dit komt niet met elkaar overeen.
+
+						Verander bovenstaande regel naar:
+						```
+						LED led2(7);
+						```
 					</script>
 				</section>
 			</div>
