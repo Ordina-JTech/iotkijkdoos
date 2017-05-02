@@ -279,7 +279,7 @@
 
 				<section data-markdown data-separator-vertical="^~~~">
 					<script type="text/template">
-						# Wat nu?!
+						# Opdracht 1
 
 						Zoals je misschien hebt gezien doet een van de led lampjes het niet. Dat kan natuurlijk niet; dat moet gemaakt worden. Kijk goed naar de code in het bestand Ordina.ino. Als je code hebt gewijzigd volg dan de <a href="#/upload-code">eerder beschreven stappen</a> om de code op de Arduino te zetten.
 						~~~
@@ -300,6 +300,34 @@
 						```
 						LED led2(7);
 						```
+					</script>
+				</section>
+
+				<section data-markdown data-separator-vertical="^~~~">
+					<script type="text/template">
+						# Opdracht 2
+
+						De kleur van de discobal kan veranderd worden door gebruik te maken van de slider in de app, maar hoe leuk is het om met één druk op de knop een kleurverloop te zien? Ga naar het bestand RGB.cpp, scroll naar de methode RGB::showGradient() en voeg tussen de accolades de code die zorgt voor het kleurverloop. Je kunt hiervoor de array “discoStates” en de variabele “nStates” (lengte discoStates) gebruiken. Het is natuurlijk ook mogelijk om een eigen array met kleuren te creëren. Druk in de app op de hamer en daarna op de knop “Gradient” om de functie uit te voeren.
+						~~~
+						# Tip 1
+						<blockquote>Gebruik de methode RGB::writeColor(int rgbValue[3]) in RGB.cpp om de kleur van RGB LED te veranderden</blockquote>
+						~~~
+						# Tip 2
+						<blockquote>De functie delay() kan worden gebruikt om tussen het veranderen van de kleuren een pauze te creëren</blockquote>
+						~~~
+						# Uitleg
+						De code zou er als volgt uit kunnen zien:
+						```
+						void RGB::showGradient()  {
+						  for (int i = 0; i < nStates; i++) {
+						    writeColor(discoStates[i]);
+						    delay(1000);
+						  }
+
+						  writeColor(off);
+						}
+						```
+						discoStates is een array. Dit houdt in dat het een verzameling is van de kleuren van de disco bol. nStates is het aantal kleuren dat er is. Met de for is het mogelijk om alle kleuren weer te geven.
 					</script>
 				</section>
 			</div>
