@@ -307,16 +307,16 @@
 					<script type="text/template">
 						# Opdracht 2
 
-						De kleur van de discobal kan veranderd worden door gebruik te maken van de slider in de app, maar hoe leuk is het om met één druk op de knop een kleurverloop te zien? Ga naar het bestand RGB.cpp, scroll naar de methode RGB::showGradient() en voeg tussen de accolades de code die zorgt voor het kleurverloop. Je kunt hiervoor de array “discoStates” en de variabele “nStates” (lengte discoStates) gebruiken. Het is natuurlijk ook mogelijk om een eigen array met kleuren te creëren. Druk in de app op de hamer en daarna op de knop “Gradient” om de functie uit te voeren.
+						De kleur van de discobal kan veranderd worden door gebruik te maken van de slider in de app, maar hoe leuk is het om met één druk op de knop een kleurverloop te zien? Ga naar het bestand <code>RGB.cpp</code>, scroll naar de methode <code>RGB::showGradient()</code> en voeg tussen de accolades de code die zorgt voor het kleurverloop. Je kunt hiervoor de array “discoStates” en de variabele “nStates” (lengte discoStates) gebruiken. Het is natuurlijk ook mogelijk om een eigen array met kleuren te creëren. Druk in de app op de hamer en daarna op de knop “Gradient” om de functie uit te voeren.
 						~~~
 						# Tip 1
-						<blockquote>Gebruik de methode RGB::writeColor(int rgbValue[3]) in RGB.cpp om de kleur van RGB LED te veranderden</blockquote>
+						<blockquote>Gebruik de methode <code>RGB::writeColor(int rgbValue[3])</code> in <code>RGB.cpp</code> om de kleur van RGB LED te veranderden</blockquote>
 						~~~
 						# Tip 2
 						<blockquote>De functie delay() kan worden gebruikt om tussen het veranderen van de kleuren een pauze te creëren</blockquote>
 						~~~
-						# Uitleg
-						De code zou er als volgt uit kunnen zien:
+						## Uitleg
+						De code in <code>RGB.cpp</code> zou er als volgt uit kunnen zien:
 						```
 						void RGB::showGradient()  {
 						  for (int i = 0; i < nStates; i++) {
@@ -327,8 +327,82 @@
 						  writeColor(off);
 						}
 						```
-						discoStates is een array. Dit houdt in dat het een verzameling is van de kleuren van de disco bol. nStates is het aantal kleuren dat er is. Met de for is het mogelijk om alle kleuren weer te geven.
+						discoStates is een array. Dit houdt in dat het een verzameling is van de kleuren van de disco bol.
+
+						nStates is het aantal kleuren dat er is. Met for is het mogelijk om alle kleuren weer te geven.
 					</script>
+				</section>
+
+				<section data-markdown data-separator-vertical="^~~~">
+					<script type="text/template">
+						# Opdracht 3
+
+						In deze opdracht gaan we muziek maken! Je hebt eerder de buzzer al aangesloten. Deze ga je nu gebruiken om geluid te maken. Ga naar het bestand <code>Buzzer.cpp</code> en scroll naar de methode <code>Buzzer::playCustomSound()</code>. Met de functie <code>tone()</code> kun je de buzzer een bepaalde toon laten maken. Druk in de app op het keyboard en daarna “My custom sound” om je geluid af te spelen.
+						~~~
+						## Noten
+						|Noot|Frequentie (Hz)|Noot|Frequentie (Hz)|
+						|:---:|:---:|:---:|:---:|
+						|c		|262 	|C		|523	|
+						|d		|294	|D		|587	|
+						|e		|330	|E		|659	|
+						|f		|349	|F		|699	|
+						|g		|392	|G		|784	|
+						|a		|440	|A		|880	|
+						|b		|494	|B		|989	|
+
+						~~~
+						### Uitleg
+						Hieronder staat een voorbeeld van Seven Nation Army:
+						```
+						void Buzzer::playCustomSound()  {
+						  const int note = 3000;
+						  const int halfNote = note/2;
+						  const int quarterNote = note/4;
+						  const int quarterNoteLengthened = static_cast<int>(quarterNote * 1.5);
+						  const int eighthNote = note/8;
+
+						  for (int i = 0; i < 2; i++) {
+						    tone(_pin, 330, quarterNote);
+						    delay(quarterNote);
+						    tone(_pin, 330, eighthNote);
+						    delay(eighthNote);
+						    tone(_pin, 392, eighthNote);
+						    delay(eighthNote);
+						    tone(_pin, 330, eighthNote);
+						    delay(eighthNote);
+						    tone(_pin, 294, eighthNote);
+						    delay(eighthNote);
+						    if (i == 0) {
+						      tone(_pin, 262, halfNote);
+						      delay(halfNote);
+						      tone(_pin, 247, halfNote);
+						      delay(halfNote);
+						    } else if (i == 1) {
+						      tone(_pin, 262, eighthNote);
+						      delay(eighthNote);
+						      tone(_pin, 294, eighthNote);
+						      delay(eighthNote);
+						      tone(_pin, 262, eighthNote);
+						      delay(eighthNote);
+						      tone(_pin, 247, quarterNoteLengthened);
+						      delay(quarterNoteLengthened);
+						    }
+						  }
+						}
+						```
+					</script>
+			</section>
+
+					<section data-markdown data-separator-vertical="^~~~" class="smallTableText">
+						<script type="text/template">
+							## Functies
+
+							|Syntax|Parameters|Uitleg|
+							|---|---|---|
+							|`if(condition) {`<br/>&ensp;`//Statements`<br/>`}`|**`condition`**: de uitkomst van de conditie moet altijd waar of niet waar zijn. Als de uitkomst waar is worden de regels code binnen het code block uitgevoerd.|De if loop wordt gebruikt om een codeblok alleen uit te voeren als er aan de conditie wordt voldaan.|
+							|for (initialization; condition; increment)  {<br/>&ensp;//Statements<br/>}|`int x = 0`: de variabele x wordt hier verklaard. Het getal 0 is de startwaarde van de for loop. Deze kan zelf bepaald worden.<br/>**x < 100**: De conditie. Als x groter of gelijk is aan 100 dan wordt de loop verlaten. Deze waarde kan zelf bepaald worden.<br/>**x++**: de toename (in dit geval). x wordt hier elke ronde met 1 verhoogd.|De for loop wordt gebruikt om een codeblok meerdere keren uit te voeren. In Afbeelding 2 wordt bijvoorbeeld het getal van 0 tot 99 geprint.|
+							|Serial.print(val)<br/>Serial.println(val)|**val**: de waarde die geprint wordt in de Serial Monitor. Dit kan elke datatype zijn.|Je kunt Serial.println() gebruiken om te debuggen. U gebruikt het bijvoorbeeld als u wil weten of een methode wordt aangeroepen of wat de waarde van een variabele is. Let er wel op dat u de Serial Monitor heeft geopend tijdens het runnen van de code (Tools -> Serial Monitor).|
+						</script>
 				</section>
 			</div>
 		</div>
@@ -341,7 +415,7 @@
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
-				controls: false,
+				controls: true,
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
