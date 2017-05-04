@@ -47,8 +47,13 @@ section.has-light-background {
 // Theme template ------------------------------
 @import "../template/theme";
 // ---------------------------------------------
-
-
+.reveal a {
+	text-decoration: underline;
+	cursor: pointer;
+}
+section.smallListText ol {
+	font-size: x-large;
+}
 section.smallTableText table {
 	font-size: large;
 }

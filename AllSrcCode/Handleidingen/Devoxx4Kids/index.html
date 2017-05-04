@@ -35,7 +35,7 @@
 					<script type="text/template">
 						## Wat ga je doen?
 
-						Voor je ligt een pakket dat is uitgedeeld door het Ordina team. De komende 75 minuten ga je met dit pakket je eigen IoT Kijkdoos maken en besturen met de “IoT Kijkdoos” app. Als dat gelukt is ga je de Arduino programmeren door vier challenges uit te voeren. Vraag het Ordina-team om hulp als er iets niet lukt.
+						Voor je ligt een pakket dat is uitgedeeld door het Ordina team. De komende 75 minuten ga je met dit pakket je eigen IoT Kijkdoos maken en besturen met de “IoT Kijkdoos” app. Als dat gelukt is ga je de Arduino programmeren door drie opdrachten uit te voeren. Vraag het Ordina-team om hulp als er iets niet lukt.
 					</script>
 				</section>
 				<section data-markdown>
@@ -136,7 +136,8 @@
 						1. sluit één draad aan op het liggende streepje '-'
 						2. sluit één draad aan op de R, G óf B
 
-						<video src="mov/Connect wires to LED.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
+						<video src="mov/Connect wires to LED.mp4" type="video/mp4" height="300px" onclick="this.paused ? this.play() : this.pause();" controls />
+
 					</script>
 				</section>
 
@@ -150,7 +151,7 @@
 
 						Herhaal deze en de vorige stap voor LED2
 
-						<video src="mov/Connect LED to PCB.mp4" type="video/mp4" height="auto" onclick="this.paused ? this.play() : this.pause();" controls />
+						<video src="mov/Connect LED to PCB.mp4" type="video/mp4" height="250px" onclick="this.paused ? this.play() : this.pause();" controls />
 					</script>
 				</section>
 
@@ -217,7 +218,7 @@
 					</script>
 				</section>
 
-				<section id="upload-code" data-markdown data-separator-vertical="^~~~">
+				<section id="upload-code" data-markdown data-separator-vertical="^~~~" class="smallListText">
 					<script type="text/template">
 						## Code uploaden
 
@@ -229,6 +230,7 @@
 						4.	Controleer of de code geen error bevat
 							-	Klik linksboven op het vinkje
 
+						<br/>
 						<figure style="display: inline-block">
 							<img src="img/arduino ide select board.png" width="400px"/>
 							<figcaption style="font-size: small">Afbeelding 1</figcaption>
@@ -268,7 +270,7 @@
 					<script type="text/template">
 						## App openen
 
-						Als je de app opent kun je jouw kijkdoos selecteren. Als de app is verbonden zie je het scherm zoals de afbeelding hieronder.
+						Als je de app opent kun je jouw kijkdoos selecteren. Als de app is verbonden zie je het scherm zoals de afbeelding <a onclick="Reveal.down();">hieronder</a>.
 
 						Ontdek wat je allemaal kunt bedienen!
 						~~~
@@ -281,7 +283,9 @@
 					<script type="text/template">
 						# Opdracht 1
 
-						Zoals je misschien hebt gezien doet een van de led lampjes het niet. Dat kan natuurlijk niet; dat moet gemaakt worden. Kijk goed naar de code in het bestand Ordina.ino. Als je code hebt gewijzigd volg dan de <a href="#/upload-code">eerder beschreven stappen</a> om de code op de Arduino te zetten.
+						Zoals je misschien hebt gezien doet een van de led lampjes het niet. Dat kan natuurlijk niet; dat moet gemaakt worden. Kijk goed naar de code in het bestand Ordina.ino.
+
+						Als je code hebt gewijzigd volg dan de <a href="#/upload-code">eerder beschreven stappen</a> om de code op de Arduino te zetten.
 						~~~
 						# Hint 1
 						<blockquote>Op welke pin zit de led aangesloten?</blockquote>
@@ -305,14 +309,21 @@
 
 				<section data-markdown data-separator-vertical="^~~~">
 					<script type="text/template">
-						# Opdracht 2
+						## Opdracht 2
 
-						De kleur van de discobal kan veranderd worden door gebruik te maken van de slider in de app, maar hoe leuk is het om met één druk op de knop een kleurverloop te zien? Ga naar het bestand <code>RGB.cpp</code>, scroll naar de methode <code>RGB::showGradient()</code> en voeg tussen de accolades de code die zorgt voor het kleurverloop. Je kunt hiervoor de array “discoStates” en de variabele “nStates” (lengte discoStates) gebruiken. Het is natuurlijk ook mogelijk om een eigen array met kleuren te creëren. Druk in de app op de hamer en daarna op de knop “Gradient” om de functie uit te voeren.
+						De kleur van de discobal kan veranderd worden door gebruik te maken van de slider in de app, maar hoe leuk is het om met één druk op de knop een kleurverloop te zien? Ga naar het bestand <code>RGB.cpp</code> en vul methode <code>RGB::showGradient()</code> in.
+
+						Druk in de app op de hamer en daarna op de knop “Gradient” om de functie uit te voeren.
+
+						Klik <a href="#/functions">hier</a> voor een uitleg van functies die je kunt gebruiken.
 						~~~
-						# Tip 1
+						# Hint 1
+						<blockquote>Gebruik <code>discoStates</code> en <code>nStates</code> voor je for loop</blockquote>
+						~~~
+						# Hint 2
 						<blockquote>Gebruik de methode <code>RGB::writeColor(int rgbValue[3])</code> in <code>RGB.cpp</code> om de kleur van RGB LED te veranderden</blockquote>
 						~~~
-						# Tip 2
+						# Hint 3
 						<blockquote>De functie delay() kan worden gebruikt om tussen het veranderen van de kleuren een pauze te creëren</blockquote>
 						~~~
 						## Uitleg
@@ -335,9 +346,11 @@
 
 				<section data-markdown data-separator-vertical="^~~~">
 					<script type="text/template">
-						# Opdracht 3
+						## Opdracht 3
 
-						In deze opdracht gaan we muziek maken! Je hebt eerder de buzzer al aangesloten. Deze ga je nu gebruiken om geluid te maken. Ga naar het bestand <code>Buzzer.cpp</code> en scroll naar de methode <code>Buzzer::playCustomSound()</code>. Met de functie <code>tone()</code> kun je de buzzer een bepaalde toon laten maken. Druk in de app op het keyboard en daarna “My custom sound” om je geluid af te spelen.
+						In deze opdracht gaan we muziek maken! Ga naar het bestand <code>Buzzer.cpp</code> en schrijf je code in methode <code>Buzzer::playCustomSound()</code>. Klik <a onclick="Reveal.down();">hier</a> voor een overzicht van noten.
+
+						Met de functie <code>tone()</code> kun je de buzzer een bepaalde toon laten maken. Druk in de app op het keyboard en daarna “My custom sound” om je geluid af te spelen.
 						~~~
 						## Noten
 						|Noot|Frequentie (Hz)|Noot|Frequentie (Hz)|
@@ -350,6 +363,9 @@
 						|a		|440	|A		|880	|
 						|b		|494	|B		|989	|
 
+						~~~
+						### Hint 1
+						<blockquote>tone(_pin, 330, 1000);<br/>delay(1000);</blockquote>
 						~~~
 						### Uitleg
 						Hieronder staat een voorbeeld van Seven Nation Army:
@@ -393,16 +409,35 @@
 					</script>
 			</section>
 
-					<section data-markdown data-separator-vertical="^~~~" class="smallTableText">
-						<script type="text/template">
-							## Functies
+			<section data-markdown data-separator-vertical="^~~~" class="smallTableText">
+				<script type="text/template">
+					# #GoedBezig! #Devoxx4Kids #IoTKijkdoos
+				</script>
+			</section>
 
-							|Syntax|Parameters|Uitleg|
-							|---|---|---|
-							|`if(condition) {`<br/>&ensp;`//Statements`<br/>`}`|**`condition`**: de uitkomst van de conditie moet altijd waar of niet waar zijn. Als de uitkomst waar is worden de regels code binnen het code block uitgevoerd.|De if loop wordt gebruikt om een codeblok alleen uit te voeren als er aan de conditie wordt voldaan.|
-							|for (initialization; condition; increment)  {<br/>&ensp;//Statements<br/>}|`int x = 0`: de variabele x wordt hier verklaard. Het getal 0 is de startwaarde van de for loop. Deze kan zelf bepaald worden.<br/>**x < 100**: De conditie. Als x groter of gelijk is aan 100 dan wordt de loop verlaten. Deze waarde kan zelf bepaald worden.<br/>**x++**: de toename (in dit geval). x wordt hier elke ronde met 1 verhoogd.|De for loop wordt gebruikt om een codeblok meerdere keren uit te voeren. In Afbeelding 2 wordt bijvoorbeeld het getal van 0 tot 99 geprint.|
-							|Serial.print(val)<br/>Serial.println(val)|**val**: de waarde die geprint wordt in de Serial Monitor. Dit kan elke datatype zijn.|Je kunt Serial.println() gebruiken om te debuggen. U gebruikt het bijvoorbeeld als u wil weten of een methode wordt aangeroepen of wat de waarde van een variabele is. Let er wel op dat u de Serial Monitor heeft geopend tijdens het runnen van de code (Tools -> Serial Monitor).|
-						</script>
+			<section data-markdown data-separator-vertical="^~~~" class="smallTableText">
+				<script type="text/template">
+					# Ctrl+X & Ctrl+V
+
+					Je kunt nu beginnen om je kijkdoos in elkaar te zetten.
+
+					<figure>
+						<img src="img/KijkdoosExample.png" height="400px"/>
+						<figcaption style="font-size: small">IoT Kijkdoos voorbeeld</figcaption>
+					</figure>
+				</script>
+			</section>
+
+				<section data-markdown data-separator-vertical="^~~~" class="smallTableText" id="functions">
+					<script type="text/template">
+						## Functies
+
+						|Syntax|Parameters|Uitleg|
+						|---|---|---|
+						|`if(condition) {`<br/>&ensp;`//Statements`<br/>`}`|**`condition`**: de uitkomst van de conditie moet altijd waar of niet waar zijn. Als de uitkomst waar is worden de regels code binnen het code block uitgevoerd.|De if loop wordt gebruikt om een codeblok alleen uit te voeren als er aan de conditie wordt voldaan.|
+						|for (initialization; condition; increment)  {<br/>&ensp;//Statements<br/><img src="img/for-loop.png" />}|`int x = 0`: de variabele x wordt hier verklaard. Het getal 0 is de startwaarde van de for loop. Deze kan zelf bepaald worden.<br/>**x < 100**: De conditie. Als x groter of gelijk is aan 100 dan wordt de loop verlaten. Deze waarde kan zelf bepaald worden.<br/>**x++**: de toename (in dit geval). x wordt hier elke ronde met 1 verhoogd.|De for loop wordt gebruikt om een codeblok meerdere keren uit te voeren. In Afbeelding 2 wordt bijvoorbeeld het getal van 0 tot 99 geprint.|
+						|Serial.print(val)<br/>Serial.println(val)|**val**: de waarde die geprint wordt in de Serial Monitor. Dit kan elke datatype zijn.|Je kunt Serial.println() gebruiken om te debuggen. U gebruikt het bijvoorbeeld als u wil weten of een methode wordt aangeroepen of wat de waarde van een variabele is. Let er wel op dat u de Serial Monitor heeft geopend tijdens het runnen van de code (Tools -> Serial Monitor).|
+					</script>
 				</section>
 			</div>
 		</div>
@@ -416,6 +451,7 @@
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
 				controls: true,
+				history: true,
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
