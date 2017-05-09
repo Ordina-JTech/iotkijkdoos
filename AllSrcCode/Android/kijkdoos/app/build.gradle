@@ -30,6 +30,14 @@ android {
     }
 }
 
+downloadLicenses {
+    ext.apacheTwo = license('Apache License, Version 2.0', 'http://opensource.org/licenses/Apache-2.0')
+    ext.bsd = license('BSD License', 'http://www.opensource.org/licenses/bsd-license.php')
+    ext.mit = license('The MIT License (MIT)', 'https://opensource.org/licenses/MIT')
+
+    dependencyConfiguration = 'compile'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
