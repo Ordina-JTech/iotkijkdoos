@@ -12,7 +12,7 @@
 - [Logo printed box](https://www.doosopmaat.nl/bestellen/type/postdoos)
 
 ## PCB Order details
-Below are the details for ordering the PCB at https://www.seeedstudio.com
+Below are the details for ordering the PCB at https://www.seeedstudio.com. Please upload the files in the folder Ordering.
 
 Fusion PCBA<br/>
 SKU: 502000001<br/>
