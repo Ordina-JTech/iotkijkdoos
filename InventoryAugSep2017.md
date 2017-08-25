@@ -9,9 +9,9 @@ Below is a list of items that participants of the workshop are allowed to take h
 |Printed wallpaper                      |260  |
 |[Complete packages](#package-content)  |69   |
 |Incomplete packages                    |34   |
-|     - no HM10 - bt4.0 modulke         |     |
-|     - no Glue stick                   |     |
-|     - no Scissors                     |     |
+| - no HM10 - bt4.0 modulke             |     |
+| - no Glue stick                       |     |
+| - no Scissors                         |     |
 
 Three HM-10 Bluetooth modules were clones instead of originals. They will not be used for the workshops.
 
@@ -22,7 +22,7 @@ Three HM-10 Bluetooth modules were clones instead of originals. They will not be
 |Arduino Uno                |0    |
 |USB cable                  |0    |
 |JTech PCB                  |6    |
-|HM-10 Bluetooth module     |43   | No names given yet! (HMSOFT to Kijkdoos200-242)
+|HM-10 Bluetooth module     |43   |
 |RGB led (set of 3)         |6    |
 |Buzzer                     |6    |
 |Servo                      |6    |
@@ -32,13 +32,17 @@ Three HM-10 Bluetooth modules were clones instead of originals. They will not be
 |Battery connector          |100+ |
 |Bundle of 10 Dupont cables |44   |
 
+No names given yet to the HM-10 Bluetooth module! (HMSOFT to Kijkdoos200-242)
+
 ## Workshop inventory
 The list below are items that are necessary to execute the workshop, but are not supposed to be taken home by the participants.
 
 |Item           |Total|
 |---------------|-----|
-|Utility knive  |8    |  Location ??? 
-|Tape           |26   |  Location ???
+|Utility knive  |8    | 
+|Tape           |26   |
+
+Location of these items are unknown
 
 ## Package content
 Each complete package contains the following components:
@@ -56,4 +60,4 @@ Each complete package contains the following components:
 |Glue stick                 |1          |
 |9V Battery                 |1          |
 |Battery connector          |1          |
-|Bundle of 20 Dupont cables |1          |
+|Bundle of 10 Dupont cables |1          |
