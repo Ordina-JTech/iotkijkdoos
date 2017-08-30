@@ -34,27 +34,120 @@ void Buzzer::vaderJacob(LED led1, LED led2) {
   led1.setLed(false);
   led2.setLed(false);
   
-  for(int i = 0; i < nCouplets; i++)  {
-    for (int j = 0; j < 2; j++)   {
-      for (int k = beginCouplet[i]; k < endCouplet[i]; k++) {
-        if (k%2 == 0) {
-            led1.setLed(true);
-            led2.setLed(false);
-        }
-        else {
-            led1.setLed(true);
-            led2.setLed(false);
-        }
-        tone(_pin, frequence[k], milliSec);
-        delay(secondsRest[i]);
-      }
-      delay(300);
-    }
-    delay(200);
-  }
+//Play first section
+  firstSection(led1, led2);
+ 
+  //Play second section
+  secondSection(led1, led2);
+ 
+  //Variant 1
+  beep(NOTE_F4, 250, led1, led2);  
+  beep(NOTE_GS4, 500, led1, led2);  
+  beep(NOTE_F4, 350, led1, led2);  
+  beep(NOTE_A4, 125, led1, led2);
+  beep(NOTE_C5, 500, led1, led2);
+  beep(NOTE_A4, 375, led1, led2);  
+  beep(NOTE_C5, 125, led1, led2);
+  beep(NOTE_E5, 650, led1, led2);
+ 
+  delay(500);
+ 
+  //Repeat second section
+  secondSection(led1, led2);
+ 
+  //Variant 2
+  beep(NOTE_F4, 250, led1, led2);  
+  beep(NOTE_GS4, 500, led1, led2);  
+  beep(NOTE_F4, 375, led1, led2);  
+  beep(NOTE_C5, 125, led1, led2);
+  beep(NOTE_A4, 500, led1, led2);  
+  beep(NOTE_F4, 375, led1, led2);  
+  beep(NOTE_C5, 125, led1, led2);
+  beep(NOTE_A4, 650, led1, led2);  
+ 
+  delay(650);
+  
   setLEDToPreviousState(led1, stateLED1, led2, stateLED2);
 }
 
+void Buzzer::beep(int note, int duration, LED led1, LED led2)
+{
+  //Play tone on buzzerPin
+  tone(_pin, note, duration);
+ 
+  //Play different LED depending on value of 'counter'
+  if(counter % 2 == 0)
+  {
+    led1.setLed(true);
+    delay(duration);
+    led1.setLed(false);
+  }else
+  {
+    led2.setLed(true);
+    delay(duration);
+    led2.setLed(true);
+  }
+ 
+  //Stop tone on buzzerPin
+  noTone(_pin);
+ 
+  delay(50);
+ 
+  //Increment counter
+  counter++;
+}
+
+void Buzzer::firstSection(LED led1, LED led2)
+{
+  beep(NOTE_A4, 500, led1, led2);
+  beep(NOTE_A4, 500, led1, led2);    
+  beep(NOTE_A4, 500, led1, led2);
+  beep(NOTE_F4, 350, led1, led2);
+  beep(NOTE_C5, 150, led1, led2);  
+  beep(NOTE_A4, 500, led1, led2);
+  beep(NOTE_F4, 350, led1, led2);
+  beep(NOTE_C5, 150, led1, led2);
+  beep(NOTE_A4, 650, led1, led2);
+ 
+  delay(500);
+ 
+  beep(NOTE_E5, 500, led1, led2);
+  beep(NOTE_E5, 500, led1, led2);
+  beep(NOTE_E5, 500, led1, led2);  
+  beep(NOTE_F5, 350, led1, led2);
+  beep(NOTE_C5, 150, led1, led2);
+  beep(NOTE_GS4,500, led1, led2);
+  beep(NOTE_F4, 350, led1, led2);
+  beep(NOTE_C5, 150, led1, led2);
+  beep(NOTE_A4, 650, led1, led2);
+ 
+  delay(500);
+}
+ 
+void Buzzer::secondSection(LED led1, LED led2)
+{
+  beep(NOTE_A5, 500, led1, led2);
+  beep(NOTE_A4, 300, led1, led2);
+  beep(NOTE_A4, 150, led1, led2);
+  beep(NOTE_A5, 500, led1, led2);
+  beep(NOTE_GS5,325, led1, led2);
+  beep(NOTE_G5, 175, led1, led2);
+  beep(NOTE_FS5,125, led1, led2);
+  beep(NOTE_F5, 125, led1, led2);    
+  beep(NOTE_FS5,250, led1, led2);
+ 
+  delay(325);
+ 
+  beep(NOTE_AS4, 250, led1, led2);
+  beep(NOTE_DS5, 500, led1, led2);
+  beep(NOTE_D5,  325, led1, led2);  
+  beep(NOTE_CS5, 175, led1, led2);  
+  beep(NOTE_C5,  125, led1, led2);  
+  beep(NOTE_AS4,  125, led1, led2);  
+  beep(NOTE_C5,  250, led1, led2);  
+ 
+  delay(350);
+}
 //Challenge II
 void Buzzer::customSound(LED led1, LED led2)  {
   bool stateLED1 = led1.getState();

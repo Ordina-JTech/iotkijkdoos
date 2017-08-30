@@ -103,8 +103,9 @@ class Buzzer  {
   void singMarioTheme(LED led1, LED led2);  
   void buzz(int targetPin, long frequency, long length, LED led1, LED led2);
   
-
-  
+  void beep(int note, int duration, LED led1, LED led2);
+  void firstSection(LED led1, LED led2);
+  void secondSection(LED led1, LED led2);
 
   int _pin;
   
@@ -115,7 +116,7 @@ class Buzzer  {
   int secondsRest[4] = {300, 300, 300, 600};
   int nCouplets = (sizeof(endCouplet)/sizeof(int));
   int milliSec = 100;
-  
+  int counter = 0; 
 
   
 };
