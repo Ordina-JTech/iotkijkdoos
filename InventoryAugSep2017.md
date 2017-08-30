@@ -9,20 +9,22 @@ Below is a list of items that participants of the workshop are allowed to take h
 |Printed wallpaper                      |260  |
 |[Complete packages](#package-content)  |69   |
 |Incomplete packages                    |34   |
-| - no HM10 - bt4.0 module              |     |
 | - no Glue stick                       |     |
 | - no Scissors                         |     |
 
-Three HM-10 Bluetooth modules were clones instead of originals. They will not be used for the workshops.
+Three HM-10 Bluetooth modules were clones instead of originals, 1 was broken at the last given workshop.
+They will not be used for the workshops.
+
+
 
 #### Spare parts
 |Item                       |Total|
 |---------------------------|-----|
 |Transparent bags           |50   |
-|Arduino Uno                |0    |
+|Arduino Uno                |1    |
 |USB cable                  |0    |
-|JTech PCB                  |6    |
-|HM-10 Bluetooth module     |39   |
+|JTech PCB                  |5    |
+|HM-10 Bluetooth module     |3    |
 |RGB led (set of 3)         |6    |
 |Buzzer                     |6    |
 |Servo                      |6    |
@@ -32,9 +34,9 @@ Three HM-10 Bluetooth modules were clones instead of originals. They will not be
 |Battery connector          |100+ |
 |Bundle of 10 Dupont cables |44   |
 
-- Names have been given to the 43 HM-10 Bluetooth modules (HMSOFT to Kijkdoos200-242)
-- 4 HM-10 Bluetooth modules were used to complete 4 incomplete packages which make a total of 69 packages now.
-- The coming days, 34 modules will be used to complete the 34 incomplete packages
+- All 34 Incomplete packages has a HM-10 Bluetooth module now, just glue and scissors are still needed.
+- 3 HM-10 Bluetooth modules are added to the inventory
+- 1 PCB used to complete a package (was missing at workshop) and 1 Arduino added to inventory (2 in 1 package)
 
 ## Workshop inventory
 The list below are items that are necessary to execute the workshop, but are not supposed to be taken home by the participants.
