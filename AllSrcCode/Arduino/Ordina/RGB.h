@@ -1,3 +1,12 @@
+struct RGB_color {
+  int red;
+  int green;
+  int blue;  
+};
+
+
+
+
 class RGB {
   
   public:
@@ -10,18 +19,12 @@ class RGB {
      int _redPin;
      int _greenPin;
      int _bluePin;
-
-     const int off[3] = {0, 0, 0};
-     const int red[3] = {255, 0, 0};
-     const int yellow[3] = {255, 255, 0};
-     const int green[3] = {0, 255, 0}; 
-     const int aqua[3] = {0, 255, 255}; 
-     const int blue[3] = {0, 0, 255}; 
-     const int purple[3] = {255, 0, 255}; 
-     int *allColors[7];
-
-     void writeColor(int rgbValues[3]);
-     
+     void writeColor(RGB_color rgbValues);    
 };
 
 
+#ifdef RGB_GLOBALS
+     RGB_color allRgbColors[7] = { {0,0,0}, {255,0,0}, {255,255,0}, {0,255,0}, {0,255,255}, {0,0,255}, {255,0,255}};
+#endif
+#define OFF allRgbColors[0]
+#define N_COLORS sizeof(allRgbColors) / sizeof(RGB_color)

@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <SoftwareSerial.h>
+#define RGB_GLOBALS
 #include "RGB.h"
+#undef RGB_GLOBALS
 
 RGB::RGB(int redPin, int greenPin, int bluePin) {
   _redPin = redPin;
@@ -11,40 +13,35 @@ RGB::RGB(int redPin, int greenPin, int bluePin) {
   pinMode(_greenPin, OUTPUT);
   pinMode(_bluePin, OUTPUT);
 
-  //Create one array with all colors 
-  allColors[0] = off;
-  allColors[1] = red;
-  allColors[2] = yellow;
-  allColors[3] = green;
-  allColors[4] = aqua;
-  allColors[5] = blue;
-  allColors[6] = purple;
 }
 
 
 void RGB::setColor(char input)  { 
   int index = input - '0';
-  int nColors = (sizeof(allColors)/3) / sizeof(int);
-  
-  if (index >= 0 && index < nColors)  {
-    writeColor(allColors[index]);
+  if (index >= 0 && index < N_COLORS)  {
+    writeColor(allRgbColors[index]);
   }
 }
 
-void RGB::writeColor(int rgbValues[3])  {
-  analogWrite(_redPin, rgbValues[0]);
-  analogWrite(_greenPin, rgbValues[1]);
-  analogWrite(_bluePin, rgbValues[2]);
+void RGB::writeColor(RGB_color rgbValues)  {
+  analogWrite(_redPin, rgbValues.red);
+  analogWrite(_greenPin, rgbValues.green);
+  analogWrite(_bluePin, rgbValues.blue);
 }
 
 //Challenge III "Gradient"
 void RGB::showGradient()  {
-  int nColors = (sizeof(allColors)/3) / sizeof(int);
-  //Add your code here
+  for (int rgb = 0; rgb <256; rgb++) {
+        analogWrite(_redPin, rgb);
+        analogWrite(_greenPin, rgb);
+        analogWrite(_bluePin, rgb);
+        delay(10);
+  }
+  reset();
 }
 
 void RGB::reset() {
-  writeColor(off);
+  writeColor(OFF);
 }
 
 
