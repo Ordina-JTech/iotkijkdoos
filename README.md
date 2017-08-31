@@ -6,6 +6,6 @@
 
 [View order details](Order.md)
 
-[Naming a Bluetooth module] (NamingBluetooth.md)
+[Naming a Bluetooth module](NamingBluetooth.md)
 
-[Connecting to Bluetooth on Android 6+] (BluetoothAndroid6plus.md)
+[Connecting to Bluetooth on Android 6+](BluetoothAndroid6plus.md)
