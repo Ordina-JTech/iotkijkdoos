@@ -7,13 +7,13 @@ Below is a list of items that participants of the workshop are allowed to take h
 |Boxes with printed logo                |280+ |
 |Printed interior                       |260  |
 |Printed wallpaper                      |260  |
-|[Complete packages](#package-content)  |69   |
+|[Complete packages](#package-content)  |68   |
 |Incomplete packages                    |34   |
 | - no Glue stick                       |     |
 | - no Scissors                         |     |
 
 Three HM-10 Bluetooth modules were clones instead of originals, 1 was broken at the last given workshop.
-They will not be used for the workshops.
+They will not be used for the workshops. 1 package was given away for education purposes.
 
 
 
