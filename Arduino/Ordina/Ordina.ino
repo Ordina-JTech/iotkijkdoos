@@ -15,7 +15,7 @@ ServoMotor servo(3);
 Buzzer buzzer(4);
 RGB rgbLed(9, 6, 5);
 LED led1(8);
-LED led2(12);
+LED led2(7);
 
 int angle;
 

@@ -7,7 +7,7 @@ Below is a list of items that participants of the workshop are allowed to take h
 |Boxes with printed logo                |280+ |
 |Printed interior                       |260  |
 |Printed wallpaper                      |260  |
-|[Complete packages](#package-content)  |43   |
+|[Complete packages](#package-content)  |33   |
 |Incomplete packages                    |34   |
 | - no Glue stick                       |     |
 | - no Scissors                         |     |
@@ -30,8 +30,8 @@ They will not be used for the workshops. 1 package was given away for education 
 |RGB led (set of 3)         |6    |
 |Buzzer                     |6    |
 |Servo                      |6    |
-|Scissors                   |0    |
-|Glue stick                 |0    |
+|Scissors                   |30+  |
+|Glue stick                 |30+  |
 |9V Battery                 |6    |
 |Battery connector          |100+ |
 |Bundle of 10 Dupont cables |44   |
