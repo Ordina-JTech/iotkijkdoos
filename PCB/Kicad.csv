@@ -1,0 +1,10 @@
+"Id";"Designator";"Behuizing";"Hoeveelheid";"Orientatie";"Leverancier en ref";
+1;"J3";"H4-2.54";1;"DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54";;;
+2;"J2";"H4-2.54";1;"DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_L1L2";;;
+3;"J1";"H4-2.54";1;"DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_RGB";;;
+4;"CN1";"H6-2.54";1;"DIP-BLACK-FEMALE-HEADER-VERT_6P-2.54_";;;
+5;"P9";"H3-2.54";1;"CONN_01X03";;;
+6;"P1";"H8-2.54";1;"Power";;;
+7;"P2";"H6-2.54";1;"Analog";;;
+8;"P3";"H10-2.54";1;"Digital";;;
+9;"P4";"H8-2.54";1;"Digital";;;

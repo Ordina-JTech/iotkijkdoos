@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>D:/data/rru20820/Documents/Kicad/Kicad.sch</source>
+    <date>17-2-2017 12:12:53</date>
+    <tool>Eeschema 4.0.5</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date>lun. 30 mars 2015</date>
+        <source>Kicad.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="P1">
+      <value>Power</value>
+      <footprint>SeeedOPL-Connector-2016:H8-2.54</footprint>
+      <libsource lib="conn" part="CONN_01X08"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56D70129</tstamp>
+    </comp>
+    <comp ref="P2">
+      <value>Analog</value>
+      <footprint>SeeedOPL-Connector-2016:H6-2.54</footprint>
+      <libsource lib="conn" part="CONN_01X06"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56D70DD8</tstamp>
+    </comp>
+    <comp ref="P4">
+      <value>Digital</value>
+      <footprint>SeeedOPL-Connector-2016:H8-2.54</footprint>
+      <libsource lib="conn" part="CONN_01X08"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56D7164F</tstamp>
+    </comp>
+    <comp ref="P3">
+      <value>Digital</value>
+      <footprint>SeeedOPL-Connector-2016:H10-2.54</footprint>
+      <libsource lib="conn" part="CONN_01X10"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56D721E0</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_RGB</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">F185-1104A1BSYA1</field>
+        <field name="SKU">320030017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58A1A7A2</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_L1L2</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">F185-1104A1BSYA1</field>
+        <field name="SKU">320030017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58A1BB58</tstamp>
+    </comp>
+    <comp ref="CN1">
+      <value>DIP-BLACK-FEMALE-HEADER-VERT_6P-2.54_</value>
+      <footprint>SeeedOPL-Connector-2016:H6-2.54</footprint>
+      <fields>
+        <field name="MPN">F185-1106A1BSYC1</field>
+        <field name="SKU">320030060</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_6P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58A1DF56</tstamp>
+    </comp>
+    <comp ref="J3">
+      <value>DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54</value>
+      <footprint>SeeedOPL-Connector-2016:H4-2.54</footprint>
+      <fields>
+        <field name="MPN">F185-1104A1BSYA1</field>
+        <field name="SKU">320030017</field>
+      </fields>
+      <libsource lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58A1E666</tstamp>
+    </comp>
+    <comp ref="P9">
+      <value>CONN_01X03</value>
+      <footprint>SeeedOPL-Connector-2016:H3-2.54</footprint>
+      <libsource lib="conn" part="CONN_01X03"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58A6C686</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="conn" part="CONN_01X03">
+      <description>Connector, single row, 01x03</description>
+      <footprints>
+        <fp>Pin_Header_Straight_1X03</fp>
+        <fp>Pin_Header_Angled_1X03</fp>
+        <fp>Socket_Strip_Straight_1X03</fp>
+        <fp>Socket_Strip_Angled_1X03</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X03</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X06">
+      <description>Connector, single row, 01x06</description>
+      <footprints>
+        <fp>Pin_Header_Straight_1X06</fp>
+        <fp>Pin_Header_Angled_1X06</fp>
+        <fp>Socket_Strip_Straight_1X06</fp>
+        <fp>Socket_Strip_Angled_1X06</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X06</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+        <pin num="5" name="P5" type="passive"/>
+        <pin num="6" name="P6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X08">
+      <description>Connector, single row, 01x08</description>
+      <footprints>
+        <fp>Pin_Header_Straight_1X08</fp>
+        <fp>Pin_Header_Angled_1X08</fp>
+        <fp>Socket_Strip_Straight_1X08</fp>
+        <fp>Socket_Strip_Angled_1X08</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X08</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+        <pin num="5" name="P5" type="passive"/>
+        <pin num="6" name="P6" type="passive"/>
+        <pin num="7" name="P7" type="passive"/>
+        <pin num="8" name="P8" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X10">
+      <description>Connector, single row, 01x10</description>
+      <footprints>
+        <fp>Pin_Header_Straight_1X10</fp>
+        <fp>Pin_Header_Angled_1X10</fp>
+        <fp>Socket_Strip_Straight_1X10</fp>
+        <fp>Socket_Strip_Angled_1X10</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X10</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+        <pin num="5" name="P5" type="passive"/>
+        <pin num="6" name="P6" type="passive"/>
+        <pin num="7" name="P7" type="passive"/>
+        <pin num="8" name="P8" type="passive"/>
+        <pin num="9" name="P9" type="passive"/>
+        <pin num="10" name="P10" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_">
+      <footprints>
+        <fp>*H4-2.54*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DIP-BLACK-FEMALE-HEADER-VERT_4P-2.54_</field>
+        <field name="MPN">F185-1104A1BSYA1</field>
+        <field name="SKU">320030017</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P$1" type="BiDi"/>
+        <pin num="2" name="P$2" type="BiDi"/>
+        <pin num="3" name="P$3" type="BiDi"/>
+        <pin num="4" name="P$4" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="SeeedOPL-Connector-2016" part="DIP-BLACK-FEMALE-HEADER-VERT_6P-2.54_">
+      <footprints>
+        <fp>*H6-2.54*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">CN</field>
+        <field name="Value">DIP-BLACK-FEMALE-HEADER-VERT_6P-2.54_</field>
+        <field name="MPN">F185-1106A1BSYC1</field>
+        <field name="SKU">320030060</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="BiDi"/>
+        <pin num="2" name="2" type="BiDi"/>
+        <pin num="3" name="3" type="BiDi"/>
+        <pin num="4" name="4" type="BiDi"/>
+        <pin num="5" name="5" type="BiDi"/>
+        <pin num="6" name="6" type="BiDi"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="conn">
+      <uri>D:\Program Files\KiCad\share\kicad\library\conn.lib</uri>
+    </library>
+    <library logical="SeeedOPL-Connector-2016">
+      <uri>D:\Program Files\KiCad\share\kicad\library\SeeedOPL-Connector-2016.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="D2">
+      <node ref="P4" pin="6"/>
+    </net>
+    <net code="2" name="/Reset">
+      <node ref="P1" pin="3"/>
+    </net>
+    <net code="3" name="D7">
+      <node ref="J1" pin="1"/>
+      <node ref="P4" pin="1"/>
+    </net>
+    <net code="4" name="D4">
+      <node ref="P4" pin="4"/>
+      <node ref="J3" pin="1"/>
+    </net>
+    <net code="5" name="D3">
+      <node ref="P4" pin="5"/>
+      <node ref="P9" pin="1"/>
+    </net>
+    <net code="6" name="/1(Tx)">
+      <node ref="P4" pin="7"/>
+    </net>
+    <net code="7" name="/0(Rx)">
+      <node ref="P4" pin="8"/>
+    </net>
+    <net code="8" name="/AREF">
+      <node ref="P3" pin="3"/>
+    </net>
+    <net code="9" name="/13(SCK)">
+      <node ref="P3" pin="5"/>
+    </net>
+    <net code="10" name="/12(MISO)">
+      <node ref="P3" pin="6"/>
+    </net>
+    <net code="11" name="D9">
+      <node ref="P3" pin="9"/>
+      <node ref="J2" pin="1"/>
+    </net>
+    <net code="12" name="D8">
+      <node ref="J2" pin="3"/>
+      <node ref="P3" pin="10"/>
+    </net>
+    <net code="13" name="A2">
+      <node ref="P2" pin="3"/>
+    </net>
+    <net code="14" name="A0">
+      <node ref="P2" pin="1"/>
+    </net>
+    <net code="15" name="A1">
+      <node ref="P2" pin="2"/>
+    </net>
+    <net code="16" name="A3">
+      <node ref="P2" pin="4"/>
+    </net>
+    <net code="17" name="Net-(CN1-Pad1)">
+      <node ref="CN1" pin="1"/>
+    </net>
+    <net code="18" name="Net-(CN1-Pad2)">
+      <node ref="CN1" pin="2"/>
+    </net>
+    <net code="19" name="GND">
+      <node ref="P1" pin="7"/>
+      <node ref="P1" pin="6"/>
+      <node ref="P3" pin="4"/>
+      <node ref="J1" pin="4"/>
+      <node ref="J2" pin="2"/>
+      <node ref="J2" pin="4"/>
+      <node ref="J3" pin="4"/>
+      <node ref="J3" pin="3"/>
+      <node ref="CN1" pin="3"/>
+      <node ref="P9" pin="3"/>
+    </net>
+    <net code="20" name="D10">
+      <node ref="P3" pin="8"/>
+      <node ref="CN1" pin="4"/>
+    </net>
+    <net code="21" name="D11">
+      <node ref="CN1" pin="5"/>
+      <node ref="P3" pin="7"/>
+    </net>
+    <net code="22" name="Net-(CN1-Pad6)">
+      <node ref="CN1" pin="6"/>
+    </net>
+    <net code="23" name="Net-(J3-Pad2)">
+      <node ref="J3" pin="2"/>
+    </net>
+    <net code="24" name="+5V">
+      <node ref="P9" pin="2"/>
+      <node ref="P1" pin="5"/>
+    </net>
+    <net code="25" name="/Vin">
+      <node ref="P1" pin="8"/>
+    </net>
+    <net code="26" name="+3V3">
+      <node ref="P1" pin="4"/>
+    </net>
+    <net code="27" name="/IOREF">
+      <node ref="P1" pin="2"/>
+    </net>
+    <net code="28" name="Net-(P1-Pad1)">
+      <node ref="P1" pin="1"/>
+    </net>
+    <net code="29" name="D6">
+      <node ref="P4" pin="2"/>
+      <node ref="J1" pin="2"/>
+    </net>
+    <net code="30" name="D5">
+      <node ref="P4" pin="3"/>
+      <node ref="J1" pin="3"/>
+    </net>
+    <net code="31" name="Net-(P2-Pad5)">
+      <node ref="P2" pin="5"/>
+    </net>
+    <net code="32" name="Net-(P2-Pad6)">
+      <node ref="P2" pin="6"/>
+    </net>
+    <net code="33" name="Net-(P3-Pad1)">
+      <node ref="P3" pin="1"/>
+    </net>
+    <net code="34" name="Net-(P3-Pad2)">
+      <node ref="P3" pin="2"/>
+    </net>
+  </nets>
+</export>
